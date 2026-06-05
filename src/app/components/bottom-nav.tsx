@@ -10,9 +10,9 @@ interface BottomNavProps {
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
+    { id: 'wallet', label: 'Wallet', icon: Wallet },
     { id: 'scan', label: 'Scan', icon: QrCode },
     { id: 'history', label: 'History', icon: History },
-    { id: 'wallet', label: 'Wallet', icon: Wallet },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 

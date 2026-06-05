@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
   Bike,
@@ -97,7 +97,6 @@ export const FleetManagement: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background p-6 pb-24">
-      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <Bike className="text-primary" size={32} />
@@ -111,7 +110,6 @@ export const FleetManagement: React.FC = () => {
           </Button>
         </div>
 
-        {/* Search and Filter */}
         <div className="flex gap-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
@@ -128,7 +126,6 @@ export const FleetManagement: React.FC = () => {
           </Button>
         </div>
 
-        {/* Status Filters */}
         <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
           {['all', 'available', 'in-ride', 'user-locked', 'maintenance'].map((status) => (
             <button
@@ -146,7 +143,6 @@ export const FleetManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Bike List */}
       <div className="space-y-4">
         {filteredBikes.map((bike, index) => (
           <motion.div

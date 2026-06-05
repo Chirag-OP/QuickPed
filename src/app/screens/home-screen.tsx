@@ -104,9 +104,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           <Button
             onClick={onStartRide}
             size="lg"
-            className="w-full shadow-2xl shadow-primary/50 mb-6"
+            className="w-full h-15 shadow-2xl shadow-primary/50 mb-6 text-2xl font-bold"
           >
-            <QrCode size={67} className="mr-3" />
+            <QrCode size={120} className="mr-2" />
             Scan QR & Ride
           </Button>
         </motion.div>

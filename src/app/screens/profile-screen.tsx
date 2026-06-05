@@ -13,7 +13,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import {
   Dialog,
@@ -37,6 +37,38 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
     verified: true,
     memberSince: 'June 2026',
     totalRides: 12
+  };
+
+  // Student benefits state & helpers
+  const [student, setStudent] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('qp_student') || 'null');
+    } catch {
+      return null;
+    }
+  });
+
+  const handleUpload = (file?: File) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = reader.result as string;
+      const next = { verified: false, status: 'pending', uploadedAt: Date.now(), image: data };
+      localStorage.setItem('qp_student', JSON.stringify(next));
+      setStudent(next as any);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const requestVerification = () => {
+    const next = { ...(student || {}), status: 'pending' };
+    localStorage.setItem('qp_student', JSON.stringify(next));
+    setStudent(next as any);
+    setTimeout(() => {
+      const verified = { ...(next as any), status: 'verified', verifiedAt: Date.now(), verified: true };
+      localStorage.setItem('qp_student', JSON.stringify(verified));
+      setStudent(verified as any);
+    }, 1500);
   };
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);

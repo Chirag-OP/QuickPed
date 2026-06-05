@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ThemeProvider } from './components/theme-provider';
 import { WelcomeScreen } from './screens/welcome-screen';
 import { LoginScreen } from './screens/login-screen';
@@ -13,7 +13,11 @@ import { ReportIssueScreen } from './screens/report-issue-screen';
 import { AdminDashboard } from './screens/admin-dashboard';
 import { UserManagement } from './screens/user-management';
 import { FleetManagement } from './screens/fleet-management';
+import { DockManagement } from './screens/dock-management';
+import { PricingConfig } from './screens/pricing-config';
+import { RevenueReports } from './screens/revenue-reports';
 import { BottomNav } from './components/bottom-nav';
+import { LayoutDashboard, Bike, Users, MapPin, IndianRupee, BarChart3, X } from 'lucide-react';
 
 type AppScreen =
   | 'welcome'
@@ -25,17 +29,27 @@ type AppScreen =
   | 'wallet'
   | 'history'
   | 'profile'
-  | 'report-issue'
-  | 'admin'
-  | 'user-management'
-  | 'fleet-management';
+  | 'report-issue';
 
 type LoginMode = 'choice' | 'user' | 'admin';
+
+type AdminScreen = 'admin' | 'fleet' | 'users' | 'docks' | 'pricing' | 'revenue';
+
+const adminNavItems: { screen: AdminScreen; label: string; Icon: React.ElementType }[] = [
+  { screen: 'admin', label: 'Dashboard', Icon: LayoutDashboard },
+  { screen: 'fleet', label: 'Fleet', Icon: Bike },
+  { screen: 'users', label: 'Users', Icon: Users },
+  { screen: 'docks', label: 'Docks', Icon: MapPin },
+  { screen: 'pricing', label: 'Pricing', Icon: IndianRupee },
+  { screen: 'revenue', label: 'Revenue', Icon: BarChart3 },
+];
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('welcome');
   const [activeRide, setActiveRide] = useState(false);
   const [initialLoginMode, setInitialLoginMode] = useState<LoginMode>('choice');
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [adminScreen, setAdminScreen] = useState<AdminScreen>('admin');
 
   const handleWelcomeComplete = () => {
     setCurrentScreen('login');
@@ -48,11 +62,13 @@ export default function App() {
   };
 
   const handleAdminLoginSuccess = () => {
-    setCurrentScreen('admin');
+    setShowAdmin(true);
+    setAdminScreen('admin');
   };
 
   const handleAdminGoogleLogin = () => {
-    setCurrentScreen('admin');
+    setShowAdmin(true);
+    setAdminScreen('admin');
   };
 
   const handleStartRide = () => {
@@ -78,6 +94,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    setShowAdmin(false);
     setCurrentScreen('login');
     setInitialLoginMode('choice');
   };
@@ -94,104 +111,106 @@ export default function App() {
     }
   };
 
+  const handleExitAdmin = () => {
+    setShowAdmin(false);
+    setCurrentScreen('login');
+    setInitialLoginMode('choice');
+  };
+
+  const handleAdminNavigate = (screen: 'user-management' | 'fleet-management') => {
+    if (screen === 'user-management') {
+      setAdminScreen('users');
+    } else {
+      setAdminScreen('fleet');
+    }
+  };
+
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-background">
-        {/* Welcome Screen */}
-        {currentScreen === 'welcome' && (
-          <WelcomeScreen onComplete={handleWelcomeComplete} />
-        )}
+        {showAdmin ? (
+          <>
+            <button
+              onClick={handleExitAdmin}
+              className="fixed top-5 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 bg-danger text-white rounded-full shadow-lg text-xs font-medium"
+            >
+              <X size={13} /> Exit Admin
+            </button>
 
-        {/* Login Screen */}
-        {currentScreen === 'login' && (
-          <LoginScreen
-            initialMode={initialLoginMode}
-            onUserLoginSuccess={handleUserLoginSuccess}
-            onAdminLoginSuccess={handleAdminLoginSuccess}
-            onAdminGoogleLogin={handleAdminGoogleLogin}
-          />
-        )}
+            {adminScreen === 'admin' && <AdminDashboard onNavigate={handleAdminNavigate} />}
+            {adminScreen === 'fleet' && <FleetManagement />}
+            {adminScreen === 'users' && <UserManagement />}
+            {adminScreen === 'docks' && <DockManagement />}
+            {adminScreen === 'pricing' && <PricingConfig />}
+            {adminScreen === 'revenue' && <RevenueReports />}
 
-        {/* Home Screen */}
-        {currentScreen === 'home' && (
-          <HomeScreen
-            onStartRide={handleStartRide}
-            onNavigate={handleNavigate}
-          />
-        )}
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-xl border-t border-border">
+              <div className="flex items-stretch">
+                {adminNavItems.map(({ screen, label, Icon }) => (
+                  <button
+                    key={screen}
+                    onClick={() => setAdminScreen(screen)}
+                    className={`relative flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 transition-all ${
+                      adminScreen === screen ? 'text-primary' : 'text-muted-foreground'
+                    }`}
+                  >
+                    <Icon size={20} />
+                    <span className="text-[10px] font-medium leading-none">{label}</span>
+                    {adminScreen === screen && <span className="absolute bottom-1 h-0.5 w-8 rounded-full bg-primary" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {currentScreen === 'welcome' && <WelcomeScreen onComplete={handleWelcomeComplete} />}
 
-        {/* Scan Screen */}
-        {currentScreen === 'scan' && (
-          <ScanScreen
-            onScanSuccess={handleScanSuccess}
-            onClose={() => setCurrentScreen('home')}
-          />
-        )}
+            {currentScreen === 'login' && (
+              <LoginScreen
+                initialMode={initialLoginMode}
+                onUserLoginSuccess={handleUserLoginSuccess}
+                onAdminLoginSuccess={handleAdminLoginSuccess}
+                onAdminGoogleLogin={handleAdminGoogleLogin}
+              />
+            )}
 
-        {/* Active Ride Screen */}
-        {currentScreen === 'active-ride' && activeRide && (
-          <ActiveRideScreen
-            onEndRide={handleEndRide}
-            onBack={() => setCurrentScreen('home')}
-          />
-        )}
+            {currentScreen === 'home' && <HomeScreen onStartRide={handleStartRide} onNavigate={handleNavigate} />}
 
-        {/* Ride Complete Screen */}
-        {currentScreen === 'ride-complete' && (
-          <RideCompleteScreen
-            rideData={{
-              duration: 720,
-              fare: 15,
-              startDock: 'Main Gate Dock',
-              endDock: 'Library Dock',
-              distance: 2.3
-            }}
-            onContinue={handleRideCompleteNext}
-          />
-        )}
+            {currentScreen === 'scan' && <ScanScreen onScanSuccess={handleScanSuccess} onClose={() => setCurrentScreen('home')} />}
 
-        {/* Report Issue Screen */}
-        {currentScreen === 'report-issue' && (
-          <ReportIssueScreen
-            bikeId="QP-2847"
-            onSubmit={handleReportComplete}
-            onSkip={handleReportComplete}
-          />
-        )}
+            {currentScreen === 'active-ride' && activeRide && (
+              <ActiveRideScreen onEndRide={handleEndRide} onBack={() => setCurrentScreen('home')} />
+            )}
 
-        {/* Wallet Screen */}
-        {currentScreen === 'wallet' && (
-          <WalletScreen onBack={() => setCurrentScreen('home')} />
-        )}
+            {currentScreen === 'ride-complete' && (
+              <RideCompleteScreen
+                rideData={{
+                  duration: 720,
+                  fare: 15,
+                  startDock: 'Main Gate Dock',
+                  endDock: 'Library Dock',
+                  distance: 2.3,
+                }}
+                onContinue={handleRideCompleteNext}
+              />
+            )}
 
-        {/* History Screen */}
-        {currentScreen === 'history' && (
-          <HistoryScreen onBack={() => setCurrentScreen('home')} />
-        )}
+            {currentScreen === 'report-issue' && (
+              <ReportIssueScreen bikeId="QP-2847" onSubmit={handleReportComplete} onSkip={handleReportComplete} />
+            )}
 
-        {/* Profile Screen */}
-        {currentScreen === 'profile' && (
-          <ProfileScreen onBack={() => setCurrentScreen('home')} onLogout={handleLogout} />
-        )}
+            {currentScreen === 'wallet' && <WalletScreen onBack={() => setCurrentScreen('home')} />}
 
-        {/* Admin Dashboard and sub-pages */}
-        {currentScreen === 'admin' && (
-          <AdminDashboard onNavigate={(screen: 'user-management' | 'fleet-management') => setCurrentScreen(screen)} />
-        )}
+            {currentScreen === 'history' && <HistoryScreen onBack={() => setCurrentScreen('home')} />}
 
-        {currentScreen === 'user-management' && (
-          <UserManagement />
-        )}
+            {currentScreen === 'profile' && <ProfileScreen onBack={() => setCurrentScreen('home')} onLogout={handleLogout} />}
 
-        {currentScreen === 'fleet-management' && (
-          <FleetManagement />
+            {['home', 'wallet', 'history', 'profile'].includes(currentScreen) && (
+              <BottomNav activeTab={currentScreen} onTabChange={handleTabChange} />
+            )}
+          </>
         )}
-
-        {/* Bottom Navigation - Show only on main screens */}
-        {['home', 'wallet', 'history', 'profile'].includes(currentScreen) && (
-          <BottomNav activeTab={currentScreen} onTabChange={handleTabChange} />
-        )}
-
       </div>
     </ThemeProvider>
   );

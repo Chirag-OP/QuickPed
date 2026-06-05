@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   LayoutDashboard,
@@ -6,15 +6,10 @@ import {
   Users,
   IndianRupee,
   TrendingUp,
-  Battery,
-  MapPin,
   AlertTriangle,
   Activity,
-  Search,
-  Clock,
   ArrowRight,
   Sparkles,
-  ChartPie,
   Loader2
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -114,9 +109,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         <div className="w-full max-w-md rounded-3xl border border-danger bg-muted p-8 text-center shadow-lg">
           <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-danger" />
           <h2 className="text-2xl font-semibold">Unable to load dashboard</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {error}
-          </p>
+          <p className="mt-2 text-sm text-muted-foreground">{error}</p>
           <div className="mt-6 flex justify-center gap-3">
             <Button variant="outline" onClick={handleRetry}>
               Retry
@@ -138,26 +131,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               <p className="text-muted-foreground">Enterprise insights, fleet command, and live dispatch control.</p>
             </div>
           </div>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">Live Feed</Badge>
-              <Badge variant="success">Operations</Badge>
-              <Badge variant="info">Analytics</Badge>
-            </div>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                className="px-3 py-1 rounded-full text-sm bg-muted hover:bg-muted/80"
-                onClick={() => onNavigate?.('user-management')}
-              >
-                Manage Users
-              </button>
-              <button
-                className="px-3 py-1 rounded-full text-sm bg-muted hover:bg-muted/80"
-                onClick={() => onNavigate?.('fleet-management')}
-              >
-                Fleet Management
-              </button>
-            </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="secondary">Live Feed</Badge>
+            <Badge variant="success">Operations</Badge>
+            <Badge variant="info">Analytics</Badge>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              className="px-3 py-1 rounded-full text-sm bg-muted hover:bg-muted/80"
+              onClick={() => onNavigate?.('user-management')}
+            >
+              Manage Users
+            </button>
+            <button
+              className="px-3 py-1 rounded-full text-sm bg-muted hover:bg-muted/80"
+              onClick={() => onNavigate?.('fleet-management')}
+            >
+              Fleet Management
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-3">
@@ -253,14 +247,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   <div
                     key={item.label}
                     className="absolute bottom-0 bg-primary rounded-t-3xl"
-                    style={{
-                      left: `${index * 14.5}%`,
-                      width: '9%',
-                      height: `${item.value}%`
-                    }}
+                    style={{ left: `${index * 14.5}%`, width: '9%', height: `${item.value}%` }}
                   />
                 ))}
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-border rounded-full" />
               </div>
             </div>
           </CardContent>
@@ -268,162 +257,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
 
         <Card variant="elevated" className="border border-border">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="text-primary" size={22} /> Live Dispatch Map
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="relative h-80 rounded-3xl bg-gradient-to-br from-muted/50 to-background overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,rgba(59,130,246,0.2),transparent_10%),radial-gradient(circle_at_70%_18%,rgba(16,185,129,0.2),transparent_12%),radial-gradient(circle_at_50%_70%,rgba(236,72,153,0.18),transparent_15%)]" />
-              <div className="absolute left-10 top-12 flex items-center gap-2 p-2 rounded-2xl bg-white/10 border border-white/10 text-white text-sm">
-                <MapPin size={16} /> Main Gate
-              </div>
-              <div className="absolute right-10 top-24 flex items-center gap-2 p-2 rounded-2xl bg-white/10 border border-white/10 text-white text-sm">
-                <MapPin size={16} /> Library Dock
-              </div>
-              <div className="absolute left-16 bottom-20 flex items-center gap-2 p-2 rounded-2xl bg-white/10 border border-white/10 text-white text-sm">
-                <MapPin size={16} /> Hostel A Dock
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-3xl p-4 bg-muted/70">
-                <p className="text-sm text-muted-foreground">Live pickups</p>
-                <p className="text-xl font-bold">12</p>
-              </div>
-              <div className="rounded-3xl p-4 bg-muted/70">
-                <p className="text-sm text-muted-foreground">Active zones</p>
-                <p className="text-xl font-bold">4</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <Card variant="elevated" className="lg:col-span-2 border border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ChartPie className="text-primary" size={22} /> Enterprise Analytics
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="rounded-3xl p-4 bg-muted/70">
-                <p className="text-sm text-muted-foreground">Peak utilization</p>
-                <p className="text-2xl font-bold">78%</p>
-              </div>
-              <div className="rounded-3xl p-4 bg-muted/70">
-                <p className="text-sm text-muted-foreground">Avg ride time</p>
-                <p className="text-2xl font-bold">14m 20s</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="rounded-3xl p-4 bg-success/10">
-                <p className="text-sm text-muted-foreground">On-time route success</p>
-                <p className="text-2xl font-bold">94%</p>
-              </div>
-              <div className="rounded-3xl p-4 bg-warning/10">
-                <p className="text-sm text-muted-foreground">Maintenance alerts</p>
-                <p className="text-2xl font-bold">8</p>
-              </div>
-              <div className="rounded-3xl p-4 bg-secondary/10">
-                <p className="text-sm text-muted-foreground">Bookings cleared</p>
-                <p className="text-2xl font-bold">95%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated" className="border border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="text-primary" size={22} /> Activity Feed
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-3xl bg-muted/70 p-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-sm text-muted-foreground">Live dispatch</p>
-                <Badge variant="success">Online</Badge>
-              </div>
-              <div className="space-y-3 text-sm text-muted-foreground">
-                <p>
-                  <span className="font-semibold text-foreground">Amit Kumar</span> accepted a ride from Main Gate.
-                </p>
-                <p>
-                  <span className="font-semibold text-foreground">Priya Patel</span> completed a premium booking.
-                </p>
-                <p>
-                  <span className="font-semibold text-foreground">2 alerts</span> raised in Library zone.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" className="flex-1">
-                View fleet details
-              </Button>
-              <Button className="flex-1">Open operations</Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card variant="elevated" className="border border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShieldCheck className="text-primary" size={22} /> Booking Workflow
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {filteredBookings.map((booking) => (
-              <div key={booking.id} className="rounded-3xl border border-border bg-muted/60 p-4">
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <div>
-                    <p className="font-semibold">{booking.id}</p>
-                    <p className="text-sm text-muted-foreground">{booking.user}</p>
-                  </div>
-                  <Badge variant={booking.status === 'Confirmed' ? 'success' : booking.status === 'Pending' ? 'warning' : 'default'}>
-                    {booking.status}
-                  </Badge>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <p className="font-medium text-foreground">{booking.bike}</p>
-                    <p>Bike</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-foreground">{booking.time}</p>
-                    <p>Start time</p>
-                  </div>
-                  <div className="font-medium text-foreground">
-                    <Button variant="secondary" size="sm">Update</Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated" className="border border-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="text-primary" size={22} /> Driver Command
-            </CardTitle>
+            <CardTitle>Driver Activity</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {drivers.map((driver) => (
-              <div key={driver.id} className="rounded-3xl border border-border bg-muted/60 p-4">
-                <div className="flex items-center justify-between gap-3 mb-2">
+              <div key={driver.id} className="rounded-3xl bg-muted/60 p-4">
+                <div className="flex items-center justify-between mb-2">
                   <div>
-                    <p className="font-semibold">{driver.name}</p>
-                    <p className="text-sm text-muted-foreground">{driver.role}</p>
+                    <p className="text-sm font-semibold">{driver.name}</p>
+                    <p className="text-xs text-muted-foreground">{driver.role}</p>
                   </div>
-                  <Badge variant={driver.status === 'Active' ? 'success' : driver.status === 'On Duty' ? 'info' : 'default'}>
+                  <Badge variant={driver.status === 'Active' ? 'success' : 'default'} className="text-xs">
                     {driver.status}
                   </Badge>
                 </div>
-                <div className="text-sm text-muted-foreground">Route optimization status and real-time dispatch available.</div>
+                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                  <div className="h-full bg-primary" style={{ width: driver.status === 'Active' ? '88%' : '34%' }} />
+                </div>
               </div>
             ))}
           </CardContent>
