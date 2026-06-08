@@ -10,66 +10,16 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { formatCurrency, formatDuration } from '../lib/utils';
+import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
+import type { RideHistoryRecord } from '../lib/admin-data';
+import { NotificationBell } from '../components/notification-bell';
 
 interface HistoryScreenProps {
+  rides: RideHistoryRecord[];
   onBack: () => void;
 }
 
-export const HistoryScreen: React.FC<HistoryScreenProps> = ({ onBack }) => {
-  const rides = [
-    {
-      id: 2847,
-      date: new Date('2026-06-02T10:30:00'),
-      duration: 720,
-      fare: 15,
-      startDock: 'Main Gate Dock',
-      endDock: 'Library Dock',
-      distance: 2.3,
-      bikeType: 'Standard'
-    },
-    {
-      id: 2846,
-      date: new Date('2026-06-01T18:15:00'),
-      duration: 540,
-      fare: 12,
-      startDock: 'Hostel A Dock',
-      endDock: 'Main Gate Dock',
-      distance: 1.8,
-      bikeType: 'Standard'
-    },
-    {
-      id: 2845,
-      date: new Date('2026-06-01T14:20:00'),
-      duration: 900,
-      fare: 18,
-      startDock: 'Library Dock',
-      endDock: 'Sports Complex',
-      distance: 3.1,
-      bikeType: 'Standard'
-    },
-    {
-      id: 2844,
-      date: new Date('2026-05-31T16:45:00'),
-      duration: 600,
-      fare: 13,
-      startDock: 'Main Gate Dock',
-      endDock: 'Cafeteria Dock',
-      distance: 2.0,
-      bikeType: 'Standard'
-    },
-    {
-      id: 2843,
-      date: new Date('2026-05-31T09:30:00'),
-      duration: 420,
-      fare: 10,
-      startDock: 'Hostel A Dock',
-      endDock: 'Academic Block',
-      distance: 1.5,
-      bikeType: 'Standard'
-    },
-  ];
-
+export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) => {
   const totalRides = rides.length;
   const totalDuration = rides.reduce((sum, ride) => sum + ride.duration, 0);
   const totalSpent = rides.reduce((sum, ride) => sum + ride.fare, 0);
@@ -78,9 +28,12 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ onBack }) => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-12 rounded-b-3xl">
-        <button onClick={onBack} className="text-white mb-6">
-          ← Back
-        </button>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <button onClick={onBack} className="text-white">
+            ← Back
+          </button>
+          <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
+        </div>
 
         <div className="flex items-center gap-3 text-white mb-6">
           <Calendar size={32} />
@@ -103,7 +56,7 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ onBack }) => {
           <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
             <CardContent className="p-4 text-center">
               <Clock className="mx-auto mb-2" size={24} />
-              <p className="text-2xl font-bold">{Math.floor(totalDuration / 3600)}h</p>
+              <p className="text-2xl font-bold">{formatDuration(totalDuration)}</p>
               <p className="text-xs text-white/80">Total Time</p>
             </CardContent>
           </Card>
@@ -126,6 +79,12 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ onBack }) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
+              {rides.length === 0 && (
+                <div className="rounded-xl bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+                  Completed rides will appear here after you end a ride.
+                </div>
+              )}
+
               {rides.map((ride, index) => (
                 <motion.div
                   key={ride.id}
@@ -142,11 +101,7 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ onBack }) => {
                       <div>
                         <p className="font-bold">Ride #{ride.id}</p>
                         <p className="text-sm text-muted-foreground">
-                          {ride.date.toLocaleDateString('en-IN', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
+                          {formatDate(ride.completedAt)}
                         </p>
                       </div>
                     </div>

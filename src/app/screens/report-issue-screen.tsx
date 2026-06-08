@@ -11,10 +11,18 @@ import {
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Textarea } from '../components/ui/textarea';
+import { NotificationBell } from '../components/notification-bell';
+
+export type IssueReportSubmission = {
+  bikeId: string;
+  issueType: string;
+  issueLabel: string;
+  description: string;
+};
 
 interface ReportIssueScreenProps {
   bikeId: string;
-  onSubmit: () => void;
+  onSubmit: (report: IssueReportSubmission) => void;
   onSkip: () => void;
 }
 
@@ -36,9 +44,18 @@ export const ReportIssueScreen: React.FC<ReportIssueScreenProps> = ({
   ];
 
   const handleSubmit = () => {
+    const issue = issues.find((item) => item.id === selectedIssue);
+    if (!issue) return;
+
+    onSubmit({
+      bikeId,
+      issueType: issue.id,
+      issueLabel: issue.label,
+      description,
+    });
     setSubmitted(true);
     setTimeout(() => {
-      onSubmit();
+      onSkip();
     }, 2000);
   };
 
@@ -68,12 +85,15 @@ export const ReportIssueScreen: React.FC<ReportIssueScreenProps> = ({
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-12 rounded-b-3xl">
-        <div className="flex items-center gap-3 text-white mb-4">
-          <AlertCircle size={32} />
-          <div>
-            <h1 className="text-2xl font-bold">Report an Issue</h1>
-            <p className="text-white/90">Help us keep bikes in top shape</p>
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 text-white">
+            <AlertCircle size={32} />
+            <div>
+              <h1 className="text-2xl font-bold">Report an Issue</h1>
+              <p className="text-white/90">Help us keep bikes in top shape</p>
+            </div>
           </div>
+          <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
         </div>
 
         <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">

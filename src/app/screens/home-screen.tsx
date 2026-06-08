@@ -5,7 +5,6 @@ import {
   Wallet,
   MapPin,
   QrCode,
-  Bell,
   User,
   Moon,
   Sun,
@@ -17,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { useTheme } from '../components/theme-provider';
 import { formatCurrency } from '../lib/utils';
+import { NotificationBell } from '../components/notification-bell';
 
 interface HomeScreenProps {
   onStartRide: () => void;
@@ -50,10 +50,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
             >
               {theme === 'light' ? <Moon size={20} className="text-white" /> : <Sun size={20} className="text-white" />}
             </button>
-            <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors relative">
-              <Bell size={20} className="text-white" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full" />
-            </button>
+            <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
             <button
               onClick={() => onNavigate('profile')}
               className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"

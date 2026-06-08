@@ -7,85 +7,43 @@ import {
   Phone,
   Wallet,
   CheckCircle,
-  XCircle,
-  ChevronDown,
-  ChevronUp,
+  ChevronRight,
   ShieldCheck,
   Ban
 } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
+import { Card } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { formatCurrency } from '../lib/utils';
+import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
+import type { AdminUserRole, InstituteData } from '../lib/admin-data';
 
-type UserRole = 'verified' | 'guest' | 'admin' | 'blocked';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  role: UserRole;
-  walletBalance: number;
-  totalRides: number;
-  memberSince: string;
-  avatar: string;
+interface UserManagementProps {
+  institute: InstituteData;
+  onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
 }
 
-interface RideRecord {
-  id: string;
-  date: string;
-  bike: string;
-  from: string;
-  to: string;
-  duration: string;
-  fare: number;
-}
-
-const initialUsers: User[] = [
-  { id: 1, name: 'Rahul Sharma', email: 'rahul.sharma@university.edu', phone: '+91 98765 43210', role: 'verified', walletBalance: 250, totalRides: 12, memberSince: 'June 2026', avatar: 'R' },
-  { id: 2, name: 'Priya Patel', email: 'priya.patel@university.edu', phone: '+91 98765 43211', role: 'verified', walletBalance: 180, totalRides: 23, memberSince: 'May 2026', avatar: 'P' },
-  { id: 3, name: 'Amit Kumar', email: 'amit.kumar@gmail.com', phone: '+91 98765 43212', role: 'guest', walletBalance: 50, totalRides: 5, memberSince: 'June 2026', avatar: 'A' },
-  { id: 4, name: 'Sneha Gupta', email: 'sneha.gupta@university.edu', phone: '+91 98765 43213', role: 'verified', walletBalance: 420, totalRides: 45, memberSince: 'April 2026', avatar: 'S' },
-  { id: 5, name: 'Karan Mehta', email: 'karan.mehta@university.edu', phone: '+91 98765 43214', role: 'admin', walletBalance: 1000, totalRides: 128, memberSince: 'March 2026', avatar: 'K' },
-  { id: 6, name: 'Ritu Singh', email: 'ritu.singh@gmail.com', phone: '+91 98765 43215', role: 'blocked', walletBalance: 0, totalRides: 3, memberSince: 'June 2026', avatar: 'R' },
-];
-
-const rideHistoryByUser: Record<number, RideRecord[]> = {
-  1: [
-    { id: 'R-5521', date: 'Today 09:15', bike: 'QP-2847', from: 'Main Gate Dock', to: 'Library Dock', duration: '12 min', fare: 15 },
-    { id: 'R-5399', date: 'Yesterday 14:30', bike: 'QP-2842', from: 'Hostel A Dock', to: 'Sports Complex', duration: '8 min', fare: 10 },
-  ],
-  2: [
-    { id: 'R-5512', date: 'Today 08:00', bike: 'QP-2846', from: 'Library Dock', to: 'Main Gate Dock', duration: '6 min', fare: 10 },
-    { id: 'R-5420', date: 'Jun 3, 17:45', bike: 'QP-2843', from: 'Sports Complex', to: 'Hostel A Dock', duration: '18 min', fare: 25 },
-    { id: 'R-5310', date: 'Jun 2, 11:00', bike: 'QP-2847', from: 'Main Gate Dock', to: 'Admin Block Dock', duration: '5 min', fare: 10 },
-  ],
-  4: [
-    { id: 'R-5519', date: 'Today 07:30', bike: 'QP-2841', from: 'Cafeteria Dock', to: 'Library Dock', duration: '4 min', fare: 10 },
-  ],
-};
-
-const roleVariant: Record<UserRole, 'success' | 'default' | 'info' | 'danger'> = {
+const roleVariant: Record<AdminUserRole, 'success' | 'default' | 'info' | 'danger'> = {
   verified: 'success',
   guest: 'default',
   admin: 'info',
   blocked: 'danger',
 };
 
-const roleLabel: Record<UserRole, string> = {
+const roleLabel: Record<AdminUserRole, string> = {
   verified: 'Verified Rider',
   guest: 'Guest Rider',
   admin: 'Admin',
   blocked: 'Blocked',
 };
 
-export const UserManagement: React.FC = () => {
-  const [users, setUsers] = useState(initialUsers);
+const normalizePhone = (phone: string) => phone.replace(/\D/g, '');
+
+export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpdateInstitute }) => {
+  const users = institute.users;
   const [searchQuery, setSearchQuery] = useState('');
-  const [expandedUser, setExpandedUser] = useState<number | null>(null);
-  const [confirmAction, setConfirmAction] = useState<{ userId: number; action: string } | null>(null);
+  const [expandedUser, setExpandedUser] = useState<string | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ userId: string; action: string } | null>(null);
   const [roleFilter, setRoleFilter] = useState<string>('all');
 
   const filteredUsers = users.filter(user => {
@@ -98,17 +56,18 @@ export const UserManagement: React.FC = () => {
     return matchSearch && matchRole;
   });
 
-  const handleAction = (userId: number, action: string) => {
-    setUsers(prev =>
-      prev.map(u => {
-        if (u.id !== userId) return u;
-        if (action === 'block') return { ...u, role: 'blocked' as UserRole };
-        if (action === 'unblock') return { ...u, role: 'guest' as UserRole };
-        if (action === 'promote') return { ...u, role: 'admin' as UserRole };
-        if (action === 'demote') return { ...u, role: 'verified' as UserRole };
-        return u;
-      })
-    );
+  const handleAction = (userId: string, action: string) => {
+    onUpdateInstitute((currentInstitute) => ({
+      ...currentInstitute,
+      users: currentInstitute.users.map((user) => {
+        if (user.id !== userId) return user;
+        if (action === 'block') return { ...user, role: 'blocked' };
+        if (action === 'unblock') return { ...user, role: 'guest' };
+        if (action === 'promote') return { ...user, role: 'admin' };
+        if (action === 'demote') return { ...user, role: 'verified' };
+        return user;
+      }),
+    }));
     setConfirmAction(null);
   };
 
@@ -172,7 +131,12 @@ export const UserManagement: React.FC = () => {
       <div className="space-y-3">
         {filteredUsers.map((user, index) => {
           const expanded = expandedUser === user.id;
-          const history = rideHistoryByUser[user.id] ?? [];
+          const userPhone = normalizePhone(user.phone);
+          const history = institute.rideHistory.filter((ride) => {
+            const ridePhone = ride.userPhone ? normalizePhone(ride.userPhone) : '';
+            return ride.user.toLowerCase() === user.name.toLowerCase() || (userPhone && ridePhone.endsWith(userPhone));
+          });
+          const latestRide = history[0];
 
           return (
             <motion.div
@@ -182,64 +146,23 @@ export const UserManagement: React.FC = () => {
               transition={{ delay: index * 0.05 }}
             >
               <Card variant="elevated" className="overflow-hidden">
-                <div className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-base shrink-0 ${
-                        user.role === 'blocked' ? 'bg-danger/40' : 'bg-gradient-to-br from-primary to-secondary'
-                      }`}>
-                        {user.avatar}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <h3 className="font-bold">{user.name}</h3>
-                          {user.role === 'verified' && <CheckCircle className="text-success" size={15} />}
-                          {user.role === 'blocked' && <Ban className="text-danger" size={15} />}
-                          {user.role === 'admin' && <ShieldCheck className="text-info" size={15} />}
-                        </div>
-                        <Badge variant={roleVariant[user.role]} className="text-xs">
-                          {roleLabel[user.role]}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => setExpandedUser(expanded ? null : user.id)}
-                      className="p-1 text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                    </button>
+                <button
+                  type="button"
+                  onClick={() => setExpandedUser(expanded ? null : user.id)}
+                  className="grid w-full grid-cols-[minmax(0,1fr)_minmax(8rem,auto)_auto] items-center gap-3 p-4 text-left transition-colors hover:bg-muted/40"
+                >
+                  <div className="flex min-w-0 items-center gap-2">
+                    <h3 className="truncate font-bold">{user.name}</h3>
+                    {user.role === 'verified' && <CheckCircle className="shrink-0 text-success" size={15} />}
+                    {user.role === 'blocked' && <Ban className="shrink-0 text-danger" size={15} />}
+                    {user.role === 'admin' && <ShieldCheck className="shrink-0 text-info" size={15} />}
                   </div>
-
-                  <div className="mt-3 space-y-1.5">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Mail size={12} />
-                      <span>{user.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Phone size={12} />
-                      <span>{user.phone}</span>
-                    </div>
+                  <div className="flex min-w-0 items-center gap-2 text-sm font-medium text-muted-foreground">
+                    <Phone size={14} />
+                    <span className="truncate">{user.phone}</span>
                   </div>
-
-                  <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-border text-center">
-                    <div>
-                      <div className="flex items-center justify-center gap-1 text-primary mb-0.5">
-                        <Wallet size={13} />
-                      </div>
-                      <p className="text-sm font-bold">{formatCurrency(user.walletBalance)}</p>
-                      <p className="text-xs text-muted-foreground">Balance</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold">{user.totalRides}</p>
-                      <p className="text-xs text-muted-foreground">Rides</p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium mt-1">{user.memberSince}</p>
-                      <p className="text-xs text-muted-foreground">Joined</p>
-                    </div>
-                  </div>
-                </div>
+                  <ChevronRight className={`text-muted-foreground transition-transform ${expanded ? 'rotate-90' : ''}`} size={18} />
+                </button>
 
                 <AnimatePresence>
                   {expanded && (
@@ -250,31 +173,53 @@ export const UserManagement: React.FC = () => {
                     >
                       <div className="px-4 pb-4 pt-2 border-t border-border">
                         <div className="space-y-3">
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                             <div className="rounded-2xl bg-muted p-3">
-                              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Latest Ride</p>
-                              <p className="mt-2 text-sm font-medium">{history[0]?.bike ?? 'No recent ride'}</p>
-                              <p className="text-xs text-muted-foreground">{history[0]?.from ?? ''} → {history[0]?.to ?? ''}</p>
+                              <p className="text-[11px] uppercase text-muted-foreground">Joining Date</p>
+                              <p className="mt-2 text-sm font-bold">{user.memberSince}</p>
                             </div>
                             <div className="rounded-2xl bg-muted p-3">
-                              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Member Since</p>
-                              <p className="mt-2 text-sm font-medium">{user.memberSince}</p>
-                              <p className="text-xs text-muted-foreground">{history.length} rides recorded</p>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-3 text-center">
-                            <div className="rounded-2xl bg-muted p-3">
-                              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Total Wallet</p>
-                              <p className="mt-2 text-sm font-bold">{formatCurrency(user.walletBalance)}</p>
+                              <p className="text-[11px] uppercase text-muted-foreground">Institute</p>
+                              <p className="mt-2 text-sm font-bold">{user.institute}</p>
                             </div>
                             <div className="rounded-2xl bg-muted p-3">
-                              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Total Rides</p>
+                              <p className="text-[11px] uppercase text-muted-foreground">Ride Count</p>
                               <p className="mt-2 text-sm font-bold">{user.totalRides}</p>
                             </div>
                             <div className="rounded-2xl bg-muted p-3">
-                              <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Last Seen</p>
-                              <p className="mt-2 text-sm font-bold">{history[0]?.date ?? 'N/A'}</p>
+                              <p className="text-[11px] uppercase text-muted-foreground">Wallet Balance</p>
+                              <p className="mt-2 text-sm font-bold">{formatCurrency(user.walletBalance)}</p>
+                            </div>
+                          </div>
+
+                          <div className="rounded-2xl bg-muted p-4">
+                            <div className="mb-3 flex items-center gap-2">
+                              <p className="text-sm font-semibold">Additional User Information</p>
+                              <Badge variant={roleVariant[user.role]} className="text-xs">
+                                {roleLabel[user.role]}
+                              </Badge>
+                            </div>
+                            <div className="grid gap-3 text-sm md:grid-cols-2">
+                              <div className="flex items-center gap-2 text-muted-foreground">
+                                <Mail size={14} />
+                                <span className="truncate">{user.email}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-muted-foreground">
+                                <Wallet size={14} />
+                                <span>{roleLabel[user.role]}</span>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground">Latest Ride</p>
+                                <p className="font-medium">
+                                  {latestRide ? `${latestRide.vehicleId} - ${latestRide.startDock} to ${latestRide.endDock}` : 'No recent ride'}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground">Last Activity</p>
+                                <p className="font-medium">
+                                  {latestRide ? `${formatDate(latestRide.completedAt)} - ${formatDuration(latestRide.duration)}` : 'N/A'}
+                                </p>
+                              </div>
                             </div>
                           </div>
 

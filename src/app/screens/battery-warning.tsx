@@ -19,9 +19,9 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
   onCancel
 }) => {
   const getBatteryStatus = () => {
-    if (batteryLevel > 60) return { color: 'success', text: 'Good' };
-    if (batteryLevel > 30) return { color: 'warning', text: 'Medium' };
-    return { color: 'danger', text: 'Low' };
+    if (batteryLevel > 60) return { text: 'Good', iconClass: 'text-success fill-success', bgClass: 'bg-success/10', barClass: 'bg-success', badgeClass: 'bg-success/10 text-success' };
+    if (batteryLevel >= 30) return { text: 'Medium', iconClass: 'text-warning fill-warning', bgClass: 'bg-warning/10', barClass: 'bg-warning', badgeClass: 'bg-warning/10 text-warning' };
+    return { text: 'Low', iconClass: 'text-danger fill-danger', bgClass: 'bg-danger/10', barClass: 'bg-danger', badgeClass: 'bg-danger/10 text-danger' };
   };
 
   const status = getBatteryStatus();
@@ -40,10 +40,10 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
         <Card variant="elevated">
           <CardContent className="p-6">
             <div className="text-center mb-6">
-              <div className={`mx-auto w-20 h-20 bg-${status.color}/10 rounded-full flex items-center justify-center mb-4`}>
+              <div className={`mx-auto w-20 h-20 ${status.bgClass} rounded-full flex items-center justify-center mb-4`}>
                 <Battery
                   size={48}
-                  className={`text-${status.color} fill-${status.color}`}
+                  className={status.iconClass}
                 />
               </div>
               <h3 className="text-2xl font-bold mb-2">Battery Status</h3>
@@ -51,17 +51,15 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
             </div>
 
             <div className="mb-6 p-4 bg-muted/30 rounded-xl text-center">
-              <p className="text-sm text-muted-foreground mb-2">Current Battery</p>
+              <p className="text-sm text-muted-foreground mb-2">Battery Status</p>
               <div className="flex items-center justify-center gap-3 mb-3">
-                <p className={`text-4xl font-bold text-${status.color}`}>
-                  {batteryLevel}%
-                </p>
-                <Badge variant={status.color as any}>{status.text}</Badge>
+                <p className="text-4xl font-bold">{status.text}</p>
+                <Badge className={status.badgeClass}>{status.text}</Badge>
               </div>
 
               <div className="w-full bg-muted rounded-full h-3">
                 <div
-                  className={`h-3 rounded-full bg-${status.color} transition-all`}
+                  className={`h-3 rounded-full ${status.barClass} transition-all`}
                   style={{ width: `${batteryLevel}%` }}
                 />
               </div>
@@ -73,7 +71,7 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
                 <div>
                   <p className="font-medium text-warning mb-1">Low Battery Warning</p>
                   <p className="text-sm text-muted-foreground">
-                    This bike may not have enough charge for a long ride. Consider choosing another bike.
+                    This vehicle has low battery. Please exchange it at the nearest dock.
                   </p>
                 </div>
               </div>

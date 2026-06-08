@@ -6,29 +6,31 @@ import {
   IndianRupee,
   MapPin,
   Bike,
-  Star
+  Star,
+  CalendarClock,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import { formatCurrency, formatDuration } from '../lib/utils';
+import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
+import type { RideHistoryRecord } from '../lib/admin-data';
+import { NotificationBell } from '../components/notification-bell';
 
 interface RideCompleteScreenProps {
-  rideData: {
-    duration: number;
-    fare: number;
-    startDock: string;
-    endDock: string;
-    distance: number;
-  };
+  rideData: RideHistoryRecord;
   onContinue: () => void;
+  onReportIssue: () => void;
 }
 
 export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
   rideData,
-  onContinue
+  onContinue,
+  onReportIssue,
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col items-center justify-center p-6">
+      <div className="mb-4 flex w-full max-w-md justify-end">
+        <NotificationBell />
+      </div>
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -59,7 +61,7 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
           transition={{ delay: 0.3 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold mb-2">Ride Complete!</h1>
+          <h1 className="text-3xl font-bold mb-2">Ride Receipt</h1>
           <p className="text-muted-foreground">Thank you for riding with QuickPed</p>
         </motion.div>
 
@@ -80,10 +82,19 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
                     {rideData.fare}
                   </p>
                 </div>
+                <p className="mt-2 text-xs text-muted-foreground">Base fare {formatCurrency(0)} + {formatCurrency(2)} per minute</p>
               </div>
 
               {/* Ride Details */}
               <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <CalendarClock className="text-muted-foreground" size={20} />
+                    <span className="text-sm">Date & Time</span>
+                  </div>
+                  <span className="text-right text-sm font-bold">{formatDate(rideData.completedAt)}</span>
+                </div>
+
                 <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
                   <div className="flex items-center gap-3">
                     <Clock className="text-muted-foreground" size={20} />
@@ -141,14 +152,18 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
           </Card>
         </motion.div>
 
-        {/* Continue Button */}
+        {/* Receipt Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
+          className="grid grid-cols-2 gap-3"
         >
           <Button onClick={onContinue} size="xl" className="w-full">
             Continue
+          </Button>
+          <Button onClick={onReportIssue} size="xl" variant="outline" className="w-full">
+            Report Issue
           </Button>
         </motion.div>
       </motion.div>

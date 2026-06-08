@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
   User,
-  Mail,
   Phone,
   Shield,
   Bell,
@@ -10,10 +9,12 @@ import {
   FileText,
   LogOut,
   ChevronRight,
-  CheckCircle
+  CheckCircle,
+  GraduationCap,
+  AlertCircle,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import {
   Dialog,
@@ -23,6 +24,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../components/ui/dialog';
+import { NotificationBell } from '../components/notification-bell';
+
+const STORAGE_KEY = 'qp_user_profile';
+
+interface UserProfile {
+  phone: string;
+  name: string;
+  institution: string;
+}
 
 interface ProfileScreenProps {
   onBack: () => void;
@@ -30,83 +40,43 @@ interface ProfileScreenProps {
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }) => {
-  const user = {
-    name: 'Gurpreet Singh',
-    email: 'gurpreetsingh@iitropar.ac.in',
-    phone: '+91 7340992754',
-    verified: true,
-    memberSince: 'June 2026',
-    totalRides: 12
-  };
-
-  // Student benefits state & helpers
-  const [student, setStudent] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('qp_student') || 'null');
-    } catch {
-      return null;
-    }
-  });
-
-  const handleUpload = (file?: File) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const data = reader.result as string;
-      const next = { verified: false, status: 'pending', uploadedAt: Date.now(), image: data };
-      localStorage.setItem('qp_student', JSON.stringify(next));
-      setStudent(next as any);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const requestVerification = () => {
-    const next = { ...(student || {}), status: 'pending' };
-    localStorage.setItem('qp_student', JSON.stringify(next));
-    setStudent(next as any);
-    setTimeout(() => {
-      const verified = { ...(next as any), status: 'verified', verifiedAt: Date.now(), verified: true };
-      localStorage.setItem('qp_student', JSON.stringify(verified));
-      setStudent(verified as any);
-    }, 1500);
-  };
-
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        setProfile(JSON.parse(saved));
+      }
+    } catch {
+      setProfile(null);
+    }
+  }, []);
+
   const menuItems = [
-    {
-      icon: Bell,
-      label: 'Notifications',
-      description: 'Manage notification preferences',
-      action: () => {}
-    },
-    {
-      icon: Shield,
-      label: 'Privacy & Security',
-      description: 'Account security settings',
-      action: () => {}
-    },
-    {
-      icon: HelpCircle,
-      label: 'Help & Support',
-      description: 'Get help and contact support',
-      action: () => {}
-    },
-    {
-      icon: FileText,
-      label: 'Terms & Conditions',
-      description: 'Read our terms and policies',
-      action: () => {}
-    },
+    { icon: Bell, label: 'Notifications', description: 'Manage notification preferences', action: () => {} },
+    { icon: Shield, label: 'Privacy & Security', description: 'Account security settings', action: () => {} },
+    { icon: HelpCircle, label: 'Help & Support', description: 'Get help and contact support', action: () => {} },
+    { icon: FileText, label: 'Terms & Conditions', description: 'Read our terms and policies', action: () => {} },
   ];
+
+  const handleLogout = () => {
+    setIsConfirmOpen(false);
+    onLogout();
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-16 rounded-b-3xl">
-        <button onClick={onBack} className="text-white mb-6">
-          ← Back
-        </button>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <button onClick={onBack} className="text-white flex items-center gap-1 hover:opacity-80 transition-opacity">
+            ← Back
+          </button>
+          <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
+        </div>
 
         {/* Profile Card */}
         <motion.div
@@ -115,47 +85,75 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
           className="text-center"
         >
           <div className="relative inline-block mb-4">
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center">
+            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg">
               <User size={48} className="text-primary" />
             </div>
-            {user.verified && (
+            {profile && (
               <div className="absolute -bottom-1 -right-1 bg-success rounded-full p-1">
                 <CheckCircle size={20} className="text-white" />
               </div>
             )}
           </div>
 
-          <h1 className="text-2xl font-bold text-white mb-1">{user.name}</h1>
+          <h1 className="text-2xl font-bold text-white mb-1">
+            {profile?.name ?? 'Guest User'}
+          </h1>
           <Badge className="bg-white/20 text-white border-white/40 mb-2">
-            {user.verified ? 'Verified Rider' : 'Regular Rider'}
+            {profile ? 'Verified Rider' : 'Regular Rider'}
           </Badge>
-          <p className="text-white/80 text-sm">Member since {user.memberSince}</p>
+          <p className="text-white/80 text-sm">
+            {profile?.institution ?? 'Institution not set'}
+          </p>
         </motion.div>
       </div>
 
       <div className="px-6 -mt-8 space-y-6">
-        {/* Contact Information */}
-        <Card variant="elevated">
-          <CardContent className="p-6 space-y-4">
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
-              <Mail className="text-primary" size={20} />
-              <div className="flex-1">
-                <p className="text-sm text-muted-foreground">Email</p>
-                <p className="font-medium">{user.email}</p>
+        {/* User Info Card */}
+        {profile ? (
+          <Card variant="elevated">
+            <CardContent className="p-6 space-y-4">
+              {/* Phone */}
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+                <Phone className="text-primary flex-shrink-0" size={20} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone Number</p>
+                  <p className="font-semibold truncate">+91 {profile.phone}</p>
+                </div>
+                <CheckCircle className="text-success flex-shrink-0" size={18} />
               </div>
-              {user.verified && <CheckCircle className="text-success" size={20} />}
-            </div>
 
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
-              <Phone className="text-primary" size={20} />
-              <div className="flex-1">
-                <p className="text-sm text-muted-foreground">Phone</p>
-                <p className="font-medium">{user.phone}</p>
+              {/* Name */}
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+                <User className="text-primary flex-shrink-0" size={20} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Full Name</p>
+                  <p className="font-semibold truncate">{profile.name}</p>
+                </div>
+                <CheckCircle className="text-success flex-shrink-0" size={18} />
               </div>
-              <CheckCircle className="text-success" size={20} />
-            </div>
-          </CardContent>
-        </Card>
+
+              {/* Institution */}
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+                <GraduationCap className="text-primary flex-shrink-0" size={20} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Institution</p>
+                  <p className="font-semibold truncate">{profile.institution}</p>
+                </div>
+                <CheckCircle className="text-success flex-shrink-0" size={18} />
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          // Fallback if no profile saved
+          <Card variant="elevated">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <AlertCircle size={20} />
+                <p className="text-sm">No profile information found. Please log in again.</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Settings Menu */}
         <Card variant="elevated">
@@ -171,16 +169,13 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
                   className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 transition-colors group"
                 >
                   <div className="p-2 bg-primary/10 rounded-lg">
-                    <item.icon className="text-primary" size={24} />
+                    <item.icon className="text-primary" size={20} />
                   </div>
                   <div className="flex-1 text-left">
                     <p className="font-medium">{item.label}</p>
                     <p className="text-sm text-muted-foreground">{item.description}</p>
                   </div>
-                  <ChevronRight
-                    className="text-muted-foreground group-hover:text-foreground transition-colors"
-                    size={20}
-                  />
+                  <ChevronRight className="text-muted-foreground group-hover:text-foreground transition-colors" size={20} />
                 </motion.button>
               ))}
             </div>
@@ -202,33 +197,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Confirm Logout</DialogTitle>
-              <DialogDescription>
-                Are you sure you want to log out?
-              </DialogDescription>
+              <DialogDescription>Are you sure you want to log out?</DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsConfirmOpen(false)}
-              >
-                No
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsConfirmOpen(false);
-                  onLogout();
-                }}
-              >
-                Yes
-              </Button>
+              <Button variant="outline" onClick={() => setIsConfirmOpen(false)}>Cancel</Button>
+              <Button onClick={handleLogout}>Yes, Logout</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* App Version */}
-        <p className="text-center text-sm text-muted-foreground">
-          QuickPed v1.0.0
-        </p>
+        <p className="text-center text-sm text-muted-foreground">QuickPed v1.0.0</p>
       </div>
     </div>
   );

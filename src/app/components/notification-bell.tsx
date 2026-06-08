@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { Bell } from 'lucide-react';
 import { useNotifications } from '../contexts/notification-context';
 import NotificationCenter from './notification-center';
+import { cn } from '../lib/utils';
 
-export const NotificationBell: React.FC = () => {
+interface NotificationBellProps {
+  className?: string;
+}
+
+export const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
   const { unreadCount } = useNotifications();
   const [open, setOpen] = useState(false);
 
@@ -11,7 +16,7 @@ export const NotificationBell: React.FC = () => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-6 right-6 z-50 p-2 rounded-full bg-background border border-border shadow-md"
+        className={cn('p-2 rounded-full bg-background border border-border shadow-md', className)}
         aria-label="Notifications"
       >
         <div className="relative">

@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { formatCurrency, formatDate } from '../lib/utils';
+import { NotificationBell } from '../components/notification-bell';
 
 interface WalletScreenProps {
   onBack: () => void;
@@ -72,9 +73,12 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-12 rounded-b-3xl">
-        <button onClick={onBack} className="text-white mb-4">
-          ← Back
-        </button>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <button onClick={onBack} className="text-white">
+            ← Back
+          </button>
+          <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
+        </div>
 
         {/* Balance Card */}
         <motion.div
