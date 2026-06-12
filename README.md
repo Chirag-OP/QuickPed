@@ -1,7 +1,4 @@
 # QuickPed 🚲
-**Next-Generation Campus Mobility & Fleet Management System**
-
-QuickPed is a scalable, highly secure bike-sharing platform designed specifically for university campuses. It provides students with a seamless PWA experience for renting bikes via OTP login, while giving Super Admins and Campus Operators a powerful dashboard to manage fleets, docks, users, and real-time revenue analytics.
 
 ---
 
