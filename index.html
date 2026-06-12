@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var t=localStorage.getItem('quickped_theme')||'system';document.documentElement.setAttribute('data-theme',t);})();</script>
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://maps.gstatic.com https://www.gstatic.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com https://upload.wikimedia.org https://cdnjs.cloudflare.com; 
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   connect-src 'self' https://maps.googleapis.com https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://us-central1-sharewheels-ae969.cloudfunctions.net https://firebasestorage.googleapis.com;
+                   frame-src 'none'; 
+                   object-src 'none';">
+    <title>QuickPed - Smart Electric Cycle Sharing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Maps API - Use environment variable or backend proxy in production -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_RESTRICTED_API_KEY&loading=async&libraries=marker&callback=initMap" async defer crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Auth loading splash — hidden once Firebase resolves auth state -->
+    <div id="authSplash" role="status" aria-label="Loading QuickPed"
+        style="position:fixed;inset:0;background:#4F46E5;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.4s ease;">
+        <i class="fas fa-bicycle" style="font-size:3rem;color:#84CC16;margin-bottom:16px;animation:pulse 1.5s ease-in-out infinite;" aria-hidden="true"></i>
+        <h1 style="color:white;font-size:1.8rem;font-weight:700;letter-spacing:-0.02em;">QuickPed</h1>
+        <p style="color:rgba(255,255,255,0.6);margin-top:8px;font-size:0.9rem;">IIT Ropar Campus</p>
+    </div>
+    <!-- Toast Container -->
+    <div id="toast-container" role="alert" aria-live="polite"></div>
+    
+    <!-- Public Website (Always visible) -->
+    <div id="public-site">
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-bicycle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            <h1>QuickPed</h1>
+                            <span>IIT Ropar Campus</span>
+                        </div>
+                    </div>
+                    
+                    <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                    
+                    <nav id="mainNav" aria-label="Main navigation">
+                        <ul>
+                            <li><a href="#" class="active" data-nav="home">Home</a></li>
+                            <li><a href="#how-it-works" data-nav="how-it-works">How It Works</a></li>
+                            <li><a href="#map-section" data-nav="docks">Docks</a></li>
+                            <li><a href="#pricing" data-nav="pricing">Pricing</a></li>
+                            <li><a href="#contact" data-nav="contact">Contact</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="auth-buttons" id="authButtons">
+                        <button class="btn btn-outline" id="loginBtn" aria-label="Login to your account" data-action="login">Login</button>
+                        <button class="btn btn-primary" id="signupBtn" aria-label="Create new account" data-action="signup">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Welcome Strip (shown when logged in) -->
+        <div class="welcome-strip" id="welcomeStrip" style="display: none;">
+            <div class="container">
+                <h3 id="welcomeMessage">Welcome back, User!</h3>
+            </div>
+        </div>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h2>Scan. Unlock. Ride.</h2>
+                <p class="hero-sub">Campus e-cycles from ₹10 &middot; First ride always free</p>
+                <button class="hero-scan-btn" id="heroScanBtn" aria-label="Scan bike QR to start ride" data-action="scan-qr">
+                    <i class="fas fa-qrcode hero-scan-icon" aria-hidden="true"></i>
+                    Scan &amp; Ride
+                </button>
+                <a href="#how-it-works" class="hero-how-link">How it works &darr;</a>
+                <div class="app-badges">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge" loading="lazy">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge" loading="lazy">
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-title">
+                    <h2>How QuickPed Works</h2>
+                    <p>Simple steps to get you moving in seconds</p>
+                </div>
+                
+                <div class="steps">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                        </div>
+                        <h3>Sign Up</h3>
+                        <p>Create your QuickPed account with your IIT Ropar student email for instant verification.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-qrcode" aria-hidden="true"></i>
+                        </div>
+                        <h3>Find & Unlock</h3>
+                        <p>Locate the nearest bike dock, scan the QR code, and unlock your bike instantly.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-biking" aria-hidden="true"></i>
+                        </div>
+                        <h3>Ride & Enjoy</h3>
+                        <p>Enjoy your ride with our comfortable electric cycles powered for campus travel.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-parking" aria-hidden="true"></i>
+                        </div>
+                        <h3>Park & Return</h3>
+                        <p>Return to any dock station and scan to end your ride. Pay only for what you use.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Interactive Map Section -->
+        <section class="interactive-map" id="map-section">
+            <!-- Decorative animated availability dots -->
+            <div class="map-availability-dot" aria-hidden="true"></div>
+            <div class="map-availability-dot" aria-hidden="true"></div>
+            <div class="map-availability-dot" aria-hidden="true"></div>
+            <div class="container">
+                <div class="section-title">
+                    <h2 style="text-align: center; color: var(--brand-primary);">Live Dock Availability</h2>
+                    <p style="text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 30px;">
+                        Find the nearest bike dock with real-time availability information
+                    </p>
+                </div>
+                
+                <div class="map-container">
+                    <div id="map" role="application" aria-label="Interactive campus map"></div>
+                    <div class="map-fallback" id="mapFallback">
+                        <i class="fas fa-map-marked-alt fa-3x" style="color: var(--brand-primary); margin-bottom: 20px;" aria-hidden="true"></i>
+                        <h3>Map Loading...</h3>
+                        <p>If this takes too long, please check your internet connection</p>
+                        <button class="btn btn-outline" id="retryMapBtn" style="margin-top: 20px;" data-action="retry-map">Retry</button>
+                    </div>
+                </div>
+                
+                <div class="docks-slider">
+                    <h3 style="margin-bottom: 20px; color: var(--text-primary);">All Dock Stations</h3>
+                    <div class="slider-container">
+                        <div class="dock-card" data-dock="library">
+                            <div class="dock-header">
+                                <span class="dock-name">Library</span>
+                                <span class="bikes-count">8/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="library-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="lhc">
+                            <div class="dock-header">
+                                <span class="dock-name">LHC</span>
+                                <span class="bikes-count">6/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="lhc-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="cafeteria">
+                            <div class="dock-header">
+                                <span class="dock-name">Cafeteria</span>
+                                <span class="bikes-count">5/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="cafeteria-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="chenab">
+                            <div class="dock-header">
+                                <span class="dock-name">Chenab Hostel</span>
+                                <span class="bikes-count">7/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="chenab-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="annapurna">
+                            <div class="dock-header">
+                                <span class="dock-name">Annapurna Hall</span>
+                                <span class="bikes-count">6/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="annapurna-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="maingate">
+                            <div class="dock-header">
+                                <span class="dock-name">Main Gate</span>
+                                <span class="bikes-count">8/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="maingate-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="nsoground">
+                            <div class="dock-header">
+                                <span class="dock-name">NSO Ground</span>
+                                <span class="bikes-count">4/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="nsoground-distance">-- km away</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dock-card" data-dock="electrical">
+                            <div class="dock-header">
+                                <span class="dock-name">Electrical</span>
+                                <span class="bikes-count">7/8 bikes</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                                <span id="electrical-distance">-- km away</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <div class="section-title">
+                    <h2 style="text-align: center; color: var(--brand-primary);">Simple, Affordable Pricing</h2>
+                    <p style="text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 30px;">
+                        One simple price. No subscriptions. No surprises.
+                    </p>
+                </div>
+                
+                <div class="fare-display">
+                    <div class="fare-amount">₹10</div>
+                    <div class="fare-subtitle">for the first 10 minutes</div>
+                    <div class="fare-note">Your first ride is always free</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>QuickPed</h3>
+                        <p>India's first dock-based electric cycle sharing service built for IIT campuses.</p>
+                        <div style="margin-top: 20px;">
+                            <a href="#" style="margin-right: 15px;" aria-label="Facebook" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                            <a href="#" style="margin-right: 15px;" aria-label="Twitter" rel="noopener noreferrer"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                            <a href="#" style="margin-right: 15px;" aria-label="Instagram" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                            <a href="#" aria-label="LinkedIn" rel="noopener noreferrer"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#" data-footer-link="home">Home</a></li>
+                            <li><a href="#how-it-works" data-footer-link="how-it-works">How It Works</a></li>
+                            <li><a href="#map-section" data-footer-link="docks">Docks</a></li>
+                            <li><a href="#pricing" data-footer-link="pricing">Pricing</a></li>
+                            <li><a href="#" data-footer-link="faqs">FAQs</a></li>
+                            <li><a href="#contact" data-footer-link="contact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Contact Info</h3>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> IIT Ropar, Punjab, India</li>
+                            <li><i class="fas fa-phone" aria-hidden="true"></i> +91 12345 67890</li>
+                            <li><i class="fas fa-envelope" aria-hidden="true"></i> info@quickped.in</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 QuickPed. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Floating Action Button — scan QR (shown when logged in, no active ride) -->
+    <button class="fab-scan" id="fabScan" aria-label="Scan bike QR code to start ride" data-action="scan-qr" style="display:none;">
+        <i class="fas fa-qrcode" aria-hidden="true"></i>
+    </button>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottomNav" aria-label="Quick navigation">
+        <div class="bottom-nav-inner">
+            <a href="#" class="bottom-nav-item active" data-nav="home" aria-label="Home">
+                <i class="fas fa-home" aria-hidden="true"></i>
+                <span>Home</span>
+            </a>
+            <a href="#map-section" class="bottom-nav-item" data-nav="docks" aria-label="Docks">
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                <span>Docks</span>
+            </a>
+            <button class="bottom-nav-item bottom-nav-scan" id="bottomNavScan" aria-label="Scan to ride" data-action="scan-qr">
+                <i class="fas fa-qrcode" aria-hidden="true"></i>
+            </button>
+            <button class="bottom-nav-item" id="bottomNavRides" aria-label="My rides" data-action="view-all-rides">
+                <i class="fas fa-bicycle" aria-hidden="true"></i>
+                <span>Rides</span>
+            </button>
+            <button class="bottom-nav-item" id="bottomNavWallet" aria-label="Open wallet" data-action="open-panel">
+                <i class="fas fa-wallet" aria-hidden="true"></i>
+                <span>Wallet</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- User Dashboard Panel (Slides in from right) -->
+    <div id="userDashboardPanel" class="user-dashboard-panel" role="dialog" aria-labelledby="panel-title" aria-modal="true" tabindex="-1">
+        <div class="panel-header">
+            <h2 id="panel-title">User Dashboard</h2>
+            <button class="close-panel" aria-label="Close dashboard" data-action="close-panel">&times;</button>
+        </div>
+        <div class="panel-content">
+            <div class="user-info" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div class="user-avatar" id="panelUserAvatar" aria-label="User avatar">U</div>
+                <div>
+                    <h3 style="color: var(--text-primary); margin: 0;" id="panelUserName">User Name</h3>
+                    <p style="color: var(--text-muted); margin: 5px 0 0;" id="panelUserEmail">user@example.com</p>
+                    <div id="verificationBadge" style="display: none; align-items: center; gap: 5px; margin-top: 4px; font-size: 0.78rem;">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                        <span id="verificationBadgeText">IIT Ropar Verified</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wallet-summary">
+                <h3 style="color: rgba(255,255,255,0.8); margin: 0;">Wallet Balance</h3>
+                <div class="wallet-amount" id="walletAmount">₹0.00</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" id="topUpBtn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.5);" aria-label="Add money to wallet" data-action="top-up">Top Up</button>
+                    <button class="btn" id="viewHistoryBtn" style="background: white; color: var(--brand-primary);" aria-label="View wallet history" data-action="view-history">View History</button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Rides</h3>
+                    <div class="stat-value" id="totalRides">0</div>
+                    <p style="color: var(--text-muted);">This month</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Distance Covered</h3>
+                    <div class="stat-value" id="distanceCovered">0 km</div>
+                    <p style="color: var(--text-muted);">This month</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Time Saved</h3>
+                    <div class="stat-value" id="timeSaved">0 hrs</div>
+                    <p style="color: var(--text-muted);">Vs walking</p>
+                </div>
+            </div>
+            
+            <div class="recent-rides">
+                <h3>Recent Rides</h3>
+                <div id="recentRidesContent">
+                    <div class="empty-state">
+                        <i class="fas fa-bicycle" aria-hidden="true"></i>
+                        <button class="btn btn-primary" id="firstRideBtn" style="margin-top: 20px;" aria-label="Claim your free first ride" data-action="claim-free-ride">Claim Free Ride</button>
+                    </div>
+                </div>
+                <button class="btn btn-outline-dark" id="viewAllRidesBtn" style="margin-top: 20px; display: none;" aria-label="View all ride history" data-action="view-all-rides">View All Rides</button>
+            </div>
+            
+            <!-- Appearance Section -->
+            <div class="appearance-settings" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">Appearance</h3>
+                <div class="theme-selector" role="group" aria-label="Choose colour theme">
+                    <button class="theme-option-btn" id="themeLightBtn" data-theme-set="light" aria-pressed="false" aria-label="Light theme">
+                        <i class="fas fa-sun" aria-hidden="true"></i>
+                        <span>Light</span>
+                    </button>
+                    <button class="theme-option-btn" id="themeDarkBtn" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                        <span>Dark</span>
+                    </button>
+                    <button class="theme-option-btn" id="themeSystemBtn" data-theme-set="system" aria-pressed="false" aria-label="System default theme">
+                        <i class="fas fa-desktop" aria-hidden="true"></i>
+                        <span>System</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Settings Section -->
+            <div class="profile-settings" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <h3 style="color: var(--text-primary); margin-bottom: 15px;">Profile Settings</h3>
+
+                <div style="display: grid; gap: 15px;">
+                    <button class="btn btn-outline-dark" id="editProfileBtn" style="width: 100%;" aria-label="Edit profile information" data-action="edit-profile">
+                        <i class="fas fa-user-edit" aria-hidden="true"></i> Edit Profile
+                    </button>
+                    <button class="btn btn-outline-dark" id="changePasswordBtn" style="width: 100%;" aria-label="Change password" data-action="change-password">
+                        <i class="fas fa-key" aria-hidden="true"></i> Change Password
+                    </button>
+                    <button class="btn btn-outline-dark" id="verifyStudentIdBtn" style="width: 100%; display: none;" aria-label="Verify student email" data-action="verify-student-id">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> Verify Student Email
+                    </button>
+                    <p id="verifiedStudentEmailNote" style="display: none; color: var(--success); font-size: 0.85rem; margin-top: 6px; text-align: center;" aria-live="polite"></p>
+                </div>
+            </div>
+            
+            <button class="btn btn-danger" id="logoutBtn" style="width: 100%; margin-top: 20px;" aria-label="Log out of your account" data-action="logout">Logout</button>
+        </div>
+    </div>
+    
+    <!-- Admin Dashboard (Hidden by default) -->
+    <div id="admin-dashboard" class="admin-dashboard" role="region" aria-labelledby="admin-dashboard-title">
+        <div class="container">
+            <div class="admin-dashboard-header">
+                <div>
+                    <h2 id="admin-dashboard-title" style="margin:0;">Admin Dashboard</h2>
+                    <span id="adminLastRefreshed" style="font-size:0.8rem; color:var(--text-muted); margin-top:4px; display:block;">
+                        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--success); margin-right:5px; animation: pulse 2s infinite;"></span>
+                        Connecting…
+                    </span>
+                </div>
+                <div>
+                    <span>Welcome, Admin</span>
+                    <button class="btn btn-outline" id="toggleUserView" style="margin-left: 15px;" aria-label="Toggle user view" data-action="toggle-view">Toggle User View</button>
+                    <button class="btn btn-outline-dark" id="adminLogoutBtn" style="margin-left: 15px;" aria-label="Log out of admin account" data-action="admin-logout">Logout</button>
+                </div>
+            </div>
+            
+            <div class="tabs" role="tablist">
+                <div class="tab active" data-tab="overview" role="tab" aria-selected="true" aria-controls="overview" data-tab-id="overview">Overview</div>
+                <div class="tab" data-tab="users" role="tab" aria-selected="false" aria-controls="users" data-tab-id="users">Users</div>
+                <div class="tab" data-tab="rides" role="tab" aria-selected="false" aria-controls="rides" data-tab-id="rides">Rides</div>
+                <div class="tab" data-tab="docks" role="tab" aria-selected="false" aria-controls="docks" data-tab-id="docks">Docks</div>
+                <div class="tab" data-tab="reports" role="tab" aria-selected="false" aria-controls="reports" data-tab-id="reports">Reports</div>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overview" role="tabpanel" aria-labelledby="tab-overview">
+                <!-- admin-stat-grid: responsive 2-col→1-col breakpoints defined in style.css -->
+                <div class="admin-stat-grid">
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--brand-primary); margin-bottom: 10px;" id="totalBikes">50+</div>
+                        <div style="font-weight: 500;">Total Bikes</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--success); margin-bottom: 10px;" id="totalDocks">8</div>
+                        <div style="font-weight: 500;">Dock Stations</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--brand-primary); margin-bottom: 10px;" id="activeUsers">0</div>
+                        <div style="font-weight: 500;">Active Users</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--brand-action); margin-bottom: 10px;" id="completedRides">0</div>
+                        <div style="font-weight: 500;">Rides Completed</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--brand-dark); margin-bottom: 10px;" id="collegeVerifiedUsers">0</div>
+                        <div style="font-weight: 500;">College Verified</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div style="font-size: 3rem; color: var(--brand-light); margin-bottom: 10px;" id="verificationRate">0%</div>
+                        <div style="font-weight: 500;">Verification Rate</div>
+                    </div>
+                </div>
+                
+                <!-- Live Active Rides Panel -->
+                <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--success);">
+                    <div class="card-header">
+                        <h3 style="display:flex; align-items:center; gap:10px;">
+                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--success); animation: pulse 2s infinite;"></span>
+                            Active Rides
+                            <span id="activeRidesCount" style="background:var(--success); color:#fff; border-radius:12px; padding:2px 10px; font-size:0.85rem;">0</span>
+                        </h3>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">Updates in real time</span>
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table aria-label="Active rides table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Bike</th>
+                                    <th scope="col" class="hide-mobile">Start Dock</th>
+                                    <th scope="col" class="hide-mobile">Started At</th>
+                                    <th scope="col">Est. Fare</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeRidesTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty-state" style="padding:20px;">
+                                        <i class="fas fa-check-circle" style="color:var(--success);" aria-hidden="true"></i>
+                                        <p>No active rides — all bikes are docked</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Rides</h3>
+                        <input type="text" placeholder="Search rides..." class="search-bar" id="adminRidesSearch" aria-label="Search rides" data-search="rides">
+                    </div>
+                    <div class="admin-table-wrapper">
+                    <table aria-label="Recent rides table">
+                        <thead>
+                            <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Bike ID</th>
+                                <th scope="col">Start Dock</th>
+                                <th scope="col">End Dock</th>
+                                <th scope="col">Duration</th>
+                                <th scope="col">Fare</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminRidesTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    <i class="fas fa-history" aria-hidden="true"></i>
+                                    <p>No rides yet</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div><!-- /.admin-table-wrapper -->
+                </div><!-- /.card -->
+            </div><!-- /#overview -->
+
+            <!-- Users Tab -->
+            <div class="tab-content" id="users" role="tabpanel" aria-labelledby="tab-users">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Users</h3>
+                        <div>
+                            <input type="text" placeholder="Search users..." class="search-bar" id="adminUsersSearch" aria-label="Search users" data-search="users">
+                        </div>
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table aria-label="Users table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col" class="hide-mobile">Phone</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Total Rides</th>
+                                    <th scope="col">Wallet Balance</th>
+                                    <th scope="col">Verification</th>
+                                    <th scope="col" class="hide-mobile">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody">
+                                <tr>
+                                    <td colspan="8" class="empty-state">
+                                        <i class="fas fa-users" aria-hidden="true"></i>
+                                        <p>No users yet</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- /.admin-table-wrapper -->
+                </div>
+            </div>
+            
+            <!-- Rides Tab -->
+            <div class="tab-content" id="rides" role="tabpanel" aria-labelledby="tab-rides">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Rides</h3>
+                        <div>
+                            <select style="padding: 8px; border-radius: 4px; border: 1px solid var(--border); margin-right: 10px;" id="adminRidesFilter" aria-label="Filter rides by status" data-filter="rides">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <input type="text" placeholder="Search by user/bike..." class="search-bar" id="adminAllRidesSearch" aria-label="Search all rides" data-search="all-rides">
+                        </div>
+                    </div>
+                    <div class="admin-table-wrapper">
+                        <table aria-label="All rides table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ride ID</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Bike</th>
+                                    <th scope="col" class="hide-mobile">Start Time</th>
+                                    <th scope="col" class="hide-mobile">End Time</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col" class="hide-mobile">Distance</th>
+                                    <th scope="col">Fare</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminAllRidesTableBody">
+                                <tr>
+                                    <td colspan="9" class="empty-state">
+                                        <i class="fas fa-biking" aria-hidden="true"></i>
+                                        <p>No rides yet</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- /.admin-table-wrapper -->
+                </div>
+            </div>
+            <!-- Docks Tab -->
+            <div class="tab-content" id="docks" role="tabpanel" aria-labelledby="tab-docks">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Dock Stations</h3>
+                        <button class="btn btn-primary" aria-label="Add new dock" data-action="add-dock">Add New Dock</button>
+                    </div>
+                    <div class="admin-table-wrapper">
+                    <table aria-label="Dock stations table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Dock Name</th>
+                                <th scope="col" class="hide-mobile">Location</th>
+                                <th scope="col">Bikes Available</th>
+                                <th scope="col" class="hide-mobile">Bikes Total</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminDocksTableBody">
+                            <tr>
+                                <td>Library</td>
+                                <td>Central Campus</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Library dock" data-action="manage-dock" data-dock="library">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LHC</td>
+                                <td>Main Campus</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage LHC dock" data-action="manage-dock" data-dock="lhc">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cafeteria</td>
+                                <td>Central Campus</td>
+                                <td>5</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Cafeteria dock" data-action="manage-dock" data-dock="cafeteria">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Chenab Hostel</td>
+                                <td>North Campus</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Chenab Hostel dock" data-action="manage-dock" data-dock="chenab">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Annapurna Hall</td>
+                                <td>North Campus</td>
+                                <td>6</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Annapurna Hall dock" data-action="manage-dock" data-dock="annapurna">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Main Gate</td>
+                                <td>South Campus</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Main Gate dock" data-action="manage-dock" data-dock="maingate">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>NSO Ground</td>
+                                <td>South Campus</td>
+                                <td>4</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage NSO Ground dock" data-action="manage-dock" data-dock="nsoground">Manage</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Electrical</td>
+                                <td>Main Campus</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-active">Operational</span></td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.85rem;" aria-label="Manage Electrical dock" data-action="manage-dock" data-dock="electrical">Manage</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div><!-- /.admin-table-wrapper -->
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div class="tab-content" id="reports" role="tabpanel" aria-labelledby="tab-reports">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Reports & Analytics</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="stat-card">
+                            <h3>Revenue Overview</h3>
+                            <div class="stat-value" id="revenueOverview">₹0</div>
+                            <p style="color: var(--text-muted);">This month</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Peak Hours</h3>
+                            <div class="stat-value" id="peakHours">-</div>
+                            <p style="color: var(--text-muted);">Most active period</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Top Dock</h3>
+                            <div class="stat-value" id="topDock">-</div>
+                            <p style="color: var(--text-muted);">Highest usage</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Total Distance</h3>
+                            <div class="stat-value" id="totalDistance">0 km</div>
+                            <p style="color: var(--text-muted);">Traveled by users</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Avg Ride Distance</h3>
+                            <div class="stat-value" id="avgRideDistance">0 km</div>
+                            <p style="color: var(--text-muted);">Per ride</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Avg Ride Fare</h3>
+                            <div class="stat-value" id="avgRideFare">₹0</div>
+                            <p style="color: var(--text-muted);">Per ride</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 15px; color: var(--text-primary);">Rides Per Day (Last 7 Days)</h3>
+                        <div style="height: 200px; background: var(--brand-light); border-radius: 8px; display: flex; align-items: flex-end; justify-content: space-around; padding: 10px 10px 0;" id="ridesChart" aria-label="Rides per day chart">
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Mon</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Tue</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Wed</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Thu</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Fri</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Sat</span>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;">
+                                <div class="chart-bar" style="width:28px;background:var(--brand-primary);border-radius:4px 4px 0 0;height:0%;"></div>
+                                <span style="font-size:10px;color:var(--text-muted);">Sun</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" role="dialog" aria-labelledby="login-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close login modal" data-action="close-login">&times;</button>
+            <div class="modal-header">
+                <h2 id="login-modal-title">Login to QuickPed</h2>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="loginEmail">Email or Phone</label>
+                    <input type="text" id="loginEmail" class="form-control" placeholder="Enter your email or phone" autocomplete="username" data-input="login-email">
+                    <div class="error-message" id="loginEmailError">Please enter your email or phone</div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" data-input="login-password">
+                        <button class="toggle-password" id="toggleLoginPassword" type="button" aria-label="Toggle password visibility" data-action="toggle-login-password">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="loginPasswordError">Please enter your password</div>
+                </div>
+                <!-- REMEMBER ME CHECKBOX -->
+                <div style="display: flex; align-items: center; margin: 15px 0;">
+                    <input type="checkbox" id="rememberMe" style="margin-right: 10px;" data-input="remember-me">
+                    <label for="rememberMe" style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">Remember me on this device</label>
+                </div>
+                <!-- END REMEMBER ME -->
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" id="forgotPasswordLink" style="color: var(--brand-primary); font-size: 0.9rem; text-decoration: none;" aria-label="Forgot password" data-action="forgot-password">Forgot Password?</a>
+                </div>
+                <div class="loading" id="loginLoading">
+                    <div class="spinner" role="status" aria-label="Loading"></div>
+                    <p>Logging in...</p>
+                </div>
+                <button class="btn btn-primary" id="loginSubmitBtn" type="submit" style="width: 100%;" aria-label="Submit login form" data-action="submit-login">Login</button>
+                </form>
+                <div class="switch-form">
+                    Don't have an account? <a href="#" id="showSignup" aria-label="Switch to signup" data-action="switch-to-signup">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal" role="dialog" aria-labelledby="signup-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close signup modal" data-action="close-signup">&times;</button>
+            <div class="modal-header">
+                <h2 id="signup-modal-title">Create QuickPed Account</h2>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="Enter your full name" autocomplete="name" data-input="signup-name">
+                    <div class="error-message" id="signupNameError">Please enter your full name</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" autocomplete="email" data-input="signup-email">
+                    <div class="error-message" id="signupEmailError">Please enter a valid email</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" class="form-control" placeholder="Enter your phone number" autocomplete="tel" data-input="signup-phone">
+                    <div class="error-message" id="signupPhoneError">Please enter a valid 10-digit phone number</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Min 8 chars, include a number" autocomplete="new-password" data-input="signup-password">
+                        <button class="toggle-password" id="toggleSignupPassword" type="button" aria-label="Toggle password visibility" data-action="toggle-signup-password">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="signupPasswordError">Please create a password</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirm">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="signupConfirm" class="form-control" placeholder="Confirm your password" autocomplete="new-password" data-input="signup-confirm">
+                        <button class="toggle-password" id="toggleSignupConfirm" type="button" aria-label="Toggle password visibility" data-action="toggle-signup-confirm">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="signupConfirmError">Passwords do not match</div>
+                </div>
+                <div class="loading" id="signupLoading">
+                    <div class="spinner" role="status" aria-label="Loading"></div>
+                    <p>Creating account...</p>
+                </div>
+                <button class="btn btn-primary" id="signupSubmitBtn" type="submit" style="width: 100%;" aria-label="Submit signup form" data-action="submit-signup">Sign Up</button>
+                </form>
+                <div class="switch-form">
+                    Already have an account? <a href="#" id="showLogin" aria-label="Switch to login" data-action="switch-to-login">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal" role="dialog" aria-labelledby="forgot-password-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close forgot password modal" data-action="close-forgot-password">&times;</button>
+            <div class="modal-header">
+                <h2 id="forgot-password-modal-title">Reset Password</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address</label>
+                    <input type="email" id="resetEmail" class="form-control" placeholder="Enter your email" autocomplete="email" data-input="reset-email">
+                    <div class="error-message" id="resetEmailError">Please enter a valid email</div>
+                </div>
+                <div class="loading" id="resetLoading" style="display: none;">
+                    <div class="spinner" role="status" aria-label="Loading"></div>
+                    <p>Sending reset instructions...</p>
+                </div>
+                <button class="btn btn-primary" id="sendResetBtn" style="width: 100%;" aria-label="Send password reset instructions" data-action="send-reset">Send Reset Instructions</button>
+                <div class="switch-form">
+                    <a href="#" id="backToLogin" aria-label="Back to login" data-action="back-to-login">Back to Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wallet Top-Up Modal -->
+    <div id="walletTopUpModal" class="modal" role="dialog" aria-labelledby="wallet-topup-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close wallet top-up modal" data-action="close-topup">&times;</button>
+            <div class="modal-header">
+                <h2 id="wallet-topup-modal-title">Top Up Wallet</h2>
+            </div>
+            <div class="modal-body">
+                <div style="text-align:center;padding:10px;background:var(--brand-light);border-radius:8px;margin-bottom:20px;">
+                    <span style="color:var(--text-muted);font-size:0.85rem;">Current Balance: </span>
+                    <span id="topupCurrentBalance" style="font-weight:700;color:var(--brand-primary);">₹0.00</span>
+                </div>
+                <h3 style="margin-bottom: 20px; color: var(--text-primary);">Select Amount</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <button class="btn btn-outline-dark amount-btn" data-amount="100" aria-label="Top up ₹100" data-action="select-amount">₹100</button>
+                    <button class="btn btn-primary amount-btn" data-amount="200" aria-label="Top up ₹200" data-action="select-amount">₹200</button>
+                    <button class="btn btn-outline-dark amount-btn" data-amount="500" aria-label="Top up ₹500" data-action="select-amount">₹500</button>
+                    <button class="btn btn-outline-dark amount-btn" data-amount="1000" aria-label="Top up ₹1000" data-action="select-amount">₹1000</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customAmount">Custom Amount</label>
+                    <input type="number" id="customAmount" class="form-control" placeholder="Enter custom amount" min="50" max="5000" aria-label="Custom top-up amount" data-input="custom-amount">
+                </div>
+                
+                <button class="btn btn-primary" id="proceedToPaymentBtn" style="width: 100%; margin-top: 20px;" aria-label="Proceed to payment" data-action="proceed-payment">Proceed to Payment</button>
+                <p style="text-align: center; margin-top: 12px; color: var(--text-muted); font-size: 0.8rem;" role="note">
+                    ⚠️ Demo Mode — no real payment is processed. Wallet credits are for testing only.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet History Modal -->
+    <div id="walletHistoryModal" class="modal" role="dialog" aria-labelledby="wallet-history-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close wallet history modal" data-action="close-wallet-history">&times;</button>
+            <div class="modal-header">
+                <h2 id="wallet-history-modal-title">Wallet History</h2>
+            </div>
+            <div class="modal-body">
+                <div id="walletHistoryContent">
+                    <!-- Wallet transactions will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- QR Scan Screen -->
+    <div class="qr-scan-screen" id="qrScanScreen" role="dialog" aria-labelledby="qr-scan-title" aria-modal="true" tabindex="-1">
+        <button class="scan-close-btn" id="cancelScanBtn" aria-label="Cancel QR scan" data-action="cancel-scan">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+
+        <!-- Default scan UI -->
+        <div id="scanDefaultState">
+            <h2 id="qr-scan-title" style="font-size:1.3rem; font-weight:600; margin-bottom:8px;">Scan Bike QR</h2>
+            <p class="scan-instruction">Point your camera at the QR code on the bike to unlock instantly</p>
+            <div class="scan-frame" id="scanFrame">
+                <div class="scan-line"></div>
+                <span class="scan-corner-bl" aria-hidden="true"></span>
+                <span class="scan-corner-br" aria-hidden="true"></span>
+            </div>
+            <p style="font-size:0.85rem; opacity:0.6; margin-bottom:12px;">Or enter bike ID manually</p>
+            <div style="display: flex; gap: 10px; width: min(80%, 320px);">
+                <input type="text" id="manualBikeId" class="form-control" placeholder="e.g. CW-031" style="flex: 1; background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.25); color:white;" aria-label="Enter bike ID manually" data-input="manual-bike-id">
+                <button class="btn btn-primary" id="manualUnlockBtn" aria-label="Unlock bike with entered ID" data-action="manual-unlock">Unlock</button>
+            </div>
+        </div>
+
+        <!-- Unlock loading state — shown while awaiting GPS + lock command -->
+        <div id="unlockLoadingState" style="display:none; flex-direction:column; align-items:center; gap:20px;">
+            <div class="unlock-spinner-ring">
+                <i class="fas fa-lock-open" aria-hidden="true"></i>
+            </div>
+            <div id="unlockStatusText" style="font-size:1.25rem; font-weight:700; letter-spacing:0.02em;">Unlocking bike…</div>
+            <div id="unlockSubText" style="font-size:0.9rem; opacity:0.65;">Connecting to lock</div>
+        </div>
+    </div>
+    
+    <!-- Active Ride Screen - ENHANCED DESIGN -->
+    <div class="active-ride-screen" id="activeRideScreen" role="dialog" aria-labelledby="active-ride-title" aria-modal="true" tabindex="-1">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span>9:41</span>
+                <span>•••</span>
+            </div>
+            <div class="status-bar-right">
+                <span class="battery-percentage">60%</span>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="ride-header">
+            <div class="header-top-row">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="live-dot"></div>
+                    <div class="header-top-text">RIDE IN PROGRESS</div>
+                </div>
+                <div class="wallet-balance-pill" id="rideWalletBalance">₹0.00</div>
+            </div>
+            <div class="bike-id" id="bikeIdDisplay">CW — 023</div>
+        </div>
+        
+        <!-- Fare Circle -->
+        <div class="fare-circle">
+            <div class="fare-label">CURRENT FARE</div>
+            <div class="fare-amount-large" id="currentFare">₹10</div>
+            <div class="fare-note-small" id="fareNote">flat for 10 min</div>
+        </div>
+        
+        <!-- White Sheet -->
+        <div class="white-sheet">
+            <div class="drag-handle"></div>
+            
+            <!-- Warning Strip -->
+            <div class="warning-strip" id="warningStrip">
+                <div class="warning-left" id="warningLeft">8m 23s left in free window</div>
+                <div class="warning-right">₹1/min starts after</div>
+                <div class="warning-progress" style="width:100%;">
+                    <div class="warning-progress-bar" id="warningProgressBar"></div>
+                </div>
+            </div>
+            
+            <!-- Timer Card -->
+            <div class="timer-card">
+                <div class="timer-icon-box">
+                    <i class="fas fa-clock" aria-hidden="true"></i>
+                </div>
+                <div class="timer-content">
+                    <div class="timer-display-large">
+                        <span id="rideMinutes">00</span><span class="colon">:</span><span id="rideSeconds">00</span>
+                    </div>
+                    <div class="timer-start-time" id="startTimeText">started 9:37 AM</div>
+                </div>
+            </div>
+            
+            <!-- Destination Dock Card -->
+            <div class="dock-card-destination">
+                <div class="dock-card-content">
+                    <div class="dock-icon-box">
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                    </div>
+                    <div class="dock-info">
+                        <div class="dock-name-main" id="destinationDock">Return dock</div>
+                        <!-- returnDockSelect is wired in main.js to setEndDock() so endRideProcess knows the return dock -->
+                        <select id="returnDockSelect" class="dock-sub-label" aria-label="Select return dock" style="border:none;background:transparent;font:inherit;color:inherit;cursor:pointer;padding:0;width:100%;">
+                            <option value="">Choose return dock…</option>
+                            <option value="Library">Library</option>
+                            <option value="LHC">LHC</option>
+                            <option value="Cafeteria">Cafeteria</option>
+                            <option value="Chenab Hostel">Chenab Hostel</option>
+                            <option value="Annapurna Hall">Annapurna Hall</option>
+                            <option value="Main Gate">Main Gate</option>
+                            <option value="NSO Ground">NSO Ground</option>
+                            <option value="Electrical">Electrical</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spacer -->
+            <div class="spacer"></div>
+            
+            <!-- Button Zone -->
+            <div class="button-zone-divider"></div>
+            <div class="button-zone">
+                <button class="btn end-ride-btn" id="endRideBtn" aria-label="End current ride" data-action="end-ride">
+                    End ride →
+                </button>
+                <!-- Force-end container: hidden normally, shown only after endRideProcess() fails -->
+                <div id="forceEndContainer" style="display:none; text-align:center; margin-top:8px;">
+                    <!-- Default state: single trigger button -->
+                    <div id="forceEndDefault">
+                        <button id="forceEndBtn" class="report-issue"
+                            style="color:var(--danger);background:none;border:none;cursor:pointer;"
+                            aria-label="Force end ride" data-action="force-end-ride">
+                            <i class="fas fa-exclamation-triangle"></i> Unable to end ride? Force end
+                        </button>
+                    </div>
+                    <!-- Confirmation state: shown after trigger is clicked -->
+                    <div id="forceEndConfirm" style="display:none;">
+                        <p style="font-size:12px;color:var(--danger);margin-bottom:8px;">
+                            This may result in incomplete ride data. Admin will be notified.
+                        </p>
+                        <div style="display:flex;gap:8px;justify-content:center;">
+                            <button id="forceEndConfirmBtn" class="btn btn-danger"
+                                style="font-size:13px;padding:8px 16px;">Yes, Force End</button>
+                            <button id="forceEndCancelBtn" class="btn btn-outline-dark"
+                                style="font-size:13px;padding:8px 16px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="report-issue" aria-label="Report an issue" data-action="report-issue">
+                    Report issue
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View All Rides Modal -->
+    <div id="viewAllRidesModal" class="modal" role="dialog" aria-labelledby="all-rides-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close all rides modal" data-action="close-all-rides">&times;</button>
+            <div class="modal-header">
+                <h2 id="all-rides-modal-title">All Ride History</h2>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <input type="text" id="ridesSearchInput" placeholder="Search rides..." class="form-control" style="width: 60%;" aria-label="Search rides" data-input="rides-search">
+                    <select id="ridesSortSelect" class="form-control" style="width: 35%;" aria-label="Sort rides" data-input="rides-sort">
+                        <option value="date">Sort by Date</option>
+                        <option value="fare">Sort by Fare</option>
+                        <option value="duration">Sort by Duration</option>
+                        <option value="distance">Sort by Distance</option>
+                    </select>
+                </div>
+                <div id="allRidesContainer">
+                    <!-- Ride history will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal" role="dialog" aria-labelledby="edit-profile-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close edit profile modal" data-action="close-edit-profile">&times;</button>
+            <div class="modal-header">
+                <h2 id="edit-profile-modal-title">Edit Profile</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editUserName">Full Name</label>
+                    <input type="text" id="editUserName" class="form-control" placeholder="Enter your full name" autocomplete="name" data-input="edit-name">
+                    <div class="error-message" id="editUserNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="editUserPhone">Phone Number</label>
+                    <input type="tel" id="editUserPhone" class="form-control" placeholder="Enter your phone number" autocomplete="tel" data-input="edit-phone">
+                    <div class="error-message" id="editUserPhoneError"></div>
+                </div>
+                <div class="loading" id="editProfileLoading" style="display: none;">
+                    <div class="spinner" role="status" aria-label="Loading"></div>
+                    <p>Updating profile...</p>
+                </div>
+                <button class="btn btn-primary" id="saveProfileBtn" style="width: 100%;" aria-label="Save profile changes" data-action="save-profile">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal" role="dialog" aria-labelledby="change-password-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close change password modal" data-action="close-change-password">&times;</button>
+            <div class="modal-header">
+                <h2 id="change-password-modal-title">Change Password</h2>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <div class="password-container">
+                        <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" autocomplete="current-password" data-input="current-password">
+                        <button class="toggle-password" type="button" data-target="currentPassword" aria-label="Toggle current password visibility" data-action="toggle-current-password">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="currentPasswordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <div class="password-container">
+                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" autocomplete="new-password" data-input="new-password">
+                        <button class="toggle-password" type="button" data-target="newPassword" aria-label="Toggle new password visibility" data-action="toggle-new-password">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="newPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmNewPassword" class="form-control" placeholder="Confirm new password" autocomplete="new-password" data-input="confirm-new-password">
+                        <button class="toggle-password" type="button" data-target="confirmNewPassword" aria-label="Toggle confirm password visibility" data-action="toggle-confirm-password">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="confirmNewPasswordError"></div>
+                </div>
+                <div class="loading" id="changePasswordLoading" style="display: none;">
+                    <div class="spinner" role="status" aria-label="Loading"></div>
+                    <p>Changing password...</p>
+                </div>
+                <button class="btn btn-primary" id="savePasswordBtn" type="submit" style="width: 100%;" aria-label="Save new password" data-action="save-password">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verify Student Email Modal -->
+    <div id="verifyStudentIdModal" class="modal" role="dialog" aria-labelledby="verify-student-id-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close verify student email modal" data-action="close-verify-id">&times;</button>
+            <div class="modal-header">
+                <h2 id="verify-student-id-modal-title">Verify Student Email</h2>
+            </div>
+            <div class="modal-body">
+                <div id="otpStep1">
+                    <p>Enter your IIT Ropar student email (<strong>@iitrpr.ac.in</strong>) to verify
+                    your account instantly:</p>
+                    <div class="form-group">
+                        <label for="studentEmail">Student Email</label>
+                        <input type="email" id="studentEmail" class="form-control"
+                               placeholder="example@iitrpr.ac.in"
+                               autocomplete="email" data-input="student-email"
+                               aria-label="IIT Ropar student email address">
+                        <div class="error-message" id="studentEmailError"></div>
+                    </div>
+                    <div class="loading" id="sendOtpLoading" style="display: none;">
+                        <div class="spinner" role="status" aria-label="Loading"></div>
+                        <p>Verifying...</p>
+                    </div>
+                    <button class="btn btn-primary" id="sendOtpBtn" style="width: 100%;"
+                            aria-label="Verify student email" data-action="send-otp">
+                        Verify Student Email
+                    </button>
+                    <p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);
+                              text-align: center;" role="note">
+                        ⚠️ Dev mode — domain check only. Full OTP verification coming before launch.
+                    </p>
+                </div>
+
+                <!-- Step 2 preserved as hidden for future OTP restoration -->
+                <div id="otpStep2" style="display: none;" aria-hidden="true">
+                    <p>Enter the 6-digit code sent to <strong id="otpEmailDisplay"></strong></p>
+                    <div class="form-group">
+                        <label for="otpInput">Verification Code</label>
+                        <input type="text" id="otpInput" class="form-control"
+                               placeholder="Enter 6-digit code" maxlength="6"
+                               inputmode="numeric" pattern="[0-9]{6}"
+                               autocomplete="one-time-code" data-input="otp-code"
+                               aria-label="6-digit verification code">
+                        <div class="error-message" id="otpInputError"></div>
+                    </div>
+                    <div id="otpTimer" style="text-align: center; color: var(--text-muted); margin: 10px 0;" aria-live="polite">
+                        Code expires in <span id="otpCountdown">5:00</span>
+                    </div>
+                    <div class="loading" id="verifyOtpLoading" style="display: none;">
+                        <div class="spinner" role="status" aria-label="Loading"></div>
+                        <p>Verifying code...</p>
+                    </div>
+                    <button class="btn btn-primary" id="verifyOtpBtn" style="width: 100%;"
+                            aria-label="Verify code" data-action="verify-otp">
+                        Verify
+                    </button>
+                    <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                        <button class="btn btn-outline" id="resendOtpBtn" disabled
+                                aria-label="Resend verification code" data-action="resend-otp">
+                            Resend Code (<span id="resendCountdown">60</span>s)
+                        </button>
+                        <button class="btn btn-outline" id="changeEmailBtn"
+                                aria-label="Change email address" data-action="change-email">
+                            Change Email
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Baseline modal handlers — zero external dependencies.
+         Uses event delegation so clicks work even if Firebase CDN modules fail to load. -->
+    <script>
+    document.addEventListener('click', function(e) {
+        var target = e.target.closest('[id], .modal-close, .hero-badge');
+        if (!target) return;
+        var id = target.id || '';
+
+        if (id === 'loginBtn' || id === 'dynamicLoginBtn') {
+            var m = document.getElementById('loginModal');
+            if (m) m.style.display = 'flex';
+        } else if (id === 'signupBtn' || id === 'dynamicSignupBtn') {
+            var m = document.getElementById('signupModal');
+            if (m) m.style.display = 'flex';
+        } else if (id === 'heroFirstRideBtn' || (target.closest && target.closest('#heroFirstRideBtn'))) {
+            var m = document.getElementById('loginModal');
+            if (m) m.style.display = 'flex';
+        } else if (target.classList.contains('modal-close')) {
+            var modal = target.closest('.modal');
+            if (modal) modal.style.display = 'none';
+        } else if (id === 'downloadAppBtn' || id === 'downloadAppHeroBtn') {
+            var m = document.getElementById('appDevelopmentModal');
+            if (m) m.style.display = 'flex';
+        }
+    });
+    </script>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/theme.js"></script>
+    <script type="module" src="assets/js/firebase-config.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+
+<!-- FIXED JAVASCRIPT FOR BUTTONS AND DISTANCE CALCULATION -->
+    <script>
+        // Dock coordinates for distance calculation
+        const dockCoordinates = {
+            library: { lat: 30.9671, lng: 76.4738 },
+            lhc: { lat: 30.9683, lng: 76.4717 },
+            cafeteria: { lat: 30.9663, lng: 76.4717 },
+            chenab: { lat: 30.9691, lng: 76.4663 },
+            annapurna: { lat: 30.9672, lng: 76.4677 },
+            maingate: { lat: 30.9708, lng: 76.4730 },
+            nsoground: { lat: 30.9635, lng: 76.4745 },
+            electrical: { lat: 30.9689, lng: 76.4752 }
+        };
+
+        // Function to calculate distance between two points (Haversine formula)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the earth in km
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const d = R * c; // Distance in km
+            return d;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        // Update dock distances
+        function updateDockDistances(position) {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+
+            Object.keys(dockCoordinates).forEach(dockKey => {
+                const dock = dockCoordinates[dockKey];
+                const distance = calculateDistance(userLat, userLng, dock.lat, dock.lng);
+                const distanceElement = document.getElementById(`${dockKey}-distance`);
+                if (distanceElement) {
+                    distanceElement.textContent = `${distance.toFixed(2)} km away`;
+                }
+            });
+        }
+
+        // Get user location and update distances
+        function getUserLocationAndCalculateDistances() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(updateDockDistances, function(error) {
+                    console.error("Geolocation error:", error);
+                    // Fallback to showing "-- km away" if geolocation fails
+                    document.querySelectorAll('[id$="-distance"]').forEach(el => {
+                        el.textContent = "-- km away";
+                    });
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+                // Fallback to showing "-- km away" if geolocation is not supported
+                document.querySelectorAll('[id$="-distance"]').forEach(el => {
+                    el.textContent = "-- km away";
+                });
+            }
+        }
+
+        // Get user location and calculate distances on load
+        getUserLocationAndCalculateDistances();
+
+        // Google Maps initialization (existing code unchanged)
+        let map;
+        let mapLoaded = false;
+        
+        function initMap() {
+            try {
+                console.log("Initializing Google Maps...");
+                
+                // IIT Ropar approximate coordinates
+                const iitRopar = { lat: 30.9671, lng: 76.4731 };
+                
+                // Initialize the map with better error handling
+                const mapOptions = {
+                    zoom: 16,
+                    center: iitRopar,
+                    styles: [
+                        {
+                            "featureType": "poi",
+                            "stylers": [{"visibility": "off"}]
+                        }
+                    ],
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: true,
+                    gestureHandling: 'auto',
+                    clickableIcons: false,
+                    mapId: 'DEMO_MAP_ID'
+                };
+                
+                const mapElement = document.getElementById("map");
+                if (!mapElement) {
+                    throw new Error("Map element not found");
+                }
+                
+                map = new google.maps.Map(mapElement, mapOptions);
+                
+                // Updated dock locations with actual coordinates
+                const docks = [
+                    { position: { lat: 30.9671, lng: 76.4738 }, title: "Library", bikes: 8 },
+                    { position: { lat: 30.9683, lng: 76.4717 }, title: "LHC", bikes: 6 },
+                    { position: { lat: 30.9663, lng: 76.4717 }, title: "Cafeteria", bikes: 5 },
+                    { position: { lat: 30.9691, lng: 76.4663 }, title: "Chenab Hostel", bikes: 7 },
+                    { position: { lat: 30.9672, lng: 76.4677 }, title: "Annapurna Hall", bikes: 6 },
+                    { position: { lat: 30.9708, lng: 76.4730 }, title: "Main Gate", bikes: 8 },
+                    { position: { lat: 30.9635, lng: 76.4745 }, title: "NSO Ground", bikes: 4 },
+                    { position: { lat: 30.9689, lng: 76.4752 }, title: "Electrical", bikes: 7 }
+                ];
+                
+                // Registry for live dock info-window updates from Firestore
+                window.quickpedDockInfoWindows = window.quickpedDockInfoWindows || {};
+
+                // Add markers for each dock with better styling
+                const markers = [];
+                docks.forEach(dock => {
+                    const pinEl = document.createElement('div');
+                    pinEl.style.cssText = 'width:20px;height:20px;border-radius:50%;background:#4F46E5;border:2px solid #FFF;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:pointer;';
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                        position: dock.position,
+                        map: map,
+                        title: dock.title,
+                        content: pinEl
+                    });
+                    
+                    markers.push(marker);
+                    
+                    // Add info window
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `<div style="text-align:center; padding:5px; min-width: 150px;">
+                                    <strong>${dock.title}</strong><br>
+                                    <span style="color:#84CC16; font-weight: bold;">${dock.bikes} bikes available</span>
+                                  </div>`
+                    });
+                    
+                    marker.addEventListener('click', () => {
+                        infoWindow.open({ map, anchor: marker });
+                    });
+
+                    // Store reference so loadDockAvailability can push live Firestore counts
+                    const dockKeyMap = {
+                        'library': 'library', 'lhc': 'lhc', 'cafeteria': 'cafeteria',
+                        'chenab hostel': 'chenab', 'annapurna hall': 'annapurna',
+                        'main gate': 'maingate', 'nso ground': 'nsoground', 'electrical': 'electrical'
+                    };
+                    const dockKey = dockKeyMap[dock.title.toLowerCase()] || dock.title.toLowerCase().replace(/\s+/g, '');
+                    window.quickpedDockInfoWindows[dockKey] = infoWindow;
+                });
+                
+                // Hide fallback content
+                const mapFallback = document.getElementById('mapFallback');
+                if (mapFallback) {
+                    mapFallback.style.display = 'none';
+                }
+                
+                console.log("Map initialized successfully with", markers.length, "dock markers");
+                
+                // Store map reference for later use
+                window.quickpedMap = map;
+                window.quickpedMarkers = markers;
+                mapLoaded = true;
+                
+            } catch (error) {
+                console.error("Map initialization error:", error);
+                handleMapError(error);
+            }
+        }
+        
+        function handleMapError(error) {
+            const mapFallback = document.getElementById('mapFallback');
+            if (!mapFallback) return;
+
+            let errorTitle = "Map Loading Failed";
+            let errorIcon = "fa-exclamation-triangle";
+            let errorMessage = "Unknown error occurred";
+
+            if (error && error.message && error.message.includes("API key")) {
+                errorTitle = "API Key Error";
+                errorIcon = "fa-key";
+                errorMessage = "Please check Google Maps API configuration";
+            } else if (error && error.message && error.message.includes("Network")) {
+                errorTitle = "Connection Error";
+                errorIcon = "fa-wifi";
+                errorMessage = "Please check your internet connection";
+            }
+
+            mapFallback.innerHTML = '';
+
+            const icon = document.createElement('i');
+            icon.className = `fas ${errorIcon} fa-3x`;
+            icon.style.cssText = 'color: var(--danger); margin-bottom: 20px;';
+            icon.setAttribute('aria-hidden', 'true');
+
+            const heading = document.createElement('h3');
+            heading.textContent = errorTitle;
+
+            const para = document.createElement('p');
+            para.textContent = errorMessage;
+
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-primary';
+            btn.style.marginTop = '20px';
+            btn.setAttribute('aria-label', 'Retry map loading');
+            btn.setAttribute('data-action', 'retry-map-error');
+            btn.onclick = () => location.reload();
+            const btnIcon = document.createElement('i');
+            btnIcon.className = 'fas fa-redo';
+            btnIcon.setAttribute('aria-hidden', 'true');
+            btn.appendChild(btnIcon);
+            btn.appendChild(document.createTextNode(' Retry'));
+
+            mapFallback.appendChild(icon);
+            mapFallback.appendChild(heading);
+            mapFallback.appendChild(para);
+            mapFallback.appendChild(btn);
+
+            mapFallback.style.display = 'flex';
+        }
+        
+        // Handle map loading errors
+        window.gm_authFailure = function() {
+            console.error("Google Maps authentication failed");
+            const mapFallback = document.getElementById('mapFallback');
+            if (mapFallback) {
+                mapFallback.innerHTML = `
+                    <i class="fas fa-key fa-3x" style="color: var(--warning); margin-bottom: 20px;" aria-hidden="true"></i>
+                    <h3>Map API Key Error</h3>
+                    <p>Please check the Google Maps API configuration</p>
+                    <button class="btn btn-outline" onclick="window.location.reload()" style="margin-top: 20px;" aria-label="Retry" data-action="retry-api-key">Retry</button>
+                `;
+            }
+        };
+        
+        // Handle map loading timeout
+        setTimeout(() => {
+            if (!mapLoaded) {
+                const mapFallback = document.getElementById('mapFallback');
+                if (mapFallback) {
+                    mapFallback.innerHTML = `
+                        <i class="fas fa-clock fa-3x" style="color: var(--warning); margin-bottom: 20px;" aria-hidden="true"></i>
+                        <h3>Map Loading Timeout</h3>
+                        <p>Map is taking too long to load. Please check your connection.</p>
+                        <button class="btn btn-primary" onclick="window.location.reload()" style="margin-top: 20px;" aria-label="Retry" data-action="retry-timeout">Retry</button>
+                    `;
+                }
+            }
+        }, 10000);
+    </script>
+
+    <!-- Ride Completed Modal — shown after every successful ride end -->
+    <div id="rideCompletedModal" class="modal" role="dialog" aria-labelledby="ride-completed-title" aria-modal="true" tabindex="-1" style="display:none;">
+        <div class="modal-content ride-summary-card">
+            <div class="ride-done-icon" aria-hidden="true">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 id="ride-completed-title" class="ride-done-heading">Thanks for riding!</h2>
+            <p class="ride-done-sub">Your bike has been returned safely.</p>
+
+            <div class="ride-summary-stats">
+                <div class="stat-item">
+                    <div class="ride-stat-value" id="summaryDuration">—</div>
+                    <div class="ride-stat-label">Duration</div>
+                </div>
+                <div class="stat-item">
+                    <div class="ride-stat-value" id="summaryDistance">—</div>
+                    <div class="ride-stat-label">Distance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="ride-stat-value" id="summaryFare">—</div>
+                    <div class="ride-stat-label">Fare</div>
+                </div>
+            </div>
+
+            <div class="ride-summary-wallet" id="summaryWalletRow" style="display:none;">
+                <i class="fas fa-wallet" aria-hidden="true"></i>
+                <span id="summaryWalletBalance">Wallet: ₹—</span>
+            </div>
+
+            <button class="btn btn-primary ride-done-btn" id="rideDoneBtn" aria-label="Return to home">
+                Back to Home
+            </button>
+        </div>
+    </div>
+</body>
+</html>
