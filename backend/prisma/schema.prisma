@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phoneNumber        String   @unique
+  name               String?
+  institutionalEmail String?  @unique
+  role               Role     @default(GUEST_RIDER)
+  walletBalance      Decimal  @default(0.00) @db.Decimal(10, 2)
+  campusId           String?  @db.Uuid
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  campus             Campus?  @relation(fields: [campusId], references: [id])
+}
+
+model Campus {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name               String
+  config             Json     // Stores map URLs and pricing rules dynamically
+  users              User[]
+}
+
+model OtpTracker {
+  identifier         String   @id // Phone number or email
+  otpCode            String
+  expiresAt          DateTime
+  lastRequestAt      DateTime @default(now())
+  attempts           Int      @default(0)
+}
+
+enum Role {
+  GUEST_RIDER
+  VERIFIED_RIDER
+  ADMIN
+  SUPER_ADMIN
+}
