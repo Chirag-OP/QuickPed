@@ -3,6 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SmsService } from '../infrastructure/sms/sms.service';
 import { EmailService } from '../infrastructure/email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import * as crypto from 'crypto';
+import { parsePhoneNumberWithError } from 'libphonenumber-js';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -14,19 +17,20 @@ export class AuthService {
   ) {}
 
   private generateOtp(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return crypto.randomInt(100000, 999999).toString();
+  }
+
+  private hashOtp(otp: string): string {
+    return crypto.createHash('sha256').update(otp).digest('hex');
   }
 
   private normalizePhone(phone: string): string {
-    let cleaned = phone.replace(/[\s-]/g, '');
-    if (!cleaned.startsWith('+')) {
-      if (cleaned.length === 10) {
-        cleaned = '+91' + cleaned;
-      } else {
-        cleaned = '+' + cleaned;
-      }
+    try {
+      const phoneNumber = parsePhoneNumberWithError(phone, 'IN');
+      return phoneNumber.format('E.164');
+    } catch (error) {
+      throw new HttpException('Invalid phone number format', HttpStatus.BAD_REQUEST);
     }
-    return cleaned;
   }
 
   async sendPhoneOtp(phoneNumber: string) {
@@ -44,17 +48,19 @@ export class AuthService {
     }
 
     const otpCode = this.generateOtp();
+    const hashedOtp = this.hashOtp(otpCode);
+
     await this.prisma.otpTracker.upsert({
       where: { identifier: normalizedPhone },
       update: {
-        otpCode,
+        otpCode: hashedOtp,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000), 
         lastRequestAt: new Date(),
         attempts: 0,
       },
       create: {
         identifier: normalizedPhone,
-        otpCode,
+        otpCode: hashedOtp,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       },
     });
@@ -71,26 +77,28 @@ export class AuthService {
       where: { identifier: normalizedPhone },
     });
 
-    if (!tracker || tracker.otpCode !== otpCode || tracker.expiresAt < new Date()) {
-      if (tracker) {
-        await this.prisma.otpTracker.update({
-          where: { identifier: normalizedPhone },
-          data: { attempts: { increment: 1 } },
-        });
-        if (tracker.attempts >= 2) {
-           await this.prisma.otpTracker.update({
-             where: { identifier: normalizedPhone },
-             data: { otpCode: 'INVALIDATED' },
-           });
-        }
-      }
+    if (!tracker) {
+      throw new HttpException('Invalid or expired OTP', HttpStatus.UNAUTHORIZED);
+    }
+
+    if (tracker.attempts >= 3) {
+      throw new HttpException('Too many failed attempts. Please request a new OTP.', HttpStatus.FORBIDDEN);
+    }
+
+    const hashedInput = this.hashOtp(otpCode);
+
+    if (tracker.otpCode !== hashedInput || tracker.expiresAt < new Date()) {
+      await this.prisma.otpTracker.update({
+        where: { identifier: normalizedPhone },
+        data: { attempts: { increment: 1 } },
+      });
       throw new HttpException('Invalid or expired OTP', HttpStatus.UNAUTHORIZED);
     }
 
     const user = await this.prisma.user.upsert({
       where: { phoneNumber: normalizedPhone },
       update: {},
-      create: { phoneNumber: normalizedPhone, role: 'GUEST_RIDER' },
+      create: { phoneNumber: normalizedPhone, role: Role.GUEST_RIDER },
     });
 
     await this.prisma.otpTracker.delete({ where: { identifier: normalizedPhone } });
@@ -103,18 +111,31 @@ export class AuthService {
   }
 
   async sendEmailOtp(userId: string, email: string) {
+    const tracker = await this.prisma.otpTracker.findUnique({
+      where: { identifier: email },
+    });
+
+    if (tracker && tracker.lastRequestAt) {
+      const diff = (new Date().getTime() - tracker.lastRequestAt.getTime()) / 1000;
+      if (diff < 60) {
+        throw new HttpException({ error: 'Please wait 60 seconds before requesting a new OTP.' }, HttpStatus.TOO_MANY_REQUESTS);
+      }
+    }
+
     const otpCode = this.generateOtp();
+    const hashedOtp = this.hashOtp(otpCode);
+
     await this.prisma.otpTracker.upsert({
       where: { identifier: email },
       update: {
-        otpCode,
+        otpCode: hashedOtp,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
         lastRequestAt: new Date(),
         attempts: 0,
       },
       create: {
         identifier: email,
-        otpCode,
+        otpCode: hashedOtp,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       },
     });
@@ -128,13 +149,27 @@ export class AuthService {
       where: { identifier: email },
     });
 
-    if (!tracker || tracker.otpCode !== otpCode || tracker.expiresAt < new Date()) {
+    if (!tracker) {
+      throw new HttpException('Invalid or expired OTP', HttpStatus.UNAUTHORIZED);
+    }
+
+    if (tracker.attempts >= 3) {
+      throw new HttpException('Too many failed attempts. Please request a new OTP.', HttpStatus.FORBIDDEN);
+    }
+
+    const hashedInput = this.hashOtp(otpCode);
+
+    if (tracker.otpCode !== hashedInput || tracker.expiresAt < new Date()) {
+      await this.prisma.otpTracker.update({
+        where: { identifier: email },
+        data: { attempts: { increment: 1 } },
+      });
       throw new HttpException('Invalid or expired OTP', HttpStatus.UNAUTHORIZED);
     }
 
     const user = await this.prisma.user.update({
       where: { id: userId },
-      data: { institutionalEmail: email, role: 'VERIFIED_RIDER' },
+      data: { institutionalEmail: email, role: Role.VERIFIED_RIDER },
     });
 
     await this.prisma.otpTracker.delete({ where: { identifier: email } });

@@ -61,11 +61,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (phone: string) => {
-    await api.post('/auth/otp/send', { phoneNumber: `+91${phone}` });
+    await api.post('/auth/otp/send', { phoneNumber: phone });
   };
 
   const verifyOtp = async (phone: string, otpCode: string) => {
-    const response = await api.post('/auth/otp/verify', { phoneNumber: `+91${phone}`, otpCode });
+    const response = await api.post('/auth/otp/verify', { phoneNumber: phone, otpCode });
     if (response.data.token) {
       localStorage.setItem('qp_auth_token', response.data.token);
       setToken(response.data.token);
