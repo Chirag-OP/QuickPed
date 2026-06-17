@@ -65,7 +65,7 @@ export class AuthService {
       },
     });
 
-    // Fire and forget, don't block response
+    
     this.smsService.sendOtp(normalizedPhone, otpCode).catch(e => console.error('Failed to dispatch SMS', e));
     return { status: 'success', message: 'OTP sent.' };
   }
