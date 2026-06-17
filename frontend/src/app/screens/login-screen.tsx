@@ -1,14 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import {
+  Facebook
+} from "lucide-react";
 import { ArrowLeft, ArrowRight, Bike, LayoutDashboard, Phone, ShieldCheck, Loader2, Search, GraduationCap, User, CheckCircle2, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
+import landscape1 from "../../assets/landscape1.png";
+import quickPedLogo from "../../assets/logo.jpeg";
 import { NotificationBell } from '../components/notification-bell';
 import { useAuth } from '../../context/AuthContext';
 
 const STORAGE_KEY = 'qp_user_profile';
+const OTP_RESEND_SECONDS = 30;
+const AUTH_LANDSCAPE_HEIGHT = 'clamp(150px, 28dvh, 250px)';
+const AUTH_LANDSCAPE_GAP = '32px';
 
 const IIT_LIST = [
   'IIT Bhubaneswar', 'IIT Bombay', 'IIT Mandi', 'IIT Delhi', 'IIT Indore',
@@ -26,6 +34,36 @@ const ADMIN_CREDENTIALS: Record<string, { password: string; name: string }> = {
 };
 
 export type AdminKey = 'parth' | 'chirag' | 'arshpreet';
+
+const AuthLandscape: React.FC = () => (
+  <div
+    className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden bg-white"
+    style={{ height: AUTH_LANDSCAPE_HEIGHT }}
+    aria-hidden="true"
+  >
+    <img
+      src={landscape1}
+      alt=""
+      className="h-full w-full object-cover object-bottom"
+      draggable={false}
+    />
+  </div>
+);
+
+const AuthPanel: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
+  <div
+    className="relative overflow-hidden bg-white"
+    style={{ minHeight: 'clamp(680px, calc(100dvh - 64px), 820px)' }}
+  >
+    <div
+      className={`relative z-10 px-8 pt-8 ${className}`}
+      style={{ paddingBottom: `calc(${AUTH_LANDSCAPE_HEIGHT} + ${AUTH_LANDSCAPE_GAP})` }}
+    >
+      {children}
+    </div>
+    <AuthLandscape />
+  </div>
+);
 
 interface LoginScreenProps {
   initialMode?: 'choice' | 'user' | 'admin';
@@ -54,6 +92,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   const [adminPassword, setAdminPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [otpCountdown, setOtpCountdown] = useState(initialStep === 'otp' ? OTP_RESEND_SECONDS : 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const loadingTimer = useRef<number | null>(null);
 
@@ -72,6 +111,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       setStep(initialStep);
       setError('');
       setIsLoading(false);
+      setOtpCountdown(initialStep === 'otp' ? OTP_RESEND_SECONDS : 0);
       setAdminId('');
       setAdminPassword('');
     }
@@ -82,6 +122,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       if (loadingTimer.current) window.clearTimeout(loadingTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (step !== 'otp' || otpCountdown <= 0) return;
+
+    const timer = window.setInterval(() => {
+      setOtpCountdown((current) => Math.max(0, current - 1));
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [otpCountdown, step]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -94,7 +144,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, '').slice(0, 10);
     setPhone(val);
@@ -116,8 +166,25 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     try {
       await login(phone);
       setStep('otp');
+      setOtpCountdown(OTP_RESEND_SECONDS);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to send OTP.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (otpCountdown > 0 || isLoading) return;
+
+    setError('');
+    setIsLoading(true);
+    try {
+      await login(phone);
+      setOtp('');
+      setOtpCountdown(OTP_RESEND_SECONDS);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to resend OTP.');
     } finally {
       setIsLoading(false);
     }
@@ -171,7 +238,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     try {
       // Hardware-requested mock campus ID
       await updateProfile(name.trim(), '123e4567-e89b-12d3-a456-426614174000');
-      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone, name: name.trim(), institution }));
+
     } catch (err: any) {
       setError('Failed to save profile.');
     } finally {
@@ -179,7 +247,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     }
   };
 
-  
+
   const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedId = adminId.trim();
@@ -190,20 +258,20 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       return;
     }
 
-    
+
     const cred = ADMIN_CREDENTIALS[trimmedId];
     if (!cred) {
       setError('Invalid Admin ID');
       return;
     }
 
-    
+
     if (trimmedPwd !== cred.password) {
       setError('Incorrect Password');
       return;
     }
 
-    
+
     setError('');
     setIsLoading(true);
     if (loadingTimer.current) window.clearTimeout(loadingTimer.current);
@@ -222,74 +290,144 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col">
-      <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-16">
-        <div className="max-w-md mx-auto">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div className="flex items-center gap-3 text-white">
-              <Bike size={40} />
-              <h1 className="text-3xl font-bold">QuickPed</h1>
-            </div>
-            <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
-          </div>
-          <p className="text-white/90">Choose how you want to access the app.</p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      {/* Decorative Header Background */}
 
-      <div className="flex-1 -mt-8 px-6 pb-8">
+
+      <div className="flex-1 px-6 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto"
-        >
-          <Card variant="elevated" className="p-8">
-            {}
+          className="max-w-lg mx-auto"        >
+          <Card
+            className="overflow-hidden rounded-[30px] border-0 shadow-none bg-white p-0"
+          >            {/* STEP: CHOICE */}
             {screen === 'choice' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-3xl font-semibold mb-2">Sign in to QuickPed</h2>
-                  <p className="text-muted-foreground">Select the login type that fits your role.</p>
+              <AuthPanel className="flex flex-col items-center">
+                <div className="text-center mb-10">
+                  <img
+                    src={quickPedLogo}
+                    alt="QuickPed"
+                    className="mx-auto mb-5 h-20 w-40 object-contain mix-blend-multiply"
+                  />
+                  <h2 className="text-4xl font-bold text-gray-900">
+                    Welcome to QuickPed
+                  </h2>
+
+                  <p className="mt-4 leading-7 text-slate-500">
+                    Create an Account to get started on your
+                    <br />
+                    Campus Mobility Journey
+                  </p>
                 </div>
-                <div className="space-y-4">
-                  <Button type="button" size="lg" className="w-full justify-between" onClick={() => setScreen('user')}>
-                    <span className="flex items-center gap-2"><Phone size={20} /> User Sign In</span>
-                    <ArrowRight size={20} />
-                  </Button>
-                  <Button type="button" size="lg" className="w-full justify-between" onClick={() => setScreen('admin')}>
-                    <span className="flex items-center gap-2"><LayoutDashboard size={20} /> Admin Login</span>
-                    <ArrowRight size={20} />
-                  </Button>
+
+                {/* dots */}
+                <div className="flex gap-2 mb-10">
+                  <div className="w-8 h-2 rounded-full bg-orange-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
                 </div>
-              </div>
+
+                {/* phone login */}
+                <Button
+                 variant="outline"
+                  size="lg"
+                  className="w-full h-14 rounded-full bg-orange-500 border-0 text-black text-lg mb-5"
+                  onClick={() => setScreen('user')}
+                >
+                  <Phone size={38} className="mr-2 text-black text-lg" />
+                  <span className="text-lg text-black font-semibold text-lg">
+                    Continue With Phone
+                  </span>
+                </Button>
+
+                 
+
+                {/* email login */}
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full h-14 rounded-full bg-orange-500 border-0 text-black text-lg mb-5"
+                >
+                  Continue With Email
+                </Button>
+
+                {/* social buttons */}
+                <div className="grid grid-cols-2 gap-4 w-full mb-8">
+
+                  <Button
+                    variant="outline"
+                    className="h-16 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50"
+                  >
+                    <img
+                      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                      alt="Google"
+                      className="w-10 h-10"
+                    />
+                    <span className="text-black font-semibold text-lg">
+                      Google
+                    </span>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="h-16 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50"                  >
+                    <img
+                      src="https://imgs.search.brave.com/FezUwRGIAsiVYTjCqJUNP5zUnnNd_uPQad1abyOSctI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTEv/MTY4LzU3OS9zbWFs/bC9mYWNlYm9vay1s/b2dvLW9uLWEtYmx1/ZS1idXR0b24tZnJl/ZS1wbmcucG5n"
+                      alt="Google"
+                      className="w-12 h-12"
+                    />
+                    <span className="text-black font-semibold text-lg">
+                      Facebook
+                    </span>
+                  </Button>
+
+
+                </div>
+
+                <p className="text-gray-500 mb-10">
+                  Already have an account?
+                  <span className="font-semibold text-gray-900 ml-1">
+                    Log in
+                  </span>
+                </p>
+              </AuthPanel>
             )}
 
-            {}
+            {/* USER FLOW */}
             {screen === 'user' && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
+              <AuthPanel className="space-y-8">
+                <div className="flex items-center gap-4">
                   <button
                     type="button"
-                    onClick={() => { setScreen('choice'); setStep('phone'); setError(''); setOtp(''); }}
-                    className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+                    onClick={() => { setScreen('choice'); setStep('phone'); setError(''); setOtp(''); setOtpCountdown(0); }}
+                    className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                   >
                     <ArrowLeft size={20} />
                   </button>
+                  <img
+                    src={quickPedLogo}
+                    alt="QuickPed"
+                    className="h-12 w-24 object-contain mix-blend-multiply"
+                  />
                   <div>
-                    <h2 className="text-2xl font-semibold">
-                      {step === 'phone' && 'User Sign In'}
+                    <h2 className="text-2xl font-bold text-slate-800">
+                      {step === 'phone' && 'Sign In'}
                       {step === 'otp' && 'Verify OTP'}
                       {step === 'profile' && 'Complete Profile'}
                     </h2>
-                    <p className="text-muted-foreground">
-                      {step === 'phone' && 'Sign in with your mobile number.'}
+                    <p className="text-slate-500 text-sm font-medium mt-1">
+                      {step === 'phone' && 'Enter your mobile number'}
                       {step === 'otp' && `Code sent to +91 ${phone}`}
-                      {step === 'profile' && 'Tell us a bit about yourself.'}
+                      {step === 'profile' && 'Tell us a bit about yourself'}
                     </p>
                   </div>
                 </div>
 
-                {}
+                {/* ANIMATED STEPS */}
                 <AnimatePresence mode="wait">
+                  {/* STEP: PHONE */}
                   {step === 'phone' && (
                     <motion.form
                       key="phone"
@@ -297,33 +435,42 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       onSubmit={handleUserPhoneSubmit}
                       className="space-y-6"
                     >
+                        {/* dots */}
+                      <div className="flex justify-center items-center gap-2 mb-10">                 
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                      <div className="w-8 h-2 rounded-full bg-orange-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+                </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Mobile Number</Label>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
-                          <div className="absolute left-10 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium select-none">+91</div>
+                        <Label htmlFor="phone" className="ml-1 font-semibold text-slate-700">Mobile Number</Label>
+                        <div className="relative group">
+                          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors" size={25} />
+                          <div className="absolute left-12 top-1/2 -translate-y-1/2 select-none text-base font-medium text-slate-600">+91</div>
                           <Input
                             id="phone"
                             type="tel"
                             inputMode="numeric"
-                            placeholder="98765 43210"
+                            placeholder="|"
                             value={phone}
                             onChange={handlePhoneChange}
-                            className="pl-20 h-12 rounded-xl text-base tracking-wider"
+                            className="pl-24 h-14 rounded-2xl text-lg tracking-wider border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white transition-all shadow-sm"
                             maxLength={10}
                             required
                           />
+
                         </div>
-                        <p className="text-xs text-muted-foreground">{phone.length}/10 digits</p>
+
                       </div>
-                      {error && <p className="text-sm text-danger font-medium">{error}</p>}
-                      <Button type="submit" size="lg" className="w-full" disabled={phone.length !== 10}>
-                        Send OTP <ArrowRight className="ml-2" size={18} />
+                      {error && <p className="text-sm text-red-500 font-medium ml-1">{error}</p>}
+                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
+                        Continue <ArrowRight className="ml-2" size={18} />
                       </Button>
                     </motion.form>
+
                   )}
 
-                  {}
+                  {/* STEP: OTP */}
                   {step === 'otp' && (
                     <motion.form
                       key="otp"
@@ -331,38 +478,66 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       onSubmit={handleUserOtpSubmit}
                       className="space-y-6"
                     >
-                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl">
-                        <p className="text-sm text-muted-foreground text-center">OTP sent to</p>
-                        <p className="text-center font-semibold text-primary">+91 {phone}</p>
+                      <div className="p-5 bg-orange-50 border border-orange-100 rounded-2xl flex flex-col items-center">
+                        <div className="w-12 h-12 bg-orange-500 text-white rounded-full flex items-center justify-center mb-3">
+                          <ShieldCheck size={24} />
+                        </div>
+                        <p className="text-sm text-slate-500 text-center font-medium">Authentication Code sent to</p>
+                        <p className="text-center font-bold text-slate-800 text-lg mt-0.5">+91 {phone}</p>
                       </div>
+                       {/* dots */}
+                      <div className="flex justify-center items-center gap-2 mb-10">                 
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                       <div className="w-8 h-2 rounded-full bg-orange-500"></div>
+                       <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+
+                </div>
                       <div className="space-y-2">
-                        <Label htmlFor="otp">Enter OTP</Label>
+                        <Label htmlFor="otp" className="text-slate-700 font-semibold ml-1">Enter 6-digit Code</Label>
                         <Input
                           id="otp"
                           type="text"
                           inputMode="numeric"
-                          placeholder="· · · ·"
+                          placeholder="· · · · · ·"
                           value={otp}
                           onChange={(e) => { setOtp(e.target.value.replace(/\D/g, '').slice(0, 6)); setError(''); }}
                           maxLength={6}
-                          className="h-14 rounded-xl text-center text-3xl tracking-[0.6em] font-bold"
+                          className="h-16 rounded-2xl text-center text-3xl tracking-[0.5em] font-extrabold border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white shadow-sm"
                           required
                         />
+                        <div className="mt-3 flex items-center justify-end gap-3">
+                          <span className="text-xs font-semibold text-slate-500">
+                            {otpCountdown > 0 ? `${otpCountdown}s` : 'Ready'}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleResendOtp}
+                            disabled={otpCountdown > 0 || isLoading}
+                            className={`h-9 rounded-full px-4 text-orange-600 hover:bg-orange-50 hover:text-orange-700 ${
+                              otpCountdown > 0 ? 'opacity-45 blur-[0.3px]' : ''
+                            }`}
+                          >
+                            Resend OTP
+                          </Button>
+                        </div>
                       </div>
                       {error && (
                         <motion.p
                           initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
-                          className="text-sm text-danger font-medium text-center"
+                          className="text-sm text-red-500 font-medium text-center"
                         >
                           {error}
                         </motion.p>
                       )}
-                      <div className="flex gap-3">
-                        <Button type="button" variant="outline" size="lg" onClick={() => { setStep('phone'); setOtp(''); setError(''); }} className="flex-1">
+                      <div className="flex gap-3 pt-2">
+                        <Button type="button" variant="outline" size="lg" onClick={() => { setStep('phone'); setOtp(''); setError(''); }} className="flex-1 h-14 rounded-2xl border-orange-200 bg-white text-slate-700 hover:bg-orange-50 font-semibold">
                           Back
                         </Button>
-                        <Button type="submit" size="lg" className="flex-1" disabled={isLoading}>
-                          {isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Verify <ArrowRight className="ml-1" size={18} /></>}
+                        <Button type="submit" size="lg" className="flex-1 h-14 rounded-2xl bg-orange-500 text-white shadow-md hover:bg-orange-600 font-semibold" disabled={isLoading || otp.length !== 6}>
+                          {isLoading ? <Loader2 className="animate-spin" size={20} /> : 'Verify Code'}
                         </Button>
                       </div>
                     </motion.form>
@@ -374,20 +549,27 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       key="profile"
                       initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                       onSubmit={handleProfileSubmit}
-                      className="space-y-5"
+                      className="space-y-6"
                     >
-                      {}
+                         {/* dots */}
+                      <div className="flex justify-center items-center gap-2 mb-10">                 
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                       <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                        <div className="w-8 h-2 rounded-full bg-orange-500"></div>
+
+                </div>
                       <div className="space-y-2">
-                        <Label htmlFor="fullname">Full Name</Label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                        <Label htmlFor="fullname" className="text-slate-700 font-semibold ml-1">Full Name</Label>
+                        <div className="relative group">
+                          <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors" size={20} />
                           <Input
                             id="fullname"
                             type="text"
                             placeholder="e.g. Gurpreet Singh"
                             value={name}
                             onChange={(e) => { setName(e.target.value); setError(''); }}
-                            className="pl-10 h-12 rounded-xl"
+                            className="pl-12 h-14 rounded-2xl text-base border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white transition-all shadow-sm"
                             required
                           />
                         </div>
@@ -395,10 +577,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
                       {/* Institution Searchable Dropdown */}
                       <div className="space-y-2">
-                        <Label htmlFor="institution-search">Institution / College</Label>
+                        <Label htmlFor="institution-search" className="text-slate-700 font-semibold ml-1">Institution / College</Label>
                         <div className="relative" ref={dropdownRef}>
-                          <div className="relative">
-                            <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                          <div className="relative group">
+                            <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors" size={20} />
                             <Input
                               id="institution-search"
                               type="text"
@@ -411,12 +593,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                                 setError('');
                               }}
                               onFocus={() => setShowInstitutionDropdown(true)}
-                              className="pl-10 pr-10 h-12 rounded-xl"
+                              className="pl-12 pr-10 h-14 rounded-2xl text-base border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white transition-all shadow-sm"
                               autoComplete="off"
                             />
                             <ChevronDown
-                              className={`absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-transform ${showInstitutionDropdown ? 'rotate-180' : ''}`}
-                              size={18}
+                              className={`absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-transform duration-300 ${showInstitutionDropdown ? 'rotate-180' : ''}`}
+                              size={20}
                             />
                           </div>
 
@@ -424,35 +606,38 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                           <AnimatePresence>
                             {showInstitutionDropdown && (
                               <motion.div
-                                initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                                className="absolute z-50 w-full mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden"
+                                initial={{ opacity: 0, y: -4, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden"
                               >
                                 {/* Search inside dropdown */}
-                                <div className="p-2 border-b border-border">
+                                <div className="p-3 border-b border-slate-100 bg-slate-50/50">
                                   <div className="relative">
-                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                     <input
                                       type="text"
                                       placeholder="Search institutions..."
                                       value={institutionSearch}
                                       onChange={(e) => { setInstitutionSearch(e.target.value); setInstitution(''); }}
-                                      className="w-full pl-7 pr-3 py-1.5 text-sm bg-muted rounded-lg outline-none"
+                                      className="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
                                       autoFocus
                                     />
                                   </div>
                                 </div>
-                                <div className="max-h-48 overflow-y-auto">
+                                <div className="max-h-56 overflow-y-auto custom-scrollbar">
                                   {filteredIITs.length === 0 ? (
-                                    <p className="text-center text-sm text-muted-foreground py-4">No results found</p>
+                                    <p className="text-center text-sm text-slate-500 py-6">No results found</p>
                                   ) : (
                                     filteredIITs.map((iit) => (
                                       <button
                                         key={iit}
                                         type="button"
                                         onClick={() => handleSelectInstitution(iit)}
-                                        className={`w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-colors flex items-center gap-2 ${institution === iit ? 'bg-primary/10 text-primary font-medium' : ''}`}
+                                        className={`w-full text-left px-4 py-3.5 text-sm transition-colors flex items-center gap-3 ${institution === iit ? 'bg-orange-50 text-orange-700 font-semibold' : 'text-slate-600 hover:bg-slate-50'}`}
                                       >
-                                        {institution === iit && <CheckCircle2 size={14} className="text-primary flex-shrink-0" />}
+                                        <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${institution === iit ? 'border-orange-500 bg-orange-500' : 'border-slate-300'}`}>
+                                          {institution === iit && <CheckCircle2 size={12} className="text-white" />}
+                                        </div>
                                         {iit}
                                       </button>
                                     ))
@@ -466,10 +651,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                         {/* Show selected pill */}
                         {institution && (
                           <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full text-sm text-primary font-medium w-fit"
+                            initial={{ opacity: 0, scale: 0.9, y: 5 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+                            className="flex items-center gap-2 px-4 py-2 mt-3 bg-orange-100/60 border border-orange-200 rounded-xl text-sm text-orange-700 font-semibold w-fit shadow-sm"
                           >
-                            <CheckCircle2 size={14} />
+                            <CheckCircle2 size={16} className="text-orange-600" />
                             {institution}
                           </motion.div>
                         )}
@@ -478,90 +663,102 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       {error && (
                         <motion.p
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                          className="text-sm text-danger font-medium"
+                          className="text-sm text-red-500 font-medium ml-1"
                         >
                           {error}
                         </motion.p>
                       )}
 
-                      <Button type="submit" size="lg" className="w-full" disabled={isLoading || !name || !institution}>
+                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all mt-4" disabled={isLoading || !name || !institution}>
                         {isLoading
-                          ? <span className="flex items-center gap-2"><Loader2 className="animate-spin" size={18} /> Saving...</span>
-                          : <span className="flex items-center gap-2">Get Started <ArrowRight size={18} /></span>
+                          ? <span className="flex items-center gap-2"><Loader2 className="animate-spin" size={20} /> Saving...</span>
+                          : <span className="flex items-center gap-2">Get Started <ArrowRight size={20} /></span>
                         }
                       </Button>
                     </motion.form>
                   )}
                 </AnimatePresence>
-              </div>
+              </AuthPanel>
             )}
 
-            {/* ── ADMIN FLOW ── */}
+            {/* ── ADMIN / SIGN UP FLOW ── */}
             {screen === 'admin' && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
+              <AuthPanel className="space-y-8">
+                <div className="flex items-center gap-4">
                   <button
                     type="button"
                     onClick={() => { setScreen('choice'); setError(''); setAdminId(''); setAdminPassword(''); }}
-                    className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+                    className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                   >
                     <ArrowLeft size={20} />
                   </button>
+                  <img
+                    src={quickPedLogo}
+                    alt="QuickPed"
+                    className="h-12 w-24 object-contain mix-blend-multiply"
+                  />
                   <div>
-                    <h2 className="text-2xl font-semibold">Admin Login</h2>
-                    <p className="text-muted-foreground">Enter your Admin ID and password.</p>
+                    <h2 className="text-2xl font-bold text-slate-800">Sign Up / Admin</h2>
+                    <p className="text-slate-500 text-sm font-medium mt-1">Enter your details to continue.</p>
                   </div>
                 </div>
 
                 <form onSubmit={handleAdminSubmit} className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="adminId">Admin ID</Label>
+                    <Label htmlFor="adminId" className="text-slate-700 font-semibold ml-1">Email / ID</Label>
                     <Input
                       id="adminId"
                       type="text"
-                      placeholder="e.g. parth#rpr@quickped.in"
+                      placeholder="e.g. name@university.edu"
                       value={adminId}
                       onChange={(e) => { setAdminId(e.target.value); setError(''); }}
-                      className="h-12 rounded-xl"
+                      className="h-14 rounded-2xl text-base border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white transition-all shadow-sm"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="adminPassword">Password</Label>
+                    <Label htmlFor="adminPassword" className="text-slate-700 font-semibold ml-1">Password</Label>
                     <Input
                       id="adminPassword"
                       type="password"
                       placeholder="Enter password"
                       value={adminPassword}
                       onChange={(e) => { setAdminPassword(e.target.value); setError(''); }}
-                      className="h-12 rounded-xl"
+                      className="h-14 rounded-2xl text-base border-slate-200 focus:border-orange-500 focus:ring-orange-500/20 bg-slate-50 focus:bg-white transition-all shadow-sm"
                       required
                     />
                   </div>
                   {error && (
                     <motion.p
                       initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}
-                      className="text-sm text-danger font-semibold"
+                      className="text-sm text-red-500 font-semibold ml-1"
                     >
                       {error}
                     </motion.p>
                   )}
-                  <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+                  <Button type="submit" size="lg" className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={isLoading}>
                     {isLoading
-                      ? <span className="flex items-center justify-center gap-2"><Loader2 className="animate-spin" size={18} /> Signing in...</span>
-                      : 'Sign in as Admin'
+                      ? <span className="flex items-center justify-center gap-2"><Loader2 className="animate-spin" size={20} /> Continuing...</span>
+                      : 'Continue'
                     }
                   </Button>
                 </form>
 
-                <div className="text-center text-sm text-muted-foreground">or</div>
+                <div className="relative my-8">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-200"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-4 bg-white text-slate-500 font-medium">Or continue with</span>
+                  </div>
+                </div>
 
-                <Button type="button" variant="outline" size="lg" className="w-full" onClick={handleAdminGoogle} disabled={isLoading}>
-                  <span className="flex items-center justify-center gap-2">
-                    {isLoading ? <><Loader2 className="animate-spin" size={18} /> Please wait</> : <><ShieldCheck size={18} /> Login with Google</>}
+                <Button type="button" variant="outline" size="lg" className="w-full h-14 border-slate-200 text-slate-700 hover:bg-slate-50 rounded-2xl font-semibold shadow-sm transition-all hover:-translate-y-0.5" onClick={handleAdminGoogle} disabled={isLoading}>
+                  <span className="flex items-center justify-center gap-3">
+                    {isLoading ? <><Loader2 className="animate-spin" size={20} /> Please wait</> : <><ShieldCheck size={20} className="text-slate-400" /> Continue with Google</>}
                   </span>
                 </Button>
-              </div>
+              </AuthPanel>
             )}
           </Card>
         </motion.div>

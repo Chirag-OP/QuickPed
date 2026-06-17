@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// gurpreet singh -17-jan-26 
+import React from 'react';
 import { motion } from 'motion/react';
 import {
   Bike,
@@ -17,6 +18,8 @@ import { Badge } from '../components/ui/badge';
 import { useTheme } from '../components/theme-provider';
 import { formatCurrency } from '../lib/utils';
 import { NotificationBell } from '../components/notification-bell';
+import { useAuth } from '../../context/AuthContext';
+import quickPedLogo from '../../assets/logo.jpeg';
 
 interface HomeScreenProps {
   onStartRide: () => void;
@@ -25,7 +28,8 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate }) => {
   const { theme, toggleTheme } = useTheme();
-  const [balance] = useState(250);
+  const { user } = useAuth();
+  const balance = Number(user?.walletBalance ?? 0);
 
   const nearbyDocks = [
     { id: 1, name: 'Main Gate Dock', bikes: 8, distance: '50m', battery: 'high' },
@@ -37,11 +41,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
   return (
     <div className="min-h-screen bg-background pb-24">
       {}
-      <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-8 rounded-b-3xl">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 pb-8 rounded-b-3xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Bike size={32} className="text-white" />
-            <h1 className="text-2xl font-bold text-white">QuickPed</h1>
+            <img src={quickPedLogo} alt="QuickPed" className="h-12 w-24 object-contain mix-blend-multiply" />
+            <div>
+              <h1 className="text-2xl font-bold text-white">QuickPed</h1>
+              <p className="text-xs font-medium text-white/75">Campus rides, ready.</p>
+            </div>
           </div>
           <div className="flex gap-3">
             <button
@@ -65,11 +72,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
+          <Card className="rounded-3xl border-white/20 bg-white/15 text-white shadow-2xl shadow-orange-950/20 backdrop-blur-lg">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white/20 rounded-xl">
+                  <div className="rounded-2xl bg-white p-3 text-orange-600 shadow-lg">
                     <Wallet size={24} />
                   </div>
                   <div>
@@ -81,7 +88,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
                   onClick={() => onNavigate('wallet')}
                   variant="secondary"
                   size="lg"
-                  className="rounded-full"
+                  className="rounded-2xl bg-white text-orange-600 shadow-lg hover:bg-orange-50 hover:text-orange-700 active:scale-[0.98]"
                 >
                   Add Money
                 </Button>
@@ -101,7 +108,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           <Button
             onClick={onStartRide}
             size="lg"
-            className="w-full h-15 shadow-2xl shadow-primary/50 mb-6 text-2xl font-bold"
+            className="w-full h-16 shadow-2xl shadow-primary/50 mb-6 text-2xl font-bold"
           >
             <QrCode size={120} className="mr-2" />
             Scan QR & Ride
@@ -153,7 +160,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
                         </Badge>
                         <Battery
                           size={16}
-                          className={dock.battery === 'high' ? 'text-success fill-success' : 'text-warning fill-warning'}
+                          className={dock.battery === 'high' ? 'text-orange-500 fill-orange-500' : 'text-warning fill-warning'}
                         />
                       </div>
                     </div>

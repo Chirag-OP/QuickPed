@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+
+  # Bike-sharing App Design
+
+  This is a code bundle for Bike-sharing App Design. The original project is available at https://www.figma.com/design/pzHRKcKnwsfBQDz9aGwI3t/Bike-sharing-App-Design.
+
+  ## Running the code
+
+  Run `npm i` to install the dependencies.
+
+  Run `npm run dev` to start the development server.
+  
+=======
 # QuickPed 🚲
 
 ---
@@ -60,3 +73,4 @@ QuickPed enforces SOLID backend architectural principles. The Database schema us
 ---
 
 *QuickPed – Revolutionizing Campus Commutes.*
+>>>>>>> d93b1f32cf43ec3f95133953fb8e10573cc5a0bf

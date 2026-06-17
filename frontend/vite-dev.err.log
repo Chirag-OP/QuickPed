@@ -1369,3 +1369,6 @@ Check the render method of `SlotClone`.
 [2m3:27:26 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/v1/users/me[39m
 Error: connect ECONNREFUSED 127.0.0.1:3000
     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+[2m4:33:55 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/v1/auth/otp/send[39m
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)

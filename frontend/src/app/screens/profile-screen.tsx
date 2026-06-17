@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
-  User,
-  Phone,
-  Shield,
-  Bell,
-  HelpCircle,
-  FileText,
-  LogOut,
-  ChevronRight,
-  CheckCircle,
-  GraduationCap,
   AlertCircle,
+  ArrowLeft,
+  Bell,
+  CheckCircle,
+  ChevronRight,
+  FileText,
+  GraduationCap,
+  HelpCircle,
+  LogOut,
+  Phone,
+  Plus,
+  Shield,
+  User,
+  Wallet,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
@@ -26,15 +29,28 @@ import {
 } from '../components/ui/dialog';
 import { NotificationBell } from '../components/notification-bell';
 import { useAuth } from '../../context/AuthContext';
+import { formatCurrency } from '../lib/utils';
+import quickPedLogo from '../../assets/logo.jpeg';
 
 interface ProfileScreenProps {
   onBack: () => void;
+  onAddMoney: () => void;
   onLogout: () => void;
 }
 
-export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }) => {
+export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onAddMoney, onLogout }) => {
   const { user } = useAuth();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedInstitute] = useState(() => {
+    try {
+      const saved = localStorage.getItem('qp_user_profile');
+      const profile = saved ? JSON.parse(saved) : {};
+      return typeof profile.institution === 'string' ? profile.institution : '';
+    } catch {
+      return '';
+    }
+  });
+  const instituteName = selectedInstitute || (user?.campusId ? 'Campus Enrolled' : 'None');
 
   const menuItems = [
     { icon: Bell, label: 'Notifications', description: 'Manage notification preferences', action: () => {} },
@@ -50,82 +66,90 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      {}
-      <div className="bg-gradient-to-r from-primary to-secondary p-6 pb-16 rounded-b-3xl">
+      <div className="rounded-b-3xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 pb-16">
         <div className="mb-6 flex items-center justify-between gap-3">
-          <button onClick={onBack} className="text-white flex items-center gap-1 hover:opacity-80 transition-opacity">
-            ← Back
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/25"
+          >
+            <ArrowLeft size={16} />
+            Back
           </button>
-          <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
+          <div className="flex items-center gap-3">
+            <img src={quickPedLogo} alt="QuickPed" className="h-11 w-24 object-contain mix-blend-multiply" />
+            <NotificationBell className="border-0 bg-white/20 text-white shadow-none hover:bg-white/30" />
+          </div>
         </div>
 
-        {}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="relative inline-block mb-4">
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg">
-              <User size={48} className="text-primary" />
-            </div>
-            {user && (
-              <div className="absolute -bottom-1 -right-1 bg-success rounded-full p-1">
-                <CheckCircle size={20} className="text-white" />
-              </div>
-            )}
+          <div className="mb-4 inline-block">
+            <img src={quickPedLogo} alt="QuickPed" className="mx-auto h-24 w-44 object-contain mix-blend-multiply" />
           </div>
 
-          <h1 className="text-2xl font-bold text-white mb-1">
+          <h1 className="mb-1 text-2xl font-bold text-white">
             {user?.name ?? 'Guest User'}
           </h1>
-          <Badge className="bg-white/20 text-white border-white/40 mb-2">
+          <Badge className="mb-2 border-white/40 bg-white/20 text-white">
             {user?.role === 'VERIFIED_RIDER' ? 'Verified Rider' : 'Regular Rider'}
           </Badge>
-          <p className="text-white/80 text-sm">
-            {user?.campusId ? 'Campus Enrolled' : 'Institution not set'}
-          </p>
+          <p className="text-sm text-white/80">{instituteName}</p>
         </motion.div>
       </div>
 
-      <div className="px-6 -mt-8 space-y-6">
-        {}
+      <div className="-mt-8 space-y-6 px-6">
         {user ? (
-          <Card variant="elevated">
-            <CardContent className="p-6 space-y-4">
-              {}
-              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+          <Card variant="elevated" className="rounded-3xl border-0 shadow-xl shadow-slate-200/80">
+            <CardContent className="space-y-4 p-6">
+              <div className="flex items-center gap-3 rounded-xl bg-muted/30 p-3">
                 <Phone className="text-primary flex-shrink-0" size={20} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone Number</p>
-                  <p className="font-semibold truncate">{user.phoneNumber}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Phone Number</p>
+                  <p className="truncate font-semibold">{user.phoneNumber}</p>
                 </div>
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
+                <CheckCircle className="text-orange-500 flex-shrink-0" size={18} />
               </div>
 
-              {}
-              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+              <div className="flex items-center gap-3 rounded-xl bg-muted/30 p-3">
                 <User className="text-primary flex-shrink-0" size={20} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Full Name</p>
-                  <p className="font-semibold truncate">{user.name}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Full Name</p>
+                  <p className="truncate font-semibold">{user.name}</p>
                 </div>
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
+                <CheckCircle className="text-orange-500 flex-shrink-0" size={18} />
               </div>
 
-              {}
-              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+              <div className="flex items-center gap-3 rounded-xl bg-muted/30 p-3">
                 <GraduationCap className="text-primary flex-shrink-0" size={20} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Institution</p>
-                  <p className="font-semibold truncate">{user.campusId ? 'Enrolled in Campus' : 'None'}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Institute</p>
+                  <p className="truncate font-semibold">{instituteName}</p>
                 </div>
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
+                <CheckCircle className="text-orange-500 flex-shrink-0" size={18} />
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl bg-orange-50 p-3">
+                <Wallet className="text-orange-600 flex-shrink-0" size={20} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs uppercase tracking-wide text-orange-700">Wallet Balance</p>
+                  <p className="truncate font-semibold">{formatCurrency(user.walletBalance)}</p>
+                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={onAddMoney}
+                  className="h-10 rounded-xl bg-orange-500 px-3 text-white shadow-lg shadow-orange-500/20 hover:bg-orange-600 active:scale-[0.98]"
+                >
+                  <Plus size={16} />
+                  Add Money
+                </Button>
               </div>
             </CardContent>
           </Card>
         ) : (
-          
           <Card variant="elevated">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 text-muted-foreground">
@@ -136,8 +160,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
           </Card>
         )}
 
-        {}
-        <Card variant="elevated">
+        <Card variant="elevated" className="rounded-3xl border-0 shadow-xl shadow-slate-200/70">
           <CardContent className="p-4">
             <div className="space-y-2">
               {menuItems.map((item, index) => (
@@ -147,23 +170,22 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onBack, onLogout }
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={item.action}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 transition-colors group"
+                  className="group flex w-full items-center gap-4 rounded-xl p-4 transition-colors hover:bg-orange-50"
                 >
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <item.icon className="text-primary" size={20} />
+                  <div className="rounded-lg bg-orange-100 p-2">
+                    <item.icon className="text-orange-600" size={20} />
                   </div>
                   <div className="flex-1 text-left">
                     <p className="font-medium">{item.label}</p>
                     <p className="text-sm text-muted-foreground">{item.description}</p>
                   </div>
-                  <ChevronRight className="text-muted-foreground group-hover:text-foreground transition-colors" size={20} />
+                  <ChevronRight className="text-muted-foreground transition-colors group-hover:text-orange-600" size={20} />
                 </motion.button>
               ))}
             </div>
           </CardContent>
         </Card>
 
-        {}
         <Button
           variant="outline"
           size="lg"
