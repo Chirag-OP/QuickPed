@@ -894,12 +894,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { label: 'Add Dock', icon: MapPin, panel: 'add-dock' as ActivePanel, color: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20' },
-                { label: 'Add Fleet', icon: Bike, panel: 'add-fleet' as ActivePanel, color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20' },
+                { label: 'Add Fleet', icon: Bike, panel: 'add-fleet' as ActivePanel, color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20' },
                 { label: 'Edit Pricing', icon: IndianRupee, panel: 'edit-pricing' as ActivePanel, color: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20' },
                 { label: 'Add Institute', icon: Building2, panel: 'add-institute' as ActivePanel, color: 'bg-purple-500/10 text-purple-700 hover:bg-purple-500/20' },
                 { label: 'View Reports', icon: FileText, panel: 'reports' as ActivePanel, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20' },
                 { label: 'View Analytics', icon: BarChart3, panel: 'analytics' as ActivePanel, color: 'bg-pink-500/10 text-pink-700 hover:bg-pink-500/20' },
-                { label: 'Manage Vehicles', icon: Wrench, panel: 'manage-vehicles' as ActivePanel, color: 'bg-teal-500/10 text-teal-700 hover:bg-teal-500/20' },
+                { label: 'Manage Vehicles', icon: Wrench, panel: 'manage-vehicles' as ActivePanel, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20' },
                 { label: 'Live Feed', icon: Radio, panel: 'livefeed' as ActivePanel, color: 'bg-red-500/10 text-red-700 hover:bg-red-500/20' },
               ].map(({ label, icon: Icon, panel, color }) => (
                 <motion.button

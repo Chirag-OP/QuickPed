@@ -475,7 +475,7 @@ function AppContent() {
             <Route path="/report-issue" element={<ProtectedRoute><ReportIssueScreen bikeId={lastCompletedRide?.vehicleId ?? RIDE_VEHICLE_ID} onSubmit={handleIssueSubmit} onSkip={handleReportComplete} /></ProtectedRoute>} />
             <Route path="/wallet" element={<ProtectedRoute><WalletScreen onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><HistoryScreen rides={userRideHistory} onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><ProfileScreen onBack={() => navigate('/dashboard')} onLogout={handleLogout} /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><ProfileScreen onBack={() => navigate('/dashboard')} onAddMoney={() => navigate('/wallet')} onLogout={handleLogout} /></ProtectedRoute>} />
             
             <Route 
               path="/admin-dashboard/*" 

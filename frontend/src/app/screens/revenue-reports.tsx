@@ -146,7 +146,7 @@ export const RevenueReports: React.FC<RevenueReportsProps> = ({ institute }) => 
                   <p className="text-sm text-muted-foreground">Weekly Revenue</p>
                   <p className="text-2xl font-bold">{formatCurrency(revenueMetrics.weekly)}</p>
                 </div>
-                <TrendingUp className="text-green-500" size={26} />
+                <TrendingUp className="text-orange-500" size={26} />
               </div>
               <div className="flex items-center justify-between gap-2 rounded-3xl bg-muted p-4">
                 <div>

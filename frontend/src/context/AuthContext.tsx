@@ -16,6 +16,8 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  refreshUser: () => Promise<User | null>;
+  setWalletBalance: (balance: number) => void;
   login: (phone: string) => Promise<void>;
   verifyOtp: (phone: string, otpCode: string) => Promise<void>;
   updateProfile: (name: string, campusId: string) => Promise<void>;
@@ -24,24 +26,53 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const WALLET_BALANCE_KEY = 'qp_wallet_balances';
+
+const getWalletKey = (profile: User) => profile.id || profile.phoneNumber;
+
+const readWalletBalances = (): Record<string, number> => {
+  try {
+    const saved = localStorage.getItem(WALLET_BALANCE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch {
+    return {};
+  }
+};
+
+const applyStoredWalletBalance = (profile: User): User => {
+  const savedBalances = readWalletBalances();
+  const savedBalance = savedBalances[getWalletKey(profile)];
+  return typeof savedBalance === 'number' ? { ...profile, walletBalance: savedBalance } : profile;
+};
+
+const persistWalletBalance = (profile: User, balance: number) => {
+  const savedBalances = readWalletBalances();
+  localStorage.setItem(
+    WALLET_BALANCE_KEY,
+    JSON.stringify({ ...savedBalances, [getWalletKey(profile)]: balance }),
+  );
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('qp_auth_token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchUser = async () => {
+  const fetchUser = async (): Promise<User | null> => {
     if (!token) {
       setIsLoading(false);
-      return;
+      return null;
     }
     try {
       const response = await api.get('/users/me');
-      setUser(response.data);
+      const profile = applyStoredWalletBalance(response.data);
+      setUser(profile);
+      return profile;
     } catch (error) {
       setToken(null);
       setUser(null);
       localStorage.removeItem('qp_auth_token');
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +108,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await fetchUser(); 
   };
 
+  const setWalletBalance = (balance: number) => {
+    const nextBalance = Math.max(0, Number.isFinite(balance) ? balance : 0);
+    setUser((current) => {
+      if (!current) return current;
+      const nextUser = { ...current, walletBalance: nextBalance };
+      persistWalletBalance(nextUser, nextBalance);
+      return nextUser;
+    });
+  };
+
   const verifyStudentEmail = async (email: string, otpCode: string) => {
     const response = await api.post('/auth/email-otp/verify', { email, otpCode });
     if (response.data.token) {
@@ -100,6 +141,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         isAuthenticated: !!token && !!user,
         isLoading,
+        refreshUser: fetchUser,
+        setWalletBalance,
         login,
         verifyOtp,
         updateProfile,

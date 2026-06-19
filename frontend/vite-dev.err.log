@@ -1,0 +1,1374 @@
+[2m12:09:27 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at DialogOverlay (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:52:26)
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:59:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:34:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-BoeYAVNW.js?v=827b56d5:29:11
+    at http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:390:21
+    at Presence (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:167:10)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at DialogPortal (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1293:10)
+    at DialogPortal (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:30:28)
+    at DialogContent (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:64:26)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at Dialog (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1250:10)
+    at Dialog (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:8:22)
+    at div
+    at div
+    at ProfileScreen (http://127.0.0.1:5173/src/app/screens/profile-screen.tsx:13:33)
+    at ProtectedRoute (http://127.0.0.1:5173/src/app/App.tsx?t=1781678320633:124:27)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4106:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4786:19)
+    at div
+    at ThemeProvider (http://127.0.0.1:5173/src/app/components/theme-provider.tsx:7:33)
+    at NotificationProvider (http://127.0.0.1:5173/src/app/contexts/notification-context.tsx:7:40)
+    at AppContent (http://127.0.0.1:5173/src/app/App.tsx?t=1781678320633:379:19)
+    at AuthProvider (http://127.0.0.1:5173/src/context/AuthContext.tsx:8:32)
+    at App
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4738:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:7158:26)
+[2m12:11:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at DialogOverlay (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:52:26)
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:59:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:34:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-BoeYAVNW.js?v=827b56d5:29:11
+    at http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:390:21
+    at Presence (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:167:10)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at DialogPortal (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1293:10)
+    at DialogPortal (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:30:28)
+    at DialogContent (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:64:26)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at Dialog (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1250:10)
+    at Dialog (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:8:22)
+    at NotificationCenter (http://127.0.0.1:5173/src/app/components/notification-center.tsx:9:38)
+    at NotificationBell (http://127.0.0.1:5173/src/app/components/notification-bell.tsx:9:36)
+    at div
+    at div
+    at div
+    at div
+    at HomeScreen (http://127.0.0.1:5173/src/app/screens/home-screen.tsx:13:30)
+    at ProtectedRoute (http://127.0.0.1:5173/src/app/App.tsx?t=1781678377368:124:27)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4106:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4786:19)
+    at div
+    at ThemeProvider (http://127.0.0.1:5173/src/app/components/theme-provider.tsx:7:33)
+    at NotificationProvider (http://127.0.0.1:5173/src/app/contexts/notification-context.tsx:7:40)
+    at AppContent (http://127.0.0.1:5173/src/app/App.tsx?t=1781678377368:379:19)
+    at AuthProvider (http://127.0.0.1:5173/src/context/AuthContext.tsx:8:32)
+    at App
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4738:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:7158:26)
+[2m12:11:20 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[2m12:11:37 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/wallet-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:15:11 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[2m12:27:54 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/wallet-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:30:52 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[2m12:31:54 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mAbortError[22m: The play() request was interrupted by a new load request. https://goo.gl/LdLk22
+[39m
+[2m12:32:42 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at DialogOverlay (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:52:26)
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:59:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:34:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-BoeYAVNW.js?v=827b56d5:29:11
+    at http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:390:21
+    at Presence (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:167:10)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at DialogPortal (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1293:10)
+    at DialogPortal (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:30:28)
+    at DialogContent (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:64:26)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at Dialog (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1250:10)
+    at Dialog (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:8:22)
+    at div
+    at div
+    at ProfileScreen (http://127.0.0.1:5173/src/app/screens/profile-screen.tsx?t=1781679627265:15:33)
+    at ProtectedRoute (http://127.0.0.1:5173/src/app/App.tsx?t=1781679668348:124:27)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4106:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4786:19)
+    at div
+    at ThemeProvider (http://127.0.0.1:5173/src/app/components/theme-provider.tsx:7:33)
+    at NotificationProvider (http://127.0.0.1:5173/src/app/contexts/notification-context.tsx:7:40)
+    at AppContent (http://127.0.0.1:5173/src/app/App.tsx?t=1781679668348:379:19)
+    at AuthProvider (http://127.0.0.1:5173/src/context/AuthContext.tsx?t=1781679335455:33:32)
+    at App
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4738:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:7158:26)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/login-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/wallet-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/profile-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/login-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/wallet-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:37:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/profile-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:32:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:21:25
+[33m  9  |  import { NotificationBell } from "../components/notification-bell";
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m2:37:06 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:37:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at DialogOverlay (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:52:26)
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:59:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:34:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-BoeYAVNW.js?v=827b56d5:29:11
+    at http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:390:21
+    at Presence (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:167:10)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at DialogPortal (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1293:10)
+    at DialogPortal (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:30:28)
+    at DialogContent (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:64:26)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at Dialog (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1250:10)
+    at Dialog (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:8:22)
+    at div
+    at div
+    at ProfileScreen (http://127.0.0.1:5173/src/app/screens/profile-screen.tsx?t=1781687245095:15:33)
+    at ProtectedRoute (http://127.0.0.1:5173/src/app/App.tsx?t=1781687245095:124:27)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4106:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4786:19)
+    at div
+    at ThemeProvider (http://127.0.0.1:5173/src/app/components/theme-provider.tsx:7:33)
+    at NotificationProvider (http://127.0.0.1:5173/src/app/contexts/notification-context.tsx:7:40)
+    at AppContent (http://127.0.0.1:5173/src/app/App.tsx?t=1781687245095:379:19)
+    at AuthProvider (http://127.0.0.1:5173/src/context/AuthContext.tsx?t=1781679335455:33:32)
+    at App
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4738:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:7158:26)
+[2m2:46:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at DialogOverlay (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:52:26)
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:59:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-Dc6rwAsf.js?v=827b56d5:34:10
+    at http://127.0.0.1:5173/node_modules/.vite/deps/dist-BoeYAVNW.js?v=827b56d5:29:11
+    at http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:390:21
+    at Presence (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:167:10)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at DialogPortal (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1293:10)
+    at DialogPortal (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:30:28)
+    at DialogContent (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:64:26)
+    at Provider (http://127.0.0.1:5173/node_modules/.vite/deps/dist-CEBu9cAW.js?v=827b56d5:42:12)
+    at Dialog (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=827b56d5:1250:10)
+    at Dialog (http://127.0.0.1:5173/src/app/components/ui/dialog.tsx:8:22)
+    at NotificationCenter (http://127.0.0.1:5173/src/app/components/notification-center.tsx:9:38)
+    at NotificationBell (http://127.0.0.1:5173/src/app/components/notification-bell.tsx:9:36)
+    at div
+    at div
+    at div
+    at div
+    at HomeScreen (http://127.0.0.1:5173/src/app/screens/home-screen.tsx?t=1781687504899:15:30)
+    at ProtectedRoute (http://127.0.0.1:5173/src/app/App.tsx?t=1781687578244:124:27)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4106:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4786:19)
+    at div
+    at ThemeProvider (http://127.0.0.1:5173/src/app/components/theme-provider.tsx:7:33)
+    at NotificationProvider (http://127.0.0.1:5173/src/app/contexts/notification-context.tsx:7:40)
+    at AppContent (http://127.0.0.1:5173/src/app/App.tsx?t=1781687578244:379:19)
+    at AuthProvider (http://127.0.0.1:5173/src/context/AuthContext.tsx?t=1781679335455:33:32)
+    at App
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:4738:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=827b56d5:7158:26)
+[2m2:46:45 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[2m2:51:35 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:5 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249ml[0m[38;5;249ma[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mh[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249me[0m[38;5;249ms[0m
+ [38;5;240m  │[0m     │ 
+ [38;5;240m  │[0m     ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:35 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:36 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:5 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249ml[0m[38;5;249ma[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mh[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249me[0m[38;5;249ms[0m
+ [38;5;240m  │[0m     │ 
+ [38;5;240m  │[0m     ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:36 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:48 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:51 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:51 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:54 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m1[0m[38;5;249m7[0m[38;5;249m-[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:54 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:56 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m1[0m[38;5;249m7[0m[38;5;249m-[0m[38;5;249mj[0m[38;5;249ma[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:57 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:51:58 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m1[0m[38;5;249m7[0m[38;5;249m-[0m[38;5;249mj[0m[38;5;249ma[0m[38;5;249mn[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:51:58 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:52:00 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m1[0m[38;5;249m7[0m[38;5;249m-[0m[38;5;249mj[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249m-[0m[38;5;249m2[0m[38;5;249m6[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:52:00 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:52:04 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected a semicolon or an implicit semicolon after a statement, but found none
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/app/screens/home-screen.tsx:1:9 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m [38;5;249mg[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m1[0m[38;5;249m7[0m[38;5;249m-[0m[38;5;249mj[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249m-[0m[38;5;249m2[0m[38;5;249m6[0m
+ [38;5;240m  │[0m         │ 
+ [38;5;240m  │[0m         ╰─ 
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: Try inserting a semicolon here
+[38;5;246m───╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m
+      at transformWithOxc (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3344:19)
+      at TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:3415:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:51)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m2:52:04 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:12:25
+[33m  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  10 |  import { useAuth } from "../../context/AuthContext";
+  11 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/login-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+      at async viteTransformMiddleware (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24440:20)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/login-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/home-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/wallet-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:04:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/app/screens/profile-screen.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:05:32 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:39 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:06:39 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:40 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/landscape1.png" from "src/app/screens/login-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/login-screen.tsx[39m:11:23
+[33m  6  |  import { Input } from "../components/ui/input";
+  7  |  import { Label } from "../components/ui/label";
+  8  |  import landscape1 from "../../assets/landscape1.png";
+     |                          ^
+  9  |  import quickPedLogo from "../../assets/logo.jpeg";
+  10 |  import { useAuth } from "../../context/AuthContext";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 7)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/home-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/home-screen.tsx[39m:22:25
+[33m  10 |  import { NotificationBell } from "../components/notification-bell";
+  11 |  import { useAuth } from "../../context/AuthContext";
+  12 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  13 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  14 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/wallet-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/wallet-screen.tsx[39m:32:25
+[33m  11 |  import { formatCurrency } from "../lib/utils";
+  12 |  import { NotificationBell } from "../components/notification-bell";
+  13 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  14 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  15 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 12)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m3:06:56 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../../assets/logo.jpeg" from "src/app/screens/profile-screen.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/screens/profile-screen.tsx[39m:33:25
+[33m  9  |  import { useAuth } from "../../context/AuthContext";
+  10 |  import { formatCurrency } from "../lib/utils";
+  11 |  import quickPedLogo from "../../assets/logo.jpeg";
+     |                            ^
+  12 |  var _jsxFileName = "C:/Users/Lenovo/Desktop/my all/code/app dev/figma app/Bike-sharing App Design/frontend/src/app/sc...
+  13 |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30602:39)
+      at TransformPluginContext.error (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30599:14)
+      at normalizeUrl (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27842:18)
+      at async file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27905:30
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:27873:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:30387:14)
+      at async loadAndTransform (file:///C:/Users/Lenovo/Desktop/my%20all/code/app%20dev/figma%20app/Bike-sharing%20App%20Design/frontend/node_modules/vite/dist/node/chunks/node.js:24646:26)
+[2m3:27:26 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/v1/users/me[39m
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+[2m4:33:55 PM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/v1/auth/otp/send[39m
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)

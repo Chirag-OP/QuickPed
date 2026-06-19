@@ -219,7 +219,7 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
                       initial={{ opacity: 0 }}
                       animate={{ opacity: [0, 0.5, 0] }}
                       transition={{ duration: 0.4 }}
-                      className="absolute inset-0 bg-green-400/30 rounded-2xl"
+                      className="absolute inset-0 bg-orange-400/30 rounded-2xl"
                     />
                   )}
 
@@ -235,7 +235,7 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
                         <motion.div
                           animate={phase === 'unlocking' ? { rotate: 360 } : {}}
                           transition={{ duration: 0.8, ease: 'easeInOut' }}
-                          className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/40"
+                          className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40"
                         >
                           {phase === 'unlocking' ? (
                             <Bike size={40} className="text-white" />
@@ -265,19 +265,19 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
                 <motion.div
                   animate={{ scale: [1, 1.12, 1] }}
                   transition={{ repeat: 2, duration: 0.5 }}
-                  className="w-28 h-28 bg-green-500 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/50"
+                  className="w-28 h-28 bg-orange-500 rounded-full flex items-center justify-center shadow-2xl shadow-orange-500/50"
                 >
                   <Zap size={56} className="text-white" />
                 </motion.div>
                 <div>
                   <p className="text-white text-2xl font-bold mb-1">Ride Started!</p>
-                  <p className="text-green-400 text-sm">Bike #A204 is now unlocked</p>
+                  <p className="text-orange-400 text-sm">Bike #A204 is now unlocked</p>
                 </div>
                 <motion.div
                   initial={{ width: '0%' }}
                   animate={{ width: '100%' }}
                   transition={{ duration: 1.6, ease: 'linear' }}
-                  className="h-1 bg-green-400 rounded-full w-48"
+                  className="h-1 bg-orange-400 rounded-full w-48"
                 />
               </motion.div>
             )}
