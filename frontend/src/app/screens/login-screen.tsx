@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { StepIndicator } from '../components/stepIndicator';
+
 import {
   Facebook
 } from "lucide-react";
@@ -288,7 +290,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     setIsLoading(false);
     setError('Use an approved Admin ID and Password to continue.');
   };
+const getCurrentStep = () => {
+  if (screen === "choice") return 0;
+  if (step === "phone") return 1;
+  if (step === "otp") return 2;
+  if (step === "profile") return 3;
 
+  return 0;
+};
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Decorative Header Background */}
@@ -300,8 +309,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="max-w-lg mx-auto"        >
           <Card
-            className="overflow-hidden rounded-[30px] border-0 shadow-none bg-white p-0"
+            className="overflow-hidden rounded-[30px] border-0 shadow-xl bg-white p-0"
           >            {/* STEP: CHOICE */}
+          {/* <StepIndicator currentStep={getCurrentStep()} /> */}
             {screen === 'choice' && (
               <AuthPanel className="flex flex-col items-center">
                 <div className="text-center mb-10">
@@ -321,19 +331,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   </p>
                 </div>
 
-                {/* dots */}
-                <div className="flex gap-2 mb-10">
-                  <div className="w-8 h-2 rounded-full bg-orange-500"></div>
-                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-                </div>
-
                 {/* phone login */}
                 <Button
-                 variant="outline"
+                 variant="ghost"
                   size="lg"
-                  className="w-full h-14 rounded-full bg-orange-500 border-0 text-black text-lg mb-5"
+                  className="w-full h-14 rounded-full bg-orange-400 border-0 text-black text-lg mb-5 hover:scale-105"
                   onClick={() => setScreen('user')}
                 >
                   <Phone size={38} className="mr-2 text-black text-lg" />
@@ -348,7 +350,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full h-14 rounded-full bg-orange-500 border-0 text-black text-lg mb-5"
+                  className="w-full h-14 rounded-full bg-gray-50 border-0 text-black text-lg mb-5 hover:scale-105"
                 >
                   Continue With Email
                 </Button>
@@ -357,8 +359,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 <div className="grid grid-cols-2 gap-4 w-full mb-8">
 
                   <Button
-                    variant="outline"
-                    className="h-16 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50"
+                    variant="ghost"
+                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-105"
                   >
                     <img
                       src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -371,8 +373,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   </Button>
 
                   <Button
-                    variant="outline"
-                    className="h-16 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50"                  >
+                    variant="ghost"
+                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-105"                  >
                     <img
                       src="https://imgs.search.brave.com/FezUwRGIAsiVYTjCqJUNP5zUnnNd_uPQad1abyOSctI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTEv/MTY4LzU3OS9zbWFs/bC9mYWNlYm9vay1s/b2dvLW9uLWEtYmx1/ZS1idXR0b24tZnJl/ZS1wbmcucG5n"
                       alt="Google"
@@ -435,13 +437,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       onSubmit={handleUserPhoneSubmit}
                       className="space-y-6"
                     >
-                        {/* dots */}
-                      <div className="flex justify-center items-center gap-2 mb-10">                 
-                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                      <div className="w-8 h-2 rounded-full bg-orange-500"></div>
-                      <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-                  <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-                </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone" className="ml-1 font-semibold text-slate-700">Mobile Number</Label>
                         <div className="relative group">
@@ -463,7 +458,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
                       </div>
                       {error && <p className="text-sm text-red-500 font-medium ml-1">{error}</p>}
-                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
+                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-400 hover:scale-105 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
                         Continue <ArrowRight className="ml-2" size={18} />
                       </Button>
                     </motion.form>
@@ -485,14 +480,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                         <p className="text-sm text-slate-500 text-center font-medium">Authentication Code sent to</p>
                         <p className="text-center font-bold text-slate-800 text-lg mt-0.5">+91 {phone}</p>
                       </div>
-                       {/* dots */}
-                      <div className="flex justify-center items-center gap-2 mb-10">                 
-                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                       <div className="w-8 h-2 rounded-full bg-orange-500"></div>
-                       <div className="w-2 h-2 rounded-full bg-orange-300"></div>
-
-                </div>
                       <div className="space-y-2">
                         <Label htmlFor="otp" className="text-slate-700 font-semibold ml-1">Enter 6-digit Code</Label>
                         <Input
@@ -551,14 +538,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       onSubmit={handleProfileSubmit}
                       className="space-y-6"
                     >
-                         {/* dots */}
-                      <div className="flex justify-center items-center gap-2 mb-10">                 
-                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                       <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                        <div className="w-8 h-2 rounded-full bg-orange-500"></div>
-
-                </div>
                       <div className="space-y-2">
                         <Label htmlFor="fullname" className="text-slate-700 font-semibold ml-1">Full Name</Label>
                         <div className="relative group">
