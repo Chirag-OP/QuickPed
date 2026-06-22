@@ -335,11 +335,11 @@ const getCurrentStep = () => {
                 <Button
                  variant="ghost"
                   size="lg"
-                  className="w-full h-14 rounded-full bg-orange-400 border-0 text-black text-lg mb-5 hover:scale-105"
+                  className="w-full h-14 rounded-full bg-orange-400 border-0 text-black text-lg mb-5 hover:scale-[1.03] transition-transform duration-200"
                   onClick={() => setScreen('user')}
                 >
                   <Phone size={38} className="mr-2 text-black text-lg" />
-                  <span className="text-lg text-black font-semibold text-lg">
+                  <span className="text-lg text-black font-semibold">
                     Continue With Phone
                   </span>
                 </Button>
@@ -350,7 +350,7 @@ const getCurrentStep = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full h-14 rounded-full bg-gray-50 border-0 text-black text-lg mb-5 hover:scale-105"
+                  className="w-full h-14 rounded-full bg-gray-50 border-0 text-black text-lg mb-5 hover:scale-[1.03] transition-transform duration-200"
                 >
                   Continue With Email
                 </Button>
@@ -360,7 +360,7 @@ const getCurrentStep = () => {
 
                   <Button
                     variant="ghost"
-                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-105"
+                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-[1.03] transition-transform duration-200"
                   >
                     <img
                       src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -374,7 +374,7 @@ const getCurrentStep = () => {
 
                   <Button
                     variant="ghost"
-                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-105"                  >
+                    className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-[1.03] transition-transform duration-200"                  >
                     <img
                       src="https://imgs.search.brave.com/FezUwRGIAsiVYTjCqJUNP5zUnnNd_uPQad1abyOSctI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTEv/MTY4LzU3OS9zbWFs/bC9mYWNlYm9vay1s/b2dvLW9uLWEtYmx1/ZS1idXR0b24tZnJl/ZS1wbmcucG5n"
                       alt="Google"
@@ -458,7 +458,7 @@ const getCurrentStep = () => {
 
                       </div>
                       {error && <p className="text-sm text-red-500 font-medium ml-1">{error}</p>}
-                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-400 hover:scale-105 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
+                      <Button type="submit" size="lg" className="w-full h-14 bg-orange-400 hover:scale-[1.03] duration-200 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
                         Continue <ArrowRight className="ml-2" size={18} />
                       </Button>
                     </motion.form>
