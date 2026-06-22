@@ -344,7 +344,7 @@ const getCurrentStep = () => {
                   </span>
                 </Button>
 
-                 
+
 
                 {/* email login */}
                 <Button
@@ -503,9 +503,8 @@ const getCurrentStep = () => {
                             size="sm"
                             onClick={handleResendOtp}
                             disabled={otpCountdown > 0 || isLoading}
-                            className={`h-9 rounded-full px-4 text-orange-600 hover:bg-orange-50 hover:text-orange-700 ${
-                              otpCountdown > 0 ? 'opacity-45 blur-[0.3px]' : ''
-                            }`}
+                            className={`h-9 rounded-full px-4 text-orange-600 hover:bg-orange-50 hover:text-orange-700 ${otpCountdown > 0 ? 'opacity-45 blur-[0.3px]' : ''
+                              }`}
                           >
                             Resend OTP
                           </Button>
