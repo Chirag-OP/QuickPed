@@ -73,7 +73,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
             <NotificationBell className="h-[46px] w-[46px] rounded-full border-0 bg-white text-[#181818] shadow-[0_10px_23px_rgba(15,15,15,0.11)]" />
             <button
               onClick={() => onNavigate('profile')}
-              className="relative flex h-[47px] w-[47px] items-center justify-center rounded-full bg-[#1f1714] text-[14px] font-bold text-white shadow-[0_10px_23px_rgba(15,15,15,0.13)]"
+              className="relative flex h-[47px] w-[47px] items-center justify-center rounded-full bg-[#1f1714] text-[14px] font-bold text-white shadow-[0_10px_23px_rgba(15,15,15,0.13)] hover:cursor-pointer hover:-translate-y-0.5 transition-all duration-200"
             >
               {userInitials}
               <span className="absolute right-[2px] top-[2px] h-[10px] w-[10px] rounded-full border-2 border-white bg-[#ff7433]" />
@@ -87,7 +87,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)]"
+          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)] hover:scale-[1.02] transition-transform duration-200"
         >
           <div className="pointer-events-none absolute right-[24px] top-[25px] h-[48px] w-[48px] rounded-full bg-white/52 blur-[3px]" />
           <div className="pointer-events-none absolute bottom-0 left-0 h-[95px] w-full overflow-hidden">
@@ -121,7 +121,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
               <Button
                 onClick={onStartRide}
                 size="lg"
-                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98]"
+                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98] hover:cursor-pointer"
               >
                 <QrCode size={18} className="mr-[9px]" />
                 Scan & Unlock
@@ -147,7 +147,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
         <section className="space-y-[17px] pt-[13px]">
           <div className="flex items-center justify-between">
             <h2 className="text-[21px] font-bold leading-none text-[#030303]">Nearby docks</h2>
-            <button className="text-[13px] font-semibold leading-none text-[#d95700]">View map</button>
+            <button className="text-[13px] font-semibold leading-none text-[#d95700] hover:cursor-pointer hover:underline">View map</button>
           </div>
 
           <div className="space-y-[12px]">
@@ -157,7 +157,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.08 * (index + 1), duration: 0.28 }}
-                className="flex h-[83px] items-center rounded-[19px] bg-white px-[16px] shadow-[0_8px_18px_rgba(15,15,15,0.035)]"
+                className="flex h-[83px] items-center rounded-[19px] bg-white px-[16px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.02]"
               >
                 <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-[#fff0df] text-[#f05f12]">
                   <MapPin size={22} />
@@ -189,7 +189,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
         <section className="space-y-[16px] pt-[18px]">
           <h2 className="text-[21px] font-bold leading-none text-[#030303]">Last ride</h2>
 
-          <div className="flex h-[86px] items-center rounded-[19px] bg-white px-[18px] shadow-[0_8px_18px_rgba(15,15,15,0.035)]">
+          <div className="flex h-[86px] items-center rounded-[19px] bg-white px-[18px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.02]">
             <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-[#e7f8ee] text-[#008354]">
               <Bike size={23} />
             </div>
@@ -211,8 +211,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
             <span className="text-[14px] font-bold leading-none text-[#050505]">{formatCurrency(28)}</span>
           </div>
 
-          <button className="flex h-[82px] w-full items-center rounded-[19px] bg-[#ffdcb6] px-[18px] text-left">
-            <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-white text-[#ee5f13]">
+          <button className="flex h-[82px] w-full items-center rounded-[19px] bg-[#ffdcb6] px-[18px] text-left transition-transform duration-200 hover:scale-[1.02] hover:cursor-pointer">
+            <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-white text-[#ee5f13] ">
               <Zap size={23} />
             </span>
             <span className="ml-[14px] min-w-0 flex-1">
