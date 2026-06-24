@@ -6,9 +6,13 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WebhookModule } from './webhooks/webhook.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+    isGlobal: true,
+  }),
     ScheduleModule.forRoot(),
     PrismaModule, 
     InfrastructureModule, 
