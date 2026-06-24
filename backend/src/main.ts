@@ -1,5 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as crypto from 'crypto';
+
+if (!globalThis.crypto) {
+  Object.defineProperty(globalThis, 'crypto', {
+    value: {
+      randomUUID: crypto.randomUUID,
+    },
+  });
+}
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
