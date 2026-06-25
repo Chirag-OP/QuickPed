@@ -34,6 +34,10 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
   const [amount, setAmount] = useState('');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentStatusMsg, setPaymentStatusMsg] = useState('');
+  
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [pendingIntent, setPendingIntent] = useState<{orderId: string, amount: string, idempotencyKey: string} | null>(null);
+  const [activeIdempotencyKey, setActiveIdempotencyKey] = useState<string>('');
 
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -43,7 +47,32 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
     script.async = true;
     document.body.appendChild(script);
 
-    fetchWalletData();
+    const initData = async () => {
+      const initialBalance = await fetchWalletData();
+      
+      const savedIntent = localStorage.getItem('qp_payment_intent');
+      if (savedIntent) {
+        try {
+          const intent = JSON.parse(savedIntent);
+          const now = Date.now();
+          const intentTime = intent.timestamp || 0;
+          
+          if (now - intentTime < 15 * 60 * 1000) { // 15 mins
+             setPendingIntent(intent);
+             setShowCancelModal(true);
+          } else {
+             localStorage.removeItem('qp_payment_intent');
+             setActiveIdempotencyKey(uuidv4());
+          }
+        } catch(e) {
+          localStorage.removeItem('qp_payment_intent');
+          setActiveIdempotencyKey(uuidv4());
+        }
+      } else {
+        setActiveIdempotencyKey(uuidv4());
+      }
+    };
+    initData();
 
     return () => {
       document.body.removeChild(script);
@@ -59,10 +88,13 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
         api.get('/users/me'),
         api.get('/wallet/transactions')
       ]);
-      setBalance(Number(userRes.data.walletBalance) || 0);
+      const fetchedBalance = Number(userRes.data.walletBalance) || 0;
+      setBalance(fetchedBalance);
       setTransactions(txRes.data || []);
+      return fetchedBalance;
     } catch (err) {
       console.error('Failed to fetch wallet data', err);
+      return 0;
     }
   };
 
@@ -84,17 +116,20 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
         const currentBalance = Number(userRes.data.walletBalance) || 0;
 
         if (currentBalance > oldBalance) {
+          localStorage.removeItem('qp_payment_intent');
           setBalance(currentBalance);
           setPaymentStatusMsg('');
           setIsProcessingPayment(false);
           setShowAddMoney(false);
           setAmount('');
+          setActiveIdempotencyKey(uuidv4());
           
           const txRes = await api.get('/wallet/transactions');
           setTransactions(txRes.data || []);
           
           if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current);
         } else if (attempts >= maxAttempts) {
+          localStorage.removeItem('qp_payment_intent');
           setPaymentStatusMsg('Payment Pending: Waiting for bank confirmation');
           setTimeout(() => {
             setIsProcessingPayment(false);
@@ -110,46 +145,90 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
     }, 2000);
   };
 
+  const openRazorpay = (orderId: string, amt: string, idempotencyKey: string) => {
+    const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+    const intent = { orderId, amount: amt, idempotencyKey, timestamp: Date.now() };
+    localStorage.setItem('qp_payment_intent', JSON.stringify(intent));
+
+    const options = {
+      key: keyId,
+      amount: Number(amt) * 100,
+      currency: 'INR',
+      name: 'QuickPed',
+      description: 'Wallet Top-up',
+      order_id: orderId,
+      handler: function () {
+        startPolling(balance);
+      },
+      modal: {
+        ondismiss: function() {
+          setPendingIntent({ orderId, amount: amt, idempotencyKey });
+          setShowCancelModal(true);
+        }
+      },
+      prefill: {
+        name: 'QuickPed User',
+      },
+      theme: {
+        color: '#3399cc'
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function () {
+      console.error('Payment failed');
+    });
+    rzp.open();
+  };
+
   const handleAddMoney = async () => {
     if (!amount || isProcessingPayment) return;
 
+    setIsProcessingPayment(true);
+
     try {
-      const idempotencyKey = uuidv4();
+      let key = activeIdempotencyKey;
+      if (!key) {
+        key = uuidv4();
+        setActiveIdempotencyKey(key);
+      }
       
       const response = await api.post('/wallet/topup/initiate', 
         { amount: Number(amount) },
-        { headers: { 'Idempotency-Key': idempotencyKey } }
+        { headers: { 'Idempotency-Key': key } }
       );
 
-      const orderId = response.data.orderId;
-      const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
-
-      const options = {
-        key: keyId,
-        amount: Number(amount) * 100,
-        currency: 'INR',
-        name: 'QuickPed',
-        description: 'Wallet Top-up',
-        order_id: orderId,
-        handler: function () {
-          startPolling(balance);
-        },
-        prefill: {
-          name: 'QuickPed User',
-        },
-        theme: {
-          color: '#3399cc'
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function () {
-        console.error('Payment failed');
-      });
-      rzp.open();
+      openRazorpay(response.data.orderId, amount, key);
     } catch (err) {
       console.error('Failed to initiate top-up', err);
+      setIsProcessingPayment(false);
     }
+  };
+
+  const resumePayment = () => {
+    if (pendingIntent) {
+      setShowCancelModal(false);
+      openRazorpay(pendingIntent.orderId, pendingIntent.amount, pendingIntent.idempotencyKey);
+    }
+  };
+
+  const cancelPayment = async () => {
+    if (pendingIntent) {
+      try {
+        await api.post('/wallet/topup/cancel', { orderId: pendingIntent.orderId });
+        const txRes = await api.get('/wallet/transactions');
+        setTransactions(txRes.data || []);
+      } catch (err) {
+        console.error('Failed to cancel transaction on backend', err);
+      }
+    }
+    
+    localStorage.removeItem('qp_payment_intent');
+    setPendingIntent(null);
+    setShowCancelModal(false);
+    setAmount('');
+    setActiveIdempotencyKey(uuidv4());
   };
 
   const quickAmounts = [100, 200, 500, 1000];
@@ -259,11 +338,11 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
       </div>
 
       {/* Add Money Modal */}
-      {showAddMoney && (
+      {showAddMoney && !showCancelModal && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50"
+          className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-40"
           onClick={() => !isProcessingPayment && setShowAddMoney(false)}
         >
           <motion.div
@@ -347,6 +426,36 @@ export const WalletScreen: React.FC<WalletScreenProps> = ({ onBack }) => {
                 onClick={handleAddMoney}
               >
                 {isProcessingPayment ? 'Processing...' : `Add ${amount ? formatCurrency(Number(amount)) : ''}`}
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Cancellation Modal */}
+      {showCancelModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            className="w-full max-w-sm bg-card rounded-3xl p-6 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-bold mb-4">Cancel Transaction?</h2>
+            <p className="text-muted-foreground mb-6 text-sm">
+              You're almost there! Resume to complete your wallet top-up securely.
+            </p>
+            
+            <div className="flex flex-col gap-3">
+              <Button size="lg" className="w-full" onClick={resumePayment}>
+                Resume Payment
+              </Button>
+              <Button variant="ghost" size="lg" className="w-full text-danger hover:text-danger hover:bg-danger/10" onClick={cancelPayment}>
+                Cancel Payment
               </Button>
             </div>
           </motion.div>

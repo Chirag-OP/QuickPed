@@ -8,7 +8,7 @@ import { PaymentProcessor } from '../wallet/services/payment.processor';
 export class WebhookController {
   constructor(private readonly paymentProcessor: PaymentProcessor) {}
 
-  @Post('razorpay')
+  @Post('payment')
   @HttpCode(HttpStatus.OK)
   async handleRazorpayWebhook(
     @Headers('x-razorpay-signature') signature: string,

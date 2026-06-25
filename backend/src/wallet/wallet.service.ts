@@ -29,6 +29,19 @@ export class WalletService {
     return orderResponse;
   }
 
+  async cancelTopUp(userId: string, orderId: string) {
+    return this.prisma.transaction.updateMany({
+      where: { 
+        userId, 
+        referenceId: orderId,
+        status: TxStatus.PENDING 
+      },
+      data: {
+        status: TxStatus.FAILED,
+      },
+    });
+  }
+
   async getUserTransactions(userId: string) {
     return this.prisma.transaction.findMany({
       where: { userId },

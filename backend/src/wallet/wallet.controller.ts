@@ -15,6 +15,11 @@ export class WalletController {
     return this.walletService.initiateTopUp(req.user.sub, dto.amount);
   }
 
+  @Post('topup/cancel')
+  cancelTopup(@Body('orderId') orderId: string, @Req() req: any) {
+    return this.walletService.cancelTopUp(req.user.sub, orderId);
+  }
+
   @Get('transactions')
   getTransactions(@Req() req: any) {
     return this.walletService.getUserTransactions(req.user.sub);
