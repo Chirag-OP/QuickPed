@@ -1,6 +1,8 @@
 // gurpreet singh -17-jan-26
 // gurpreet singh 19-jun-26
-import React from 'react';
+//  gurpreet singh 24-jun-26
+
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   Battery,
@@ -32,10 +34,34 @@ type NearbyDock = {
   battery: number;
 };
 
+const getLocalGreeting = (date = new Date()) => {
+  const hour = date.getHours();
+
+  if (hour >= 4 && hour < 12) return '🌅 Good Morning';
+  if (hour >= 12 && hour < 17) return '☀️ Good Afternoon';
+  if (hour >= 17 && hour < 21) return '🌇 Good Evening';
+  return '🌙 Good Night';
+};
+
+const useLocalGreeting = () => {
+  const [greeting, setGreeting] = useState(() => getLocalGreeting());
+
+  useEffect(() => {
+    const updateGreeting = () => setGreeting(getLocalGreeting());
+    updateGreeting();
+
+    const interval = window.setInterval(updateGreeting, 60 * 1000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  return greeting;
+};
+
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate }) => {
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
   const balance = Number(user?.walletBalance ?? 0);
+  const greeting = useLocalGreeting();
 
   void theme;
   void toggleTheme;
@@ -62,7 +88,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[13px] font-medium uppercase leading-none tracking-[4px] text-[#77736f]">
-              GOOD MORNING
+              {greeting}
             </p>
             <h1 className="mt-[9px] text-[16px] font-bold leading-none text-[#050505]">
               {user?.name || 'Aarav'}
@@ -87,9 +113,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)]"
+          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)] hover:scale-[1.02] transition-transform duration-200"
         >
-          <div className="pointer-events-none absolute right-[24px] top-[25px] h-[48px] w-[48px] rounded-full bg-white/52 blur-[3px] hover:scale-[1.03] transition-transform duration-200 hover:cursor-pointer" />
+          <div className="pointer-events-none absolute right-[24px] top-[25px] h-[48px] w-[48px] rounded-full bg-white/52 blur-[3px]" />
           <div className="pointer-events-none absolute bottom-0 left-0 h-[95px] w-full overflow-hidden">
             <svg className="absolute bottom-[-1px] left-0 h-[90px] w-full" viewBox="0 0 380 115" preserveAspectRatio="none">
               <path
@@ -121,7 +147,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
               <Button
                 onClick={onStartRide}
                 size="lg"
-                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98] hover:cursor-pointer hover:scale-[1.03] transition-transform duration-200 lg:hover:scale-100"
+                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98] hover:cursor-pointer"
               >
                 <QrCode size={18} className="mr-[9px]" />
                 Scan & Unlock
@@ -157,7 +183,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.08 * (index + 1), duration: 0.28 }}
-                className="flex h-[83px] items-center rounded-[19px] bg-white px-[16px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.03]"
+                className="flex h-[83px] items-center rounded-[19px] bg-white px-[16px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.02]"
               >
                 <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-[#fff0df] text-[#f05f12]">
                   <MapPin size={22} />
@@ -189,7 +215,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
         <section className="space-y-[16px] pt-[18px]">
           <h2 className="text-[21px] font-bold leading-none text-[#030303]">Last ride</h2>
 
-          <div className="flex h-[86px] items-center rounded-[19px] bg-white px-[18px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.03]">
+          <div className="flex h-[86px] items-center rounded-[19px] bg-white px-[18px] shadow-[0_8px_18px_rgba(15,15,15,0.035)] transition-transform duration-200 hover:scale-[1.02]">
             <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-[#e7f8ee] text-[#008354]">
               <Bike size={23} />
             </div>
@@ -211,7 +237,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
             <span className="text-[14px] font-bold leading-none text-[#050505]">{formatCurrency(28)}</span>
           </div>
 
-          <button className="flex h-[82px] w-full items-center rounded-[19px] bg-[#ffdcb6] px-[18px] text-left transition-transform duration-200 hover:scale-[1.03] hover:cursor-pointer">
+          <button className="flex h-[82px] w-full items-center rounded-[19px] bg-[#ffdcb6] px-[18px] text-left transition-transform duration-200 hover:scale-[1.02] hover:cursor-pointer">
             <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[16px] bg-white text-[#ee5f13] ">
               <Zap size={23} />
             </span>

@@ -10,6 +10,11 @@ import { ActiveRideScreen } from './screens/active-ride-screen';
 import { WalletScreen } from './screens/wallet-screen';
 import { HistoryScreen } from './screens/history-screen';
 import { ProfileScreen } from './screens/profile-screen';
+
+import { ProfileSettingsScreen } from './screens/profile-settings-screen';
+import { ProfileNotificationsScreen } from './screens/profile-notifications-screen';
+import { SavedPlacesScreen } from './screens/saved-places-screen';
+import { HelpSupportScreen } from './screens/help-support-screen';
 import { ScanScreen } from './screens/scan-screen';
 import { RideCompleteScreen } from './screens/ride-complete-screen';
 import { ReportIssueScreen } from './screens/report-issue-screen';
@@ -476,6 +481,12 @@ function AppContent() {
             <Route path="/wallet" element={<ProtectedRoute><WalletScreen onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><HistoryScreen rides={userRideHistory} onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfileScreen onBack={() => navigate('/dashboard')} onAddMoney={() => navigate('/wallet')} onLogout={handleLogout} /></ProtectedRoute>} />
+
+            <Route path="/profile/settings" element={<ProtectedRoute><ProfileSettingsScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
+            <Route path="/profile/notifications" element={<ProtectedRoute><ProfileNotificationsScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
+            <Route path="/profile/saved-places" element={<ProtectedRoute><SavedPlacesScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
+            <Route path="/profile/help-support" element={<ProtectedRoute><HelpSupportScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
+
             
             <Route 
               path="/admin-dashboard/*" 

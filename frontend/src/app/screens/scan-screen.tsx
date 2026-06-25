@@ -83,8 +83,9 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
   const scanning = phase === 'camera-active';
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col overflow-hidden">
-      {}
+<div className="fixed inset-0 z-50 bg-[#1B130F] overflow-hidden">
+  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:32px_32px]" />
+        {}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover opacity-60"
@@ -98,18 +99,35 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
       {}
       <div className="relative z-10 flex flex-col h-full">
         {}
-        <div className="p-6 flex items-center justify-between">
-          <h2 className="text-white text-xl font-semibold tracking-wide">Scan QR Code</h2>
-          <div className="flex items-center gap-2">
-            <NotificationBell className="border-0 bg-white/10 text-white shadow-none hover:bg-white/20" />
-            <button
-              onClick={handleClose}
-              className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
-            >
-              <X size={24} className="text-white" />
-            </button>
-          </div>
-        </div>
+     <div className="absolute top-6 left-0 right-0 z-20 flex items-center justify-between px-6">
+
+  {/* Close Button */}
+  <button
+    onClick={handleClose}
+    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md"
+  >
+    <X size={22} className="text-white" />
+  </button>
+
+  {/* Scanning Badge */}
+  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-md">
+
+    <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></div>
+
+    <span className="text-sm font-medium text-white">
+      Scanning
+    </span>
+
+  </div>
+
+  {/* Flash Button */}
+  <button
+    className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md"
+  >
+    <Zap size={20} className="text-white" />
+  </button>
+
+</div>
 
         {}
         <div className="flex-1 flex items-center justify-center px-6">
@@ -285,20 +303,134 @@ export const ScanScreen: React.FC<ScanScreenProps> = ({ onScanSuccess, onClose }
         </div>
 
         {}
-        <div className="p-6">
-          <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-            <CardContent className="p-4 text-center">
-              <p className="text-white text-sm">
-                {phase === 'requesting-permission' && 'Camera permission is required to scan the QR code'}
-                {phase === 'permission-denied' && 'Enable camera in settings to continue'}
-                {phase === 'camera-active' && 'Position the QR code on the bike within the frame'}
-                {phase === 'detected' && 'QR Code found! Verifying bike...'}
-                {phase === 'unlocking' && '🔓 Bike is unlocking, please wait...'}
-                {phase === 'ride-started' && '✅ Have a safe ride!'}
-              </p>
-            </CardContent>
-          </Card>
+        <div className="absolute bottom-0 left-0 right-0 rounded-t-[34px] bg-[#F8F8F8] px-5 pt-4 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.18)]">
+
+    {/* Drag Handle */}
+
+    <div className="mx-auto mb-5 h-1.5 w-12 rounded-full bg-gray-300" />
+
+
+
+    {/* Bike Card */}
+
+    <div className="flex items-center justify-between">
+
+        <div className="flex items-center gap-4">
+
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100">
+
+                <Bike
+                    className="text-orange-500"
+                    size={24}
+                />
+
+            </div>
+
+            <div>
+
+                <h3 className="font-bold text-lg text-gray-900">
+
+                    QuickPad · QP-2417
+
+                </h3>
+
+                <p className="text-gray-500 text-sm">
+
+                    Hostel C dock · 4 cycles ready
+
+                </p>
+
+            </div>
+
         </div>
+
+        <span className="rounded-full bg-green-100 px-4 py-1 text-sm font-medium text-green-700">
+
+            Ready
+
+        </span>
+
+    </div>
+
+
+
+    {/* Fare Card */}
+
+    <div className="mt-6 rounded-3xl bg-white p-5">
+
+        <div className="flex items-center justify-between text-gray-700">
+
+            <span>
+
+                Unlock fee
+
+            </span>
+
+            <span className="font-semibold">
+
+                ₹5
+
+            </span>
+
+        </div>
+
+
+
+        <div className="mt-4 flex items-center justify-between text-gray-700">
+
+            <span>
+
+                First 5 minutes
+
+            </span>
+
+            <span className="font-semibold text-green-600">
+
+                Free
+
+            </span>
+
+        </div>
+
+
+
+        <hr className="my-4" />
+
+
+
+        <div className="flex items-center justify-between">
+
+            <span className="text-lg font-bold">
+
+                Total to pay now
+
+            </span>
+
+            <span className="text-2xl font-bold">
+
+                ₹5
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    {/* Pay Button */}
+
+    <Button
+
+        className="mt-6 h-14 w-full rounded-full bg-black text-white text-lg font-semibold hover:bg-black"
+
+    >
+
+        Pay ₹5 & Unlock
+
+    </Button>
+
+</div>
       </div>
     </div>
   );
