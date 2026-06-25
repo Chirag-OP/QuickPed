@@ -23,11 +23,9 @@ import {
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Switch } from '../components/ui/switch';
-
 interface ProfileSettingsScreenProps {
   onBack: () => void;
 }
-
 type SettingsRow = {
   label: string;
   description?: string;
@@ -35,9 +33,7 @@ type SettingsRow = {
   action?: 'toggle' | 'chevron' | 'danger';
   enabled?: boolean;
 };
-
 const sectionClassName = 'rounded-[26px] border-0 bg-white shadow-[0_16px_40px_rgba(31,31,31,0.06)]';
-
 export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ onBack }) => {
   const [theme, setTheme] = useState<'Light Mode' | 'Dark Mode' | 'System Theme'>('System Theme');
   const [toggles, setToggles] = useState({
@@ -49,21 +45,18 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
     dataSharing: false,
     location: true,
   });
-
   const accountRows: SettingsRow[] = [
     { label: 'Edit Profile', description: 'Update your QuickPed account details', icon: UserRound },
     { label: 'Change Name', description: 'Personalize your display name', icon: User },
     { label: 'Change Profile Picture', description: 'Upload a new profile photo', icon: Camera },
     { label: 'Change Phone Number', description: 'Update your registered mobile number', icon: Smartphone },
   ];
-
   const privacyRows: SettingsRow[] = [
     { label: 'Privacy Policy', description: 'How QuickPed protects your data', icon: Shield },
     { label: 'Terms & Conditions', description: 'Usage policies and ride terms', icon: FileText },
     { label: 'Data Sharing', description: 'Allow service improvement analytics', icon: Share2, action: 'toggle', enabled: toggles.dataSharing },
     { label: 'Location Permission', description: 'Use location for nearby docks and rides', icon: Globe2, action: 'toggle', enabled: toggles.location },
   ];
-
   const appRows: SettingsRow[] = [
     { label: 'Language', description: 'English', icon: Languages },
     { label: 'Rate App', description: 'Share your QuickPed experience', icon: Star },
@@ -72,12 +65,10 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
     { label: 'About QuickPed', description: 'Campus mobility made simple', icon: FileText },
     { label: 'Check for Updates', description: 'Look for the newest frontend release', icon: RefreshCcw },
   ];
-
   const securityRows: SettingsRow[] = [
     { label: 'Logout from All Devices', description: 'End active QuickPed sessions', icon: LogOut, action: 'danger' },
     { label: 'Delete Account', description: 'Permanently remove your account', icon: Trash2, action: 'danger' },
   ];
-
   const renderRows = (rows: SettingsRow[]) =>
     rows.map((row, index) => {
       const Icon = row.icon;
@@ -119,7 +110,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
         </motion.div>
       );
     });
-
   const notificationOptions = [
     ['ride', 'Ride Notifications', 'Ride starts, completions, and reservations'],
     ['wallet', 'Wallet Notifications', 'Top-ups and low balance alerts'],
@@ -127,7 +117,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
     ['push', 'Push Notifications', 'Mobile push alerts'],
     ['email', 'Email Notifications', 'Important updates by email'],
   ] as const;
-
   return (
     <div className="min-h-screen bg-[#f7f6f3] pb-10">
       <main className="mx-auto max-w-3xl px-4 py-5 sm:px-6">
@@ -144,13 +133,11 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
           </Button>
           <div className="rounded-full bg-orange-50 px-4 py-2 text-sm font-bold text-orange-600">Settings</div>
         </div>
-
         <section className="mb-6 rounded-[30px] bg-[#ffdfbd] px-5 py-6 text-slate-950">
           <p className="text-sm font-bold uppercase tracking-[3px] text-orange-700">QuickPed Profile</p>
           <h1 className="mt-3 text-3xl font-black leading-tight">Settings</h1>
           <p className="mt-2 max-w-xl text-sm font-medium text-slate-600">Tune your account, theme, alerts, privacy, and app preferences.</p>
         </section>
-
         <div className="space-y-5">
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">Account</h2>
@@ -158,7 +145,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
               <CardContent className="p-0">{renderRows(accountRows)}</CardContent>
             </Card>
           </section>
-
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">Appearance</h2>
             <Card className={sectionClassName}>
@@ -188,7 +174,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
               </CardContent>
             </Card>
           </section>
-
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">Notifications</h2>
             <Card className={sectionClassName}>
@@ -218,21 +203,18 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({ on
               </CardContent>
             </Card>
           </section>
-
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">Privacy & Security</h2>
             <Card className={sectionClassName}>
               <CardContent className="p-0">{renderRows(privacyRows)}</CardContent>
             </Card>
           </section>
-
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">App</h2>
             <Card className={sectionClassName}>
               <CardContent className="p-0">{renderRows(appRows)}</CardContent>
             </Card>
           </section>
-
           <section>
             <h2 className="mb-3 px-1 text-lg font-black text-slate-950">Security</h2>
             <Card className={sectionClassName}>

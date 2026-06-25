@@ -15,35 +15,29 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
 import type { RideHistoryRecord } from '../lib/admin-data';
-
 interface HistoryScreenProps {
   rides: RideHistoryRecord[];
   onBack: () => void;
 }
-
 const formatJourneyTimer = (seconds: number) => {
   const safeSeconds = Math.max(0, seconds);
   const minutes = Math.floor(safeSeconds / 60);
   const remainingSeconds = safeSeconds % 60;
   return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
-
 export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) => {
   const totalRides = rides.length;
   const totalDuration = rides.reduce((sum, ride) => sum + ride.duration, 0);
   const totalSpent = rides.reduce((sum, ride) => sum + ride.fare, 0);
   const latestRide = rides[0];
-  const displayDuration = latestRide?.duration ?? 758;
-  const displayFare = latestRide?.fare ?? 25;
-  const displayDistance = latestRide?.distance ?? 2.1;
-  const displayDock = latestRide?.startDock ?? 'Hostel C dock';
-  const displayVehicle = latestRide?.vehicleId ?? 'QP-2417';
-
+  const displayDuration = latestRide?.duration ?? 0;
+  const displayFare = latestRide?.fare ?? 0;
+  const displayDistance = latestRide?.distance ?? 0;
+  const displayDock = latestRide?.startDock ?? 'Unknown Dock';
+  const displayVehicle = latestRide?.vehicleId ?? 'Unknown Vehicle';
   return (
     <div className="min-h-screen bg-[#f3f1ee] pb-[122px] text-[#080808]">
-      
-
-      <main className="px-[34px] pt-[16px]">
+            <main className="px-[34px] pt-[16px]">
         <div className="mb-[18px] flex items-center justify-between">
           <button
             onClick={onBack}
@@ -52,12 +46,10 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
           >
             <ArrowLeft size={20} />
           </button>
-
           <div className="flex h-[34px] items-center gap-[8px] rounded-full bg-white px-[14px] text-[13px] font-semibold text-[#171717] shadow-[0_8px_18px_rgba(15,15,15,0.09)]">
             <span className="h-[9px] w-[9px] rounded-full bg-[#149662]" />
             Ride in progress
           </div>
-
           <button
             className="flex h-[43px] w-[43px] items-center justify-center rounded-full bg-white text-[#ef6421] shadow-[0_8px_18px_rgba(15,15,15,0.09)]"
             aria-label="Ride alert"
@@ -65,7 +57,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             <AlertTriangle size={18} />
           </button>
         </div>
-
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -94,7 +85,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             </div>
           </div>
         </motion.section>
-
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -124,7 +114,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             <circle cx="347" cy="72" r="5" fill="#141414" />
           </svg>
         </motion.section>
-
         <section className="mb-[20px] grid grid-cols-3 gap-[12px]">
           {[
             { icon: Route, color: 'text-[#1f70c7]', bg: 'bg-[#e8f2ff]', value: displayDistance.toFixed(1), unit: 'km', label: 'DISTANCE' },
@@ -154,7 +143,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             );
           })}
         </section>
-
         <motion.section
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -169,7 +157,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             <p className="mt-[8px] truncate text-[13px] leading-none text-[#59606a]">e-Cycle · {displayDock}</p>
           </div>
         </motion.section>
-
         <div className="mb-[18px] flex items-center gap-[14px]">
           <button className="flex h-[56px] w-[56px] shrink-0 items-center justify-center rounded-full bg-white text-[#232323] shadow-[0_8px_18px_rgba(15,15,15,0.08)]" aria-label="Pause ride">
             <Pause size={20} />
@@ -179,11 +166,9 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
             End ride & lock
           </button>
         </div>
-
         <p className="mb-[86px] text-center text-[12px] leading-none text-[#69707a]">
           Park inside any QuickPad dock to end your ride
         </p>
-
         <section className="space-y-[14px]">
           <div className="flex items-end justify-between">
             <div>
@@ -193,13 +178,11 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
               </p>
             </div>
           </div>
-
           {rides.length === 0 && (
             <div className="rounded-[19px] bg-white px-[18px] py-[22px] text-center text-[13px] text-[#686b71] shadow-[0_8px_18px_rgba(15,15,15,0.035)]">
               Completed rides will appear here after you end a ride.
             </div>
           )}
-
           {rides.map((ride, index) => (
             <motion.article
               key={ride.id}

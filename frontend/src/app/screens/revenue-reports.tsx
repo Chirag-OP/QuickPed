@@ -7,22 +7,17 @@ import { Button } from '../components/ui/button';
 import { formatCurrency } from '../lib/utils';
 import { getCompletedRides, getRevenueMetrics, type InstituteData } from '../lib/admin-data';
 import { downloadInstituteReport, type ReportFormat } from '../lib/report-export';
-
 interface RevenueReportsProps {
   institute: InstituteData;
 }
-
 const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
 const isSameDay = (a: Date, b: Date) =>
   a.getFullYear() === b.getFullYear() &&
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
-
 const buildRevenueData = (institute: InstituteData, period: 'weekly' | 'monthly') => {
   const completedRides = getCompletedRides(institute.rideHistory);
   const now = new Date();
-
   if (period === 'weekly') {
     const today = startOfDay(now);
     return Array.from({ length: 7 }, (_, index) => {
@@ -38,7 +33,6 @@ const buildRevenueData = (institute: InstituteData, period: 'weekly' | 'monthly'
       };
     });
   }
-
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const weekCount = Math.ceil(now.getDate() / 7);
   return Array.from({ length: Math.max(1, weekCount) }, (_, index) => {
@@ -57,31 +51,25 @@ const buildRevenueData = (institute: InstituteData, period: 'weekly' | 'monthly'
     };
   });
 };
-
 export const RevenueReports: React.FC<RevenueReportsProps> = ({ institute }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<'weekly' | 'monthly'>('weekly');
   const [reportOptionsOpen, setReportOptionsOpen] = useState(false);
   const [reportStatus, setReportStatus] = useState('');
-
   const revenueData = useMemo(
     () => buildRevenueData(institute, selectedPeriod),
     [institute, selectedPeriod]
   );
-
   const revenueMetrics = useMemo(() => getRevenueMetrics(institute), [institute]);
   const completedRides = useMemo(() => getCompletedRides(institute.rideHistory), [institute.rideHistory]);
-
   const periodSummary = useMemo(() => {
     const total = revenueData.reduce((sum, item) => sum + item.revenue, 0);
     const average = Math.round(total / revenueData.length);
     return { total, average };
   }, [revenueData]);
-
   const handleDownloadReport = (format: ReportFormat) => {
     const message = downloadInstituteReport(institute, format);
     setReportStatus(message);
   };
-
   return (
     <div className="min-h-screen bg-background p-6 pb-24">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -103,7 +91,6 @@ export const RevenueReports: React.FC<RevenueReportsProps> = ({ institute }) => 
           </Button>
         </div>
       </div>
-
       <div className="grid gap-4 xl:grid-cols-[2fr_1fr]">
         <Card className="border border-border">
           <CardHeader>
@@ -127,7 +114,6 @@ export const RevenueReports: React.FC<RevenueReportsProps> = ({ institute }) => 
             </ResponsiveContainer>
           </CardContent>
         </Card>
-
         <div className="space-y-4">
           <Card className="border border-border">
             <CardHeader>
@@ -164,7 +150,6 @@ export const RevenueReports: React.FC<RevenueReportsProps> = ({ institute }) => 
               </div>
             </CardContent>
           </Card>
-
           <Card className="border border-border">
             <CardHeader>
               <CardTitle>Summary</CardTitle>

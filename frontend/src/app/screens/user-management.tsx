@@ -17,35 +17,29 @@ import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
 import type { AdminUserRole, InstituteData } from '../lib/admin-data';
-
 interface UserManagementProps {
   institute: InstituteData;
   onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
 }
-
 const roleVariant: Record<AdminUserRole, 'success' | 'default' | 'info' | 'danger'> = {
   verified: 'success',
   guest: 'default',
   admin: 'info',
   blocked: 'danger',
 };
-
 const roleLabel: Record<AdminUserRole, string> = {
   verified: 'Verified Rider',
   guest: 'Guest Rider',
   admin: 'Admin',
   blocked: 'Blocked',
 };
-
 const normalizePhone = (phone: string) => phone.replace(/\D/g, '');
-
 export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpdateInstitute }) => {
   const users = institute.users;
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<{ userId: string; action: string } | null>(null);
   const [roleFilter, setRoleFilter] = useState<string>('all');
-
   const filteredUsers = users.filter(user => {
     const q = searchQuery.toLowerCase();
     const matchSearch =
@@ -55,7 +49,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
     const matchRole = roleFilter === 'all' || user.role === roleFilter;
     return matchSearch && matchRole;
   });
-
   const handleAction = (userId: string, action: string) => {
     onUpdateInstitute((currentInstitute) => ({
       ...currentInstitute,
@@ -70,11 +63,9 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
     }));
     setConfirmAction(null);
   };
-
   const verifiedCount = users.filter(u => u.role === 'verified').length;
   const guestCount = users.filter(u => u.role === 'guest').length;
   const blockedCount = users.filter(u => u.role === 'blocked').length;
-
   return (
     <div className="min-h-screen bg-background p-4 md:p-6 pb-28">
       <div className="mb-6">
@@ -87,7 +78,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
             <p className="text-sm text-muted-foreground">{users.length} registered users</p>
           </div>
         </div>
-
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
           <Input
@@ -97,7 +87,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
             className="pl-9 h-11 rounded-xl"
           />
         </div>
-
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
           {(['all', 'verified', 'guest', 'admin', 'blocked'] as const).map(r => (
             <button
@@ -112,7 +101,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
           ))}
         </div>
       </div>
-
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-success/10 rounded-xl p-3 text-center">
           <p className="text-xl font-bold text-success">{verifiedCount}</p>
@@ -127,7 +115,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
           <p className="text-xs text-muted-foreground">Blocked</p>
         </div>
       </div>
-
       <div className="space-y-3">
         {filteredUsers.map((user, index) => {
           const expanded = expandedUser === user.id;
@@ -137,7 +124,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
             return ride.user.toLowerCase() === user.name.toLowerCase() || (userPhone && ridePhone.endsWith(userPhone));
           });
           const latestRide = history[0];
-
           return (
             <motion.div
               key={user.id}
@@ -163,7 +149,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
                   </div>
                   <ChevronRight className={`text-muted-foreground transition-transform ${expanded ? 'rotate-90' : ''}`} size={18} />
                 </button>
-
                 <AnimatePresence>
                   {expanded && (
                     <motion.div
@@ -191,7 +176,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
                               <p className="mt-2 text-sm font-bold">{formatCurrency(user.walletBalance)}</p>
                             </div>
                           </div>
-
                           <div className="rounded-2xl bg-muted p-4">
                             <div className="mb-3 flex items-center gap-2">
                               <p className="text-sm font-semibold">Additional User Information</p>
@@ -222,7 +206,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
                               </div>
                             </div>
                           </div>
-
                           {confirmAction?.userId === user.id && (
                             <div className="rounded-2xl bg-warning/10 border border-warning/20 p-4">
                               <p className="text-sm font-medium">Are you sure?</p>
@@ -236,7 +219,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ institute, onUpd
                               </div>
                             </div>
                           )}
-
                           <div className="grid grid-cols-2 gap-3">
                             {user.role !== 'admin' && (
                               <Button variant="secondary" className="w-full" onClick={() => setConfirmAction({ userId: user.id, action: 'promote' })}>

@@ -4,14 +4,12 @@ import { Battery, AlertTriangle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-
 interface BatteryWarningProps {
   batteryLevel: number;
   bikeId: string;
   onProceed: () => void;
   onCancel: () => void;
 }
-
 export const BatteryWarning: React.FC<BatteryWarningProps> = ({
   batteryLevel,
   bikeId,
@@ -23,9 +21,7 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
     if (batteryLevel >= 30) return { text: 'Medium', iconClass: 'text-warning fill-warning', bgClass: 'bg-warning/10', barClass: 'bg-warning', badgeClass: 'bg-warning/10 text-warning' };
     return { text: 'Low', iconClass: 'text-danger fill-danger', bgClass: 'bg-danger/10', barClass: 'bg-danger', badgeClass: 'bg-danger/10 text-danger' };
   };
-
   const status = getBatteryStatus();
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -49,14 +45,12 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
               <h3 className="text-2xl font-bold mb-2">Battery Status</h3>
               <p className="text-muted-foreground">Bike {bikeId}</p>
             </div>
-
             <div className="mb-6 p-4 bg-muted/30 rounded-xl text-center">
               <p className="text-sm text-muted-foreground mb-2">Battery Status</p>
               <div className="flex items-center justify-center gap-3 mb-3">
                 <p className="text-4xl font-bold">{status.text}</p>
                 <Badge className={status.badgeClass}>{status.text}</Badge>
               </div>
-
               <div className="w-full bg-muted rounded-full h-3">
                 <div
                   className={`h-3 rounded-full ${status.barClass} transition-all`}
@@ -64,7 +58,6 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
                 />
               </div>
             </div>
-
             {batteryLevel < 30 && (
               <div className="mb-6 p-4 bg-warning/10 border-l-4 border-warning rounded-lg flex items-start gap-3">
                 <AlertTriangle className="text-warning flex-shrink-0 mt-0.5" size={20} />
@@ -76,7 +69,6 @@ export const BatteryWarning: React.FC<BatteryWarningProps> = ({
                 </div>
               </div>
             )}
-
             <div className="flex gap-3">
               <Button onClick={onCancel} variant="outline" size="lg" className="flex-1">
                 Choose Another

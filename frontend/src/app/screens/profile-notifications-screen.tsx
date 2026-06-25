@@ -15,11 +15,9 @@ import {
   XCircle,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-
 interface ProfileNotificationsScreenProps {
   onBack: () => void;
 }
-
 type NotificationItem = {
   id: string;
   title: string;
@@ -29,7 +27,6 @@ type NotificationItem = {
   icon: React.ElementType;
   accent: string;
 };
-
 const seedNotifications: NotificationItem[] = [
   {
     id: 'ride-started',
@@ -113,19 +110,15 @@ const seedNotifications: NotificationItem[] = [
     accent: 'bg-orange-50 text-orange-500',
   },
 ];
-
 export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProps> = ({ onBack }) => {
   const [notifications, setNotifications] = useState(seedNotifications);
   const unreadCount = useMemo(() => notifications.filter((notification) => notification.unread).length, [notifications]);
-
   const markAllAsRead = () => {
     setNotifications((current) => current.map((notification) => ({ ...notification, unread: false })));
   };
-
   const deleteNotification = (id: string) => {
     setNotifications((current) => current.filter((notification) => notification.id !== id));
   };
-
   return (
     <div className="min-h-screen bg-[#f7f6f3] pb-10">
       <main className="mx-auto max-w-3xl px-4 py-5 sm:px-6">
@@ -144,7 +137,6 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
             {unreadCount} unread
           </div>
         </div>
-
         <section className="mb-5 rounded-[30px] bg-[#ffdfbd] px-5 py-6">
           <div className="flex items-start gap-4">
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-white text-orange-500 shadow-[0_10px_24px_rgba(249,115,22,0.12)]">
@@ -157,7 +149,6 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
             </div>
           </div>
         </section>
-
         <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Button
             type="button"
@@ -177,7 +168,6 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
             Clear All
           </Button>
         </div>
-
         <section className="space-y-3">
           {notifications.map((notification, index) => {
             const Icon = notification.icon;
@@ -219,7 +209,6 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
               </motion.article>
             );
           })}
-
           {notifications.length === 0 && (
             <div className="rounded-[24px] bg-white px-5 py-10 text-center shadow-[0_12px_30px_rgba(31,31,31,0.05)]">
               <BellRing className="mx-auto text-orange-300" size={34} />

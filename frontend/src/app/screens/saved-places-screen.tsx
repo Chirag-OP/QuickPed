@@ -13,18 +13,15 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-
 interface SavedPlacesScreenProps {
   onBack: () => void;
 }
-
 type SavedPlace = {
   id: string;
   name: string;
   subtitle: string;
   favorite: boolean;
 };
-
 const campusPlaces: SavedPlace[] = [
   'CSE Department',
   'Electrical Department',
@@ -50,17 +47,14 @@ const campusPlaces: SavedPlace[] = [
   subtitle: 'Frequently Visited',
   favorite: index < 4,
 }));
-
 export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) => {
   const [query, setQuery] = useState('');
   const [places, setPlaces] = useState(campusPlaces);
-
   const filteredPlaces = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) return places;
     return places.filter((place) => place.name.toLowerCase().includes(normalized));
   }, [places, query]);
-
   const addNewPlace = () => {
     const nextPlace: SavedPlace = {
       id: `custom-${Date.now()}`,
@@ -70,7 +64,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
     };
     setPlaces((current) => [nextPlace, ...current]);
   };
-
   const editPlace = (id: string) => {
     setPlaces((current) =>
       current.map((place) =>
@@ -83,11 +76,9 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
       )
     );
   };
-
   const deletePlace = (id: string) => {
     setPlaces((current) => current.filter((place) => place.id !== id));
   };
-
   return (
     <div className="min-h-screen bg-[#f7f6f3] pb-10">
       <main className="mx-auto max-w-5xl px-4 py-5 sm:px-6">
@@ -106,7 +97,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
             {places.length} saved
           </div>
         </div>
-
         <section className="mb-5 rounded-[30px] bg-[#ffdfbd] px-5 py-6">
           <div className="flex items-start gap-4">
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-white text-orange-500 shadow-[0_10px_24px_rgba(249,115,22,0.12)]">
@@ -119,7 +109,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
             </div>
           </div>
         </section>
-
         <div className="mb-5 grid gap-3 sm:grid-cols-[1fr_auto]">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -139,7 +128,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
             Add New Place
           </Button>
         </div>
-
         <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {filteredPlaces.map((place, index) => (
             <motion.article
@@ -172,7 +160,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
                   <Star size={18} fill={place.favorite ? 'currentColor' : 'none'} />
                 </button>
               </div>
-
               <div className="mt-4 grid grid-cols-3 gap-2">
                 <button
                   type="button"
@@ -201,7 +188,6 @@ export const SavedPlacesScreen: React.FC<SavedPlacesScreenProps> = ({ onBack }) 
             </motion.article>
           ))}
         </section>
-
         {filteredPlaces.length === 0 && (
           <div className="mt-5 rounded-[24px] bg-white px-5 py-10 text-center shadow-[0_12px_30px_rgba(31,31,31,0.05)]">
             <MapPin className="mx-auto text-orange-300" size={34} />

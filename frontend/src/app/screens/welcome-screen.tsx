@@ -2,28 +2,23 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Bike, Zap, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/button';
-
 interface WelcomeScreenProps {
   onComplete: () => void;
 }
-
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
     }, 5000);
-
     return () => clearTimeout(timer);
   }, [onComplete]);
-
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-amber-500 flex items-center justify-center overflow-hidden">
-      {/* Premium Ambient Background Elements */}
+      {}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-white/10 blur-[120px] rounded-full mix-blend-overlay"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-amber-300/20 blur-[150px] rounded-full mix-blend-overlay"></div>
-
-        {/* Floating Mobility/Cycle Background Theme Components */}
+        {}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -44,8 +39,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
           </motion.div>
         ))}
       </div>
-
-      {/* Main Glassmorphic Onboarding Container */}
+      {}
       <div className="relative z-10 text-center px-6 max-w-xl w-full flex flex-col items-center">
         <motion.div
           initial={{ scale: 0.85, opacity: 0, y: 30 }}
@@ -72,8 +66,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
             </div>
           </div>
         </motion.div>
-
-        {/* Premium Typography & Titles */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,8 +80,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
             Campus mobility made easy with smart electric rides and seamless rentals.
           </p>
         </motion.div>
-
-        {/* Action Call to Action Button */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,8 +97,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
-
-        {/* Step Pagination Carousel Dots - Inspired by image_91094d.png */}
+        {}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

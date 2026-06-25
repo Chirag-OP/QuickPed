@@ -12,16 +12,13 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-
 interface HelpSupportScreenProps {
   onBack: () => void;
 }
-
 const securityNumbers = [
   { label: 'Security Guard', phone: '7340992754' },
   { label: 'Security Guard', phone: '78148 38214' },
 ];
-
 const supportActions = [
   {
     label: 'Call Security Guard',
@@ -63,7 +60,6 @@ const supportActions = [
     href: 'tel:7340992754',
   },
 ];
-
 export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) => {
   return (
     <div className="min-h-screen bg-[#f7f6f3] pb-10">
@@ -81,7 +77,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
           </Button>
           <div className="rounded-full bg-orange-50 px-4 py-2 text-sm font-bold text-orange-600">Help & Support</div>
         </div>
-
         <section className="mb-5 rounded-[30px] bg-[#ffdfbd] px-5 py-6">
           <div className="flex items-start gap-4">
             <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-white text-orange-500 shadow-[0_10px_24px_rgba(249,115,22,0.12)]">
@@ -94,7 +89,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
             </div>
           </div>
         </section>
-
         <section className="mb-5 rounded-[26px] bg-white p-4 shadow-[0_16px_40px_rgba(31,31,31,0.06)]">
           <div className="mb-4 flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-red-50 text-red-500">
@@ -105,7 +99,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
               <p className="text-sm font-medium text-slate-500">Use these contacts for urgent campus safety needs.</p>
             </div>
           </div>
-
           <div className="grid gap-3 sm:grid-cols-2">
             {securityNumbers.map((contact) => (
               <a
@@ -124,7 +117,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
             ))}
           </div>
         </section>
-
         <section className="grid gap-3 sm:grid-cols-2">
           {supportActions.map((action, index) => {
             const Icon = action.icon;
@@ -139,7 +131,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
                 </span>
               </>
             );
-
             if (action.href) {
               return (
                 <motion.a
@@ -154,7 +145,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
                 </motion.a>
               );
             }
-
             return (
               <motion.button
                 key={action.label}
@@ -169,7 +159,6 @@ export const HelpSupportScreen: React.FC<HelpSupportScreenProps> = ({ onBack }) 
             );
           })}
         </section>
-
         <section className="mt-5 rounded-[26px] bg-slate-950 p-5 text-white shadow-[0_16px_40px_rgba(15,23,42,0.12)]">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/10 text-orange-300">

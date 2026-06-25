@@ -3,15 +3,12 @@ import { Bell } from 'lucide-react';
 import { useNotifications } from '../contexts/notification-context';
 import NotificationCenter from './notification-center';
 import { cn } from '../lib/utils';
-
 interface NotificationBellProps {
   className?: string;
 }
-
 export const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
   const { unreadCount } = useNotifications();
   const [open, setOpen] = useState(false);
-
   return (
     <>
       <button onClick={() => setOpen(true)}
@@ -29,10 +26,8 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({ className })
       )}
       </div>
     </button>
-
       <NotificationCenter open={open} onOpenChange={setOpen} />
     </>
   );
 };
-
 export default NotificationBell;

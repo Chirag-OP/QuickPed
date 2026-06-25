@@ -7,8 +7,7 @@ import { UsersModule } from './users/users.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WebhookModule } from './webhooks/webhook.module';
 import { ConfigModule } from '@nestjs/config';
-
-
+import { CampusModule } from './campus/campus.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule, 
     WalletModule,
     WebhookModule,
+    CampusModule,
   ],
   controllers: [],
   providers: [],

@@ -2,22 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
-
 class PhoneLoginScreen extends ConsumerStatefulWidget {
   const PhoneLoginScreen({super.key});
-
   @override
   ConsumerState<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
 }
-
 class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
   final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authProvider) == AuthState.loading;
-
     return Scaffold(
       appBar: AppBar(title: const Text('User Login')),
       body: Padding(
@@ -59,22 +54,17 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
     );
   }
 }
-
 class VerifyOtpScreen extends ConsumerStatefulWidget {
   final String phone;
   const VerifyOtpScreen({super.key, required this.phone});
-
   @override
   ConsumerState<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
 }
-
 class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
   final _otpController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authProvider) == AuthState.loading;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Verify OTP')),
       body: Padding(
@@ -97,7 +87,6 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
                       if (_otpController.text.isEmpty) return;
                       try {
                         await ref.read(authProvider.notifier).verifyPhoneOtp(widget.phone, _otpController.text);
-                        // GoRouter handles redirection based on AuthState
                       } catch (e) {
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceAll("Exception: ", ""))));
@@ -112,20 +101,16 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
     );
   }
 }
-
 class CampusProfileScreen extends ConsumerStatefulWidget {
   const CampusProfileScreen({super.key});
-
   @override
   ConsumerState<CampusProfileScreen> createState() => _CampusProfileScreenState();
 }
-
 class _CampusProfileScreenState extends ConsumerState<CampusProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   String? _selectedInstitution;
-
   static const List<String> _iits = [
     "IIT Bhubaneswar", "IIT Bombay", "IIT Mandi", "IIT Delhi", "IIT Indore",
     "IIT Kharagpur", "IIT Hyderabad", "IIT Jodhpur", "IIT Kanpur", "IIT Madras",
@@ -133,11 +118,9 @@ class _CampusProfileScreenState extends ConsumerState<CampusProfileScreen> {
     "IIT Jammu", "IIT Dharwad", "IIT Goa", "IIT Bhilai", "IIT Tirupati",
     "IIT Palakkad", "IIT Dhanbad (ISM)", "IIT Varanasi (BHU)"
   ];
-
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authProvider) == AuthState.loading;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Profile Setup')),
       body: Padding(
@@ -194,7 +177,6 @@ class _CampusProfileScreenState extends ConsumerState<CampusProfileScreen> {
                               );
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile Updated')));
-                            // router automatically redirects to home
                           }
                         } catch (e) {
                           if (mounted) {
@@ -211,10 +193,8 @@ class _CampusProfileScreenState extends ConsumerState<CampusProfileScreen> {
     );
   }
 }
-
 class MainDashboardScreen extends ConsumerWidget {
   const MainDashboardScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -237,15 +217,12 @@ class MainDashboardScreen extends ConsumerWidget {
     );
   }
 }
-
 class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storageService = ref.watch(storageServiceProvider);
     final profile = storageService.getUserProfile();
-
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: Padding(

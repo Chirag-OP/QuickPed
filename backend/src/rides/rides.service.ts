@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { TxStatus, TxType } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CompleteRideDto } from './dto/complete-ride.dto';
-
 type RideHistoryItem = {
   id: string;
   user: string;
@@ -18,7 +17,6 @@ type RideHistoryItem = {
   completedAt: string;
   startedAt?: string;
 };
-
 const mapRide = (ride: any): RideHistoryItem => ({
   id: ride.id,
   user: ride.userName?.trim() || ride.name?.trim() || 'Guest User',
@@ -34,44 +32,34 @@ const mapRide = (ride: any): RideHistoryItem => ({
   completedAt: ride.completedAt instanceof Date ? ride.completedAt.toISOString() : String(ride.completedAt),
   startedAt: ride.startedAt instanceof Date ? ride.startedAt.toISOString() : String(ride.startedAt),
 });
-
 @Injectable()
 export class RidesService {
   constructor(private prisma: PrismaService) {}
-
   async completeRide(userId: string, dto: CompleteRideDto) {
     const fare = Number(dto.fare);
     const duration = Math.max(1, Math.round(Number(dto.duration)));
     const distance = Number(dto.distance);
-
     if (!Number.isFinite(fare) || fare < 0) {
       throw new BadRequestException('Invalid fare.');
     }
-
     if (!Number.isFinite(distance) || distance < 0) {
       throw new BadRequestException('Invalid distance.');
     }
-
     const startedAt = dto.startedAt ? new Date(dto.startedAt) : new Date(Date.now() - duration * 1000);
     if (Number.isNaN(startedAt.getTime())) {
       throw new BadRequestException('Invalid start time.');
     }
-
     return this.prisma.$transaction(async (prismaTx) => {
       await prismaTx.$executeRaw`SELECT * FROM "User" WHERE id = ${userId}::uuid FOR UPDATE`;
-
       const user = await prismaTx.user.findUnique({
         where: { id: userId },
         select: { id: true, name: true, phoneNumber: true, walletBalance: true },
       });
-
       if (!user) {
         throw new NotFoundException('User not found');
       }
-
       const completedAt = new Date();
       const nextBalance = Math.max(0, Number(user.walletBalance) - fare);
-
       const rideRows = await prismaTx.$queryRaw<any[]>`
         INSERT INTO "Ride" (
           "userId",
@@ -111,9 +99,7 @@ export class RidesService {
           "startedAt",
           "completedAt";
       `;
-
       const ride = rideRows[0];
-
       await prismaTx.transaction.create({
         data: {
           userId,
@@ -123,12 +109,10 @@ export class RidesService {
           referenceId: ride.id,
         },
       });
-
       await prismaTx.user.update({
         where: { id: userId },
         data: { walletBalance: nextBalance },
       });
-
       return {
         ride: mapRide({
           ...ride,
@@ -139,7 +123,6 @@ export class RidesService {
       };
     });
   }
-
   async getUserRideHistory(userId: string) {
     const rides = await this.prisma.$queryRaw<any[]>`
       SELECT
@@ -161,7 +144,6 @@ export class RidesService {
       WHERE r."userId" = ${userId}::uuid
       ORDER BY r."completedAt" DESC
     `;
-
     return rides.map(mapRide);
   }
 }

@@ -14,13 +14,11 @@ import { Card, CardContent } from '../components/ui/card';
 import { formatCurrency, formatDate, formatDuration } from '../lib/utils';
 import type { RideHistoryRecord } from '../lib/admin-data';
 import { NotificationBell } from '../components/notification-bell';
-
 interface RideCompleteScreenProps {
   rideData: RideHistoryRecord;
   onContinue: () => void;
   onReportIssue: () => void;
 }
-
 export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
   rideData,
   onContinue,
@@ -53,7 +51,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
             />
           </div>
         </motion.div>
-
         {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -64,7 +61,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
           <h1 className="text-3xl font-bold mb-2">Ride Receipt</h1>
           <p className="text-muted-foreground">Thank you for riding with QuickPed</p>
         </motion.div>
-
         {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -84,7 +80,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
                 </div>
                 <p className="mt-2 text-xs text-muted-foreground">Base fare {formatCurrency(0)} + {formatCurrency(2)} per minute</p>
               </div>
-
               {}
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
@@ -94,7 +89,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
                   </div>
                   <span className="text-right text-sm font-bold">{formatDate(rideData.completedAt)}</span>
                 </div>
-
                 <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
                   <div className="flex items-center gap-3">
                     <Clock className="text-muted-foreground" size={20} />
@@ -102,7 +96,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
                   </div>
                   <span className="font-bold">{formatDuration(rideData.duration)}</span>
                 </div>
-
                 <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
                   <div className="flex items-center gap-3">
                     <Bike className="text-muted-foreground" size={20} />
@@ -110,7 +103,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
                   </div>
                   <span className="font-bold">{rideData.distance} km</span>
                 </div>
-
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="text-success" size={16} />
@@ -128,7 +120,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
             </CardContent>
           </Card>
         </motion.div>
-
         {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -151,7 +142,6 @@ export const RideCompleteScreen: React.FC<RideCompleteScreenProps> = ({
             </CardContent>
           </Card>
         </motion.div>
-
         {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -1,11 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
-
 async function main() {
   console.log('Seeding database...');
-  
-  const superAdmin = await prisma.user.upsert({
+    const superAdmin = await prisma.user.upsert({
     where: { phoneNumber: '+919999999999' },
     update: {
       role: 'SUPER_ADMIN',
@@ -16,10 +13,8 @@ async function main() {
       walletBalance: 0.00,
     },
   });
-
   console.log('Founder account injected:', superAdmin);
 }
-
 main()
   .catch((e) => {
     console.error(e);

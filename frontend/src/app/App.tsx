@@ -10,7 +10,6 @@ import { ActiveRideScreen } from './screens/active-ride-screen';
 import { WalletScreen } from './screens/wallet-screen';
 import { HistoryScreen } from './screens/history-screen';
 import { ProfileScreen } from './screens/profile-screen';
-
 import { ProfileSettingsScreen } from './screens/profile-settings-screen';
 import { ProfileNotificationsScreen } from './screens/profile-notifications-screen';
 import { SavedPlacesScreen } from './screens/saved-places-screen';
@@ -39,9 +38,8 @@ import {
   type RideHistoryRecord,
 } from './lib/admin-data';
 import { LayoutDashboard, Bike, Users, MapPin, IndianRupee, BarChart3, X } from 'lucide-react';
-
+import api from '../api/axios';
 type LoginMode = 'choice' | 'user' | 'admin';
-
 const adminNavItems = [
   { screen: 'admin', label: 'Dashboard', Icon: LayoutDashboard },
   { screen: 'fleet', label: 'Fleet', Icon: Bike },
@@ -50,25 +48,21 @@ const adminNavItems = [
   { screen: 'pricing', label: 'Pricing', Icon: IndianRupee },
   { screen: 'revenue', label: 'Revenue', Icon: BarChart3 },
 ];
-
 const USER_PROFILE_KEY = 'qp_user_profile';
 const RIDE_VEHICLE_ID = 'QP-2847';
 const RIDE_START_DOCK = 'Main Gate Dock';
 const RIDE_END_DOCK = 'Library Dock';
-
 type StoredUserProfile = {
   phone?: string;
   name?: string;
   institution?: string;
 };
-
 type IssueReportSubmission = {
   bikeId: string;
   issueType: string;
   issueLabel: string;
   description: string;
 };
-
 const readUserProfile = (): StoredUserProfile => {
   try {
     const saved = localStorage.getItem(USER_PROFILE_KEY);
@@ -77,11 +71,8 @@ const readUserProfile = (): StoredUserProfile => {
     return {};
   }
 };
-
 const normalizePhone = (phone?: string) => phone?.replace(/\D/g, '') ?? '';
-
 const getInitial = (name?: string) => (name?.trim().charAt(0).toUpperCase() || 'G');
-
 function RootGatekeeper() {
   const { isAuthenticated, user, isLoading } = useAuth();
   if (isLoading) return null;
@@ -91,7 +82,6 @@ function RootGatekeeper() {
   if (!user?.campusId) return <Navigate to="/profile-setup" replace />;
   return <Navigate to="/dashboard" replace />;
 }
-
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) {
   const { isAuthenticated, user, isLoading } = useAuth();
   if (isLoading) return null;
@@ -101,7 +91,6 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode,
   }
   return <>{children}</>;
 }
-
 function AdminLayout({
   institutes,
   selectedInstitute,
@@ -114,11 +103,9 @@ function AdminLayout({
 }: any) {
   const navigate = useNavigate();
   const location = useLocation();
-
   const pathParts = location.pathname.split('/');
   const prefix = pathParts[1]; 
   const currentTab = pathParts[2] || 'admin';
-
   return (
     <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'ADMIN']}>
       <>
@@ -131,7 +118,6 @@ function AdminLayout({
             <X size={13} /> Exit Admin
           </button>
         </div>
-
         <Routes>
           <Route 
             path="" 
@@ -155,8 +141,7 @@ function AdminLayout({
               />
             } 
           />
-          
-          {selectedInstitute && (
+                    {selectedInstitute && (
             <>
               <Route path="fleet" element={<FleetManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
               <Route path="users" element={<UserManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
@@ -165,10 +150,8 @@ function AdminLayout({
               <Route path="revenue" element={<RevenueReports institute={selectedInstitute} />} />
             </>
           )}
-
           <Route path="*" element={<Navigate to={`/${prefix}`} replace />} />
         </Routes>
-
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-xl border-t border-border pb-safe">
           <div className="flex items-stretch">
             {adminNavItems.map(({ screen, label, Icon }) => {
@@ -193,16 +176,13 @@ function AdminLayout({
     </ProtectedRoute>
   );
 }
-
 function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, isAuthenticated, user, isLoading } = useAuth();
-
   useEffect(() => {
     if (isLoading) return;
-    
-    if (isAuthenticated) {
+        if (isAuthenticated) {
       if (user?.role === 'SUPER_ADMIN') {
         if (location.pathname === '/login' || location.pathname === '/' || location.pathname === '/welcome') {
           navigate('/hq-dashboard');
@@ -222,23 +202,60 @@ function AppContent() {
       }
     }
   }, [isAuthenticated, user, isLoading, location.pathname, navigate]);
-
   const [activeRide, setActiveRide] = useState(false);
   const [initialLoginMode, setInitialLoginMode] = useState<LoginMode>('choice');
   const [adminKey, setAdminKey] = useState<AdminKey>('parth');
-  const [institutes, setInstitutes] = useState<InstituteData[]>(() => createInitialInstitutes());
+  const [institutes, setInstitutes] = useState<any[]>([]);
   const [selectedInstituteId, setSelectedInstituteId] = useState<string | null>(null);
   const [lastCompletedRide, setLastCompletedRide] = useState<RideHistoryRecord | null>(null);
   const [userRideHistory, setUserRideHistory] = useState<RideHistoryRecord[]>([]);
-
+  useEffect(() => {
+    api.get('/campuses').then(res => {
+      const fetchedInstitutes = res.data.map((c: any) => ({
+        id: c.id,
+        name: c.name,
+        docks: (c.docks || []).map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          location: d.name,
+          campus: c.name,
+          spots: d.optimumCapacity || 10,
+          occupied: 0,
+          status: 'available'
+        })),
+        vehicles: (c.vehicles || []).map((v: any) => ({
+          id: v.id,
+          type: v.vehicleType || 'Bicycle',
+          dockId: '',
+          location: 'Unknown',
+          status: v.status ? v.status.toLowerCase() : 'available',
+          battery: v.batteryLevel || 100,
+          lastRide: 'Never',
+          totalRides: 0,
+          condition: 'good'
+        })),
+        pricing: c.fareConfigurations && c.fareConfigurations.length > 0 ? {
+           baseFare: Number(c.fareConfigurations[0].baseFare),
+           perMinute: Number(c.fareConfigurations[0].perMinuteRate),
+           reservation: 5,
+           subscription: 199,
+           discount: 10,
+           pricingStructure: `Standard: base ${c.fareConfigurations[0].baseFare}, per min ${c.fareConfigurations[0].perMinuteRate}`
+        } : { baseFare: 0, perMinute: 2, reservation: 5, subscription: 199, discount: 10, pricingStructure: 'Standard' },
+        rideHistory: [],
+        issueReports: [],
+        revenue: [],
+        vehicleTypes: ['Bicycle', 'E-Bike']
+      }));
+      setInstitutes(fetchedInstitutes);
+    }).catch(err => console.error('Failed to fetch campuses', err));
+  }, []);
   const selectedInstitute = institutes.find((institute) => institute.id === selectedInstituteId) ?? null;
-
   const resolveUserInstituteId = (profile: StoredUserProfile) => {
     const institution = profile.institution?.trim().toLowerCase();
     const matchingInstitute = institutes.find((institute) => institute.name.toLowerCase() === institution);
     return matchingInstitute?.id ?? institutes[0]?.id ?? null;
   };
-
   const upsertRideUser = (users: AdminUser[], profile: StoredUserProfile, fare: number): AdminUser[] => {
     const profilePhone = normalizePhone(profile.phone);
     const profileName = profile.name?.trim() || 'Guest User';
@@ -246,7 +263,6 @@ function AppContent() {
       const userPhone = normalizePhone(user.phone);
       return (profilePhone && userPhone.endsWith(profilePhone)) || user.name.toLowerCase() === profileName.toLowerCase();
     });
-
     if (userIndex >= 0) {
       return users.map((user, index) =>
         index === userIndex
@@ -258,7 +274,6 @@ function AppContent() {
           : user
       );
     }
-
     const newUser: AdminUser = {
       id: `u-${Date.now().toString(36)}`,
       name: profileName,
@@ -271,40 +286,32 @@ function AppContent() {
       institute: profile.institution || 'IIT Delhi',
       avatar: getInitial(profileName),
     };
-
     return [newUser, ...users];
   };
-
   const handleWelcomeComplete = () => {
     setInitialLoginMode('choice');
     navigate('/login');
   };
-
   const handleUserLoginSuccess = () => {
     setInitialLoginMode('choice');
     navigate('/dashboard');
   };
-
   const handleAdminLoginSuccess = (key: AdminKey) => {
     setAdminKey(key);
     setSelectedInstituteId(null);
     navigate('/hq-dashboard');
   };
-
   const handleAdminGoogleLogin = () => {
     setInitialLoginMode('admin');
     navigate('/login');
   };
-
   const handleStartRide = () => {
     navigate('/scan');
   };
-
   const handleScanSuccess = () => {
     setActiveRide(true);
     navigate('/active-ride');
   };
-
   const handleEndRide = (durationSeconds: number) => {
     const profile = readUserProfile();
     const instituteId = resolveUserInstituteId(profile);
@@ -326,15 +333,12 @@ function AppContent() {
       startedAt: new Date(now.getTime() - safeDuration * 1000).toISOString(),
       completedAt: now.toISOString(),
     };
-
     setLastCompletedRide(completedRide);
     setUserRideHistory((prev) => [completedRide, ...prev]);
-
     if (instituteId) {
       setInstitutes((prev) =>
         prev.map((institute) => {
           if (institute.id !== instituteId) return institute;
-
           const rideHistory = [completedRide, ...institute.rideHistory];
           const destinationDock = institute.docks.find((dock) => dock.name === RIDE_END_DOCK) ?? institute.docks[0];
           const vehicles = institute.vehicles.map((vehicle) =>
@@ -349,7 +353,6 @@ function AppContent() {
                 }
               : vehicle
           );
-
           return {
             ...institute,
             rideHistory,
@@ -363,25 +366,20 @@ function AppContent() {
         })
       );
     }
-
     setActiveRide(false);
     navigate('/ride-complete');
   };
-
   const handleRideCompleteContinue = () => {
     navigate('/dashboard');
   };
-
   const handleRideCompleteReport = () => {
     navigate('/report-issue');
   };
-
   const handleIssueSubmit = (submission: IssueReportSubmission) => {
     const profile = readUserProfile();
     const instituteId = resolveUserInstituteId(profile);
     const institute = institutes.find((item) => item.id === instituteId);
     if (!instituteId || !institute) return;
-
     const issueReport: IssueReport = {
       id: `I-${Date.now().toString(36)}`,
       instituteId,
@@ -395,7 +393,6 @@ function AppContent() {
       description: submission.description.trim(),
       reportedAt: new Date().toISOString(),
     };
-
     setInstitutes((prev) =>
       prev.map((item) =>
         item.id === instituteId
@@ -404,40 +401,33 @@ function AppContent() {
       )
     );
   };
-
   const handleReportComplete = () => {
     navigate('/dashboard');
   };
-
   const handleLogout = () => {
     setSelectedInstituteId(null);
     logout();
     setInitialLoginMode('choice');
     navigate('/login');
   };
-
   const handleExitAdmin = () => {
     setSelectedInstituteId(null);
     logout();
     setInitialLoginMode('choice');
     navigate('/login');
   };
-
   const handleSelectInstitute = (instituteId: string) => {
     setSelectedInstituteId(instituteId);
   };
-
   const handleAddInstitute = (institute: InstituteData) => {
     setInstitutes((prev) => [...prev, institute]);
     setSelectedInstituteId(institute.id);
   };
-
   const handleUpdateSelectedInstitute = (updater: (institute: InstituteData) => InstituteData) => {
     setInstitutes((prev) =>
       prev.map((institute) => (institute.id === selectedInstituteId ? updater(institute) : institute))
     );
   };
-
   return (
     <NotificationProvider>
       <ThemeProvider>
@@ -445,8 +435,7 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<RootGatekeeper />} />
             <Route path="/welcome" element={<WelcomeScreen onComplete={handleWelcomeComplete} />} />
-            
-            <Route 
+                        <Route 
               path="/login" 
               element={
                 <LoginScreen 
@@ -457,8 +446,7 @@ function AppContent() {
                 />
               } 
             />
-            
-            <Route 
+                        <Route 
               path="/profile-setup" 
               element={
                 <ProtectedRoute>
@@ -472,8 +460,7 @@ function AppContent() {
                 </ProtectedRoute>
               } 
             />
-            
-            <Route path="/dashboard" element={<ProtectedRoute><HomeScreen onStartRide={handleStartRide} onNavigate={(s) => navigate(s === 'home' ? '/dashboard' : `/${s}`)} /></ProtectedRoute>} />
+                        <Route path="/dashboard" element={<ProtectedRoute><HomeScreen onStartRide={handleStartRide} onNavigate={(s) => navigate(s === 'home' ? '/dashboard' : `/${s}`)} /></ProtectedRoute>} />
             <Route path="/scan" element={<ProtectedRoute><ScanScreen onScanSuccess={handleScanSuccess} onClose={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/active-ride" element={<ProtectedRoute><ActiveRideScreen onEndRide={handleEndRide} onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/ride-complete" element={<ProtectedRoute><RideCompleteScreen rideData={lastCompletedRide!} onContinue={handleRideCompleteContinue} onReportIssue={handleRideCompleteReport} /></ProtectedRoute>} />
@@ -481,14 +468,11 @@ function AppContent() {
             <Route path="/wallet" element={<ProtectedRoute><WalletScreen onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><HistoryScreen rides={userRideHistory} onBack={() => navigate('/dashboard')} /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfileScreen onBack={() => navigate('/dashboard')} onAddMoney={() => navigate('/wallet')} onLogout={handleLogout} /></ProtectedRoute>} />
-
             <Route path="/profile/settings" element={<ProtectedRoute><ProfileSettingsScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
             <Route path="/profile/notifications" element={<ProtectedRoute><ProfileNotificationsScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
             <Route path="/profile/saved-places" element={<ProtectedRoute><SavedPlacesScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
             <Route path="/profile/help-support" element={<ProtectedRoute><HelpSupportScreen onBack={() => navigate('/profile')} /></ProtectedRoute>} />
-
-            
-            <Route 
+                        <Route 
               path="/admin-dashboard/*" 
               element={
                 <AdminLayout 
@@ -503,8 +487,7 @@ function AppContent() {
                 />
               } 
             />
-            
-            <Route 
+                        <Route 
               path="/hq-dashboard/*" 
               element={
                 <AdminLayout 
@@ -520,7 +503,6 @@ function AppContent() {
               } 
             />
           </Routes>
-
           {['/dashboard', '/wallet', '/history', '/profile'].includes(location.pathname) && (
             <BottomNav 
               activeTab={location.pathname.replace('/', '') === 'dashboard' ? 'home' : location.pathname.replace('/', '')} 
@@ -536,7 +518,6 @@ function AppContent() {
     </NotificationProvider>
   );
 }
-
 export default function App() {
   return (
     <AuthProvider>

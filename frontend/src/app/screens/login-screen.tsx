@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { StepIndicator } from '../components/stepIndicator';
-
 import {
   Facebook
 } from "lucide-react";
@@ -14,29 +13,17 @@ import landscape1 from "../../assets/landscape1.png";
 import quickPedLogo from "../../assets/logo.jpeg";
 import { NotificationBell } from '../components/notification-bell';
 import { useAuth } from '../../context/AuthContext';
-
+import api from '../../api/axios';
 const STORAGE_KEY = 'qp_user_profile';
 const OTP_RESEND_SECONDS = 30;
 const AUTH_LANDSCAPE_HEIGHT = 'clamp(150px, 28dvh, 250px)';
 const AUTH_LANDSCAPE_GAP = '32px';
-
-const IIT_LIST = [
-  'IIT Bhubaneswar', 'IIT Bombay', 'IIT Mandi', 'IIT Delhi', 'IIT Indore',
-  'IIT Kharagpur', 'IIT Hyderabad', 'IIT Jodhpur', 'IIT Kanpur', 'IIT Madras',
-  'IIT Gandhinagar', 'IIT Patna', 'IIT Roorkee', 'IIT Ropar', 'IIT Guwahati',
-  'IIT Jammu', 'IIT Dharwad', 'IIT Goa', 'IIT Bhilai', 'IIT Tirupati',
-  'IIT Palakkad', 'IIT Dhanbad (ISM)', 'IIT (BHU) Varanasi',
-];
-
-
 const ADMIN_CREDENTIALS: Record<string, { password: string; name: string }> = {
   'parth#rpr@quickped.in': { password: 'parth_+1', name: 'Parth Bansal' },
   'chirag#rpr@quickped.in': { password: 'chirag#_+', name: 'Chirag' },
   'arshpreet#rpr@quickped.in': { password: 'arsh_+#1', name: 'Arshpreet' },
 };
-
 export type AdminKey = 'parth' | 'chirag' | 'arshpreet';
-
 const AuthLandscape: React.FC = () => (
   <div
     className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden bg-white"
@@ -51,7 +38,6 @@ const AuthLandscape: React.FC = () => (
     />
   </div>
 );
-
 const AuthPanel: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <div
     className="relative overflow-hidden bg-white"
@@ -66,7 +52,6 @@ const AuthPanel: React.FC<{ children: React.ReactNode; className?: string }> = (
     <AuthLandscape />
   </div>
 );
-
 interface LoginScreenProps {
   initialMode?: 'choice' | 'user' | 'admin';
   initialStep?: 'phone' | 'otp' | 'profile';
@@ -74,7 +59,6 @@ interface LoginScreenProps {
   onAdminLoginSuccess: (adminKey: AdminKey) => void;
   onAdminGoogleLogin: () => void;
 }
-
 export const LoginScreen: React.FC<LoginScreenProps> = ({
   initialMode = 'choice',
   initialStep = 'phone',
@@ -97,16 +81,17 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   const [otpCountdown, setOtpCountdown] = useState(initialStep === 'otp' ? OTP_RESEND_SECONDS : 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const loadingTimer = useRef<number | null>(null);
-
+  const [campuses, setCampuses] = useState<any[]>([]);
+  useEffect(() => {
+    api.get('/campuses').then(res => setCampuses(res.data)).catch(console.error);
+  }, []);
   const { login, verifyOtp, updateProfile, isAuthenticated, user } = useAuth();
-
   useEffect(() => {
     if (isAuthenticated && user && !user.campusId) {
       setScreen('user');
       setStep('profile');
     }
   }, [isAuthenticated, user]);
-
   useEffect(() => {
     if (!isAuthenticated) {
       setScreen(initialMode);
@@ -118,24 +103,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       setAdminPassword('');
     }
   }, [initialMode, initialStep, isAuthenticated]);
-
   useEffect(() => {
     return () => {
       if (loadingTimer.current) window.clearTimeout(loadingTimer.current);
     };
   }, []);
-
   useEffect(() => {
     if (step !== 'otp' || otpCountdown <= 0) return;
-
     const timer = window.setInterval(() => {
       setOtpCountdown((current) => Math.max(0, current - 1));
     }, 1000);
-
     return () => window.clearInterval(timer);
   }, [otpCountdown, step]);
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -145,14 +124,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, '').slice(0, 10);
     setPhone(val);
     setError('');
   };
-
   const handleUserPhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone.trim()) {
@@ -175,10 +151,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       setIsLoading(false);
     }
   };
-
   const handleResendOtp = async () => {
     if (otpCountdown > 0 || isLoading) return;
-
     setError('');
     setIsLoading(true);
     try {
@@ -191,7 +165,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       setIsLoading(false);
     }
   };
-
   const handleUserOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp.trim()) {
@@ -206,25 +179,21 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     setIsLoading(true);
     try {
       await verifyOtp(phone, otp);
-      // Let AuthContext and App route gatekeeper handle the next step
     } catch (err: any) {
       setError('Incorrect OTP. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
-  const filteredIITs = IIT_LIST.filter(iit =>
-    iit.toLowerCase().includes(institutionSearch.toLowerCase())
+  const filteredIITs = campuses.filter(c =>
+    c.name.toLowerCase().includes(institutionSearch.toLowerCase())
   );
-
-  const handleSelectInstitution = (iit: string) => {
-    setInstitution(iit);
-    setInstitutionSearch(iit);
+  const handleSelectInstitution = (iitId: string, iitName: string) => {
+    setInstitution(iitId);
+    setInstitutionSearch(iitName);
     setShowInstitutionDropdown(false);
     setError('');
   };
-
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -238,42 +207,31 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     setError('');
     setIsLoading(true);
     try {
-      // Hardware-requested mock campus ID
-      await updateProfile(name.trim(), '123e4567-e89b-12d3-a456-426614174000');
+      await updateProfile(name.trim(), institution);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone, name: name.trim(), institution }));
-
     } catch (err: any) {
       setError('Failed to save profile.');
     } finally {
       setIsLoading(false);
     }
   };
-
-
   const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedId = adminId.trim();
     const trimmedPwd = adminPassword.trim();
-
     if (!trimmedId || !trimmedPwd) {
       setError('Provide both Admin ID and Password.');
       return;
     }
-
-
     const cred = ADMIN_CREDENTIALS[trimmedId];
     if (!cred) {
       setError('Invalid Admin ID');
       return;
     }
-
-
     if (trimmedPwd !== cred.password) {
       setError('Incorrect Password');
       return;
     }
-
-
     setError('');
     setIsLoading(true);
     if (loadingTimer.current) window.clearTimeout(loadingTimer.current);
@@ -285,7 +243,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       onAdminLoginSuccess(adminKey);
     }, 750);
   };
-
   const handleAdminGoogle = () => {
     setIsLoading(false);
     setError('Use an approved Admin ID and Password to continue.');
@@ -295,14 +252,11 @@ const getCurrentStep = () => {
   if (step === "phone") return 1;
   if (step === "otp") return 2;
   if (step === "profile") return 3;
-
   return 0;
 };
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Decorative Header Background */}
-
-
+      {}
       <div className="flex-1 px-6 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -310,8 +264,8 @@ const getCurrentStep = () => {
           className="max-w-lg mx-auto"        >
           <Card
             className="overflow-hidden rounded-[30px] border-0 shadow-xl bg-white p-0"
-          >            {/* STEP: CHOICE */}
-          {/* <StepIndicator currentStep={getCurrentStep()} /> */}
+          >            {}
+          {}
             {screen === 'choice' && (
               <AuthPanel className="flex flex-col items-center">
                 <div className="text-center mb-10">
@@ -323,15 +277,13 @@ const getCurrentStep = () => {
                   <h2 className="text-4xl font-bold text-gray-900">
                     Welcome to QuickPed
                   </h2>
-
                   <p className="mt-4 leading-7 text-slate-500">
                     Create an Account to get started on your
                     <br />
                     Campus Mobility Journey
                   </p>
                 </div>
-
-                {/* phone login */}
+                {}
                 <Button
                  variant="ghost"
                   size="lg"
@@ -343,10 +295,7 @@ const getCurrentStep = () => {
                     Continue With Phone
                   </span>
                 </Button>
-
-
-
-                {/* email login */}
+                {}
                 <Button
                   variant="outline"
                   size="lg"
@@ -354,10 +303,8 @@ const getCurrentStep = () => {
                 >
                   Continue With Email
                 </Button>
-
-                {/* social buttons */}
+                {}
                 <div className="grid grid-cols-2 gap-4 w-full mb-8">
-
                   <Button
                     variant="ghost"
                     className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-[1.03] transition-transform duration-200"
@@ -371,7 +318,6 @@ const getCurrentStep = () => {
                       Google
                     </span>
                   </Button>
-
                   <Button
                     variant="ghost"
                     className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-[1.03] transition-transform duration-200"                  >
@@ -384,10 +330,7 @@ const getCurrentStep = () => {
                       Facebook
                     </span>
                   </Button>
-
-
                 </div>
-
                 <p className="text-gray-500 mb-10">
                   Already have an account?
                   <span className="font-semibold text-gray-900 ml-1">
@@ -396,8 +339,7 @@ const getCurrentStep = () => {
                 </p>
               </AuthPanel>
             )}
-
-            {/* USER FLOW */}
+            {}
             {screen === 'user' && (
               <AuthPanel className="space-y-8">
                 <div className="flex items-center gap-4">
@@ -426,10 +368,9 @@ const getCurrentStep = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* ANIMATED STEPS */}
+                {}
                 <AnimatePresence mode="wait">
-                  {/* STEP: PHONE */}
+                  {}
                   {step === 'phone' && (
                     <motion.form
                       key="phone"
@@ -453,19 +394,15 @@ const getCurrentStep = () => {
                             maxLength={10}
                             required
                           />
-
                         </div>
-
                       </div>
                       {error && <p className="text-sm text-red-500 font-medium ml-1">{error}</p>}
                       <Button type="submit" size="lg" className="w-full h-14 bg-orange-400 hover:scale-[1.03] duration-200 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all" disabled={phone.length !== 10}>
                         Continue <ArrowRight className="ml-2" size={18} />
                       </Button>
                     </motion.form>
-
                   )}
-
-                  {/* STEP: OTP */}
+                  {}
                   {step === 'otp' && (
                     <motion.form
                       key="otp"
@@ -528,8 +465,7 @@ const getCurrentStep = () => {
                       </div>
                     </motion.form>
                   )}
-
-                  {/* STEP: PROFILE */}
+                  {}
                   {step === 'profile' && (
                     <motion.form
                       key="profile"
@@ -552,8 +488,7 @@ const getCurrentStep = () => {
                           />
                         </div>
                       </div>
-
-                      {/* Institution Searchable Dropdown */}
+                      {}
                       <div className="space-y-2">
                         <Label htmlFor="institution-search" className="text-slate-700 font-semibold ml-1">Institution / College</Label>
                         <div className="relative" ref={dropdownRef}>
@@ -579,8 +514,7 @@ const getCurrentStep = () => {
                               size={20}
                             />
                           </div>
-
-                          {/* Dropdown List */}
+                          {}
                           <AnimatePresence>
                             {showInstitutionDropdown && (
                               <motion.div
@@ -588,7 +522,7 @@ const getCurrentStep = () => {
                                 transition={{ duration: 0.15 }}
                                 className="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden"
                               >
-                                {/* Search inside dropdown */}
+                                {}
                                 <div className="p-3 border-b border-slate-100 bg-slate-50/50">
                                   <div className="relative">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
@@ -606,17 +540,17 @@ const getCurrentStep = () => {
                                   {filteredIITs.length === 0 ? (
                                     <p className="text-center text-sm text-slate-500 py-6">No results found</p>
                                   ) : (
-                                    filteredIITs.map((iit) => (
+                                    filteredIITs.map((campus) => (
                                       <button
-                                        key={iit}
+                                        key={campus.id}
                                         type="button"
-                                        onClick={() => handleSelectInstitution(iit)}
-                                        className={`w-full text-left px-4 py-3.5 text-sm transition-colors flex items-center gap-3 ${institution === iit ? 'bg-orange-50 text-orange-700 font-semibold' : 'text-slate-600 hover:bg-slate-50'}`}
+                                        onClick={() => handleSelectInstitution(campus.id, campus.name)}
+                                        className={`w-full text-left px-4 py-3.5 text-sm transition-colors flex items-center gap-3 ${institution === campus.id ? 'bg-orange-50 text-orange-700 font-semibold' : 'text-slate-600 hover:bg-slate-50'}`}
                                       >
-                                        <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${institution === iit ? 'border-orange-500 bg-orange-500' : 'border-slate-300'}`}>
-                                          {institution === iit && <CheckCircle2 size={12} className="text-white" />}
+                                        <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${institution === campus.id ? 'border-orange-500 bg-orange-500' : 'border-slate-300'}`}>
+                                          {institution === campus.id && <CheckCircle2 size={12} className="text-white" />}
                                         </div>
-                                        {iit}
+                                        {campus.name}
                                       </button>
                                     ))
                                   )}
@@ -625,8 +559,7 @@ const getCurrentStep = () => {
                             )}
                           </AnimatePresence>
                         </div>
-
-                        {/* Show selected pill */}
+                        {}
                         {institution && (
                           <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 5 }} animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -637,7 +570,6 @@ const getCurrentStep = () => {
                           </motion.div>
                         )}
                       </div>
-
                       {error && (
                         <motion.p
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -646,7 +578,6 @@ const getCurrentStep = () => {
                           {error}
                         </motion.p>
                       )}
-
                       <Button type="submit" size="lg" className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-semibold text-base shadow-md hover:shadow-lg transition-all mt-4" disabled={isLoading || !name || !institution}>
                         {isLoading
                           ? <span className="flex items-center gap-2"><Loader2 className="animate-spin" size={20} /> Saving...</span>
@@ -658,8 +589,7 @@ const getCurrentStep = () => {
                 </AnimatePresence>
               </AuthPanel>
             )}
-
-            {/* ── ADMIN / SIGN UP FLOW ── */}
+            {}
             {screen === 'admin' && (
               <AuthPanel className="space-y-8">
                 <div className="flex items-center gap-4">
@@ -680,7 +610,6 @@ const getCurrentStep = () => {
                     <p className="text-slate-500 text-sm font-medium mt-1">Enter your details to continue.</p>
                   </div>
                 </div>
-
                 <form onSubmit={handleAdminSubmit} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="adminId" className="text-slate-700 font-semibold ml-1">Email / ID</Label>
@@ -721,7 +650,6 @@ const getCurrentStep = () => {
                     }
                   </Button>
                 </form>
-
                 <div className="relative my-8">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-200"></div>
@@ -730,7 +658,6 @@ const getCurrentStep = () => {
                     <span className="px-4 bg-white text-slate-500 font-medium">Or continue with</span>
                   </div>
                 </div>
-
                 <Button type="button" variant="outline" size="lg" className="w-full h-14 border-slate-200 text-slate-700 hover:bg-slate-50 rounded-2xl font-semibold shadow-sm transition-all hover:-translate-y-0.5" onClick={handleAdminGoogle} disabled={isLoading}>
                   <span className="flex items-center justify-center gap-3">
                     {isLoading ? <><Loader2 className="animate-spin" size={20} /> Please wait</> : <><ShieldCheck size={20} className="text-slate-400" /> Continue with Google</>}

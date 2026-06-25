@@ -17,19 +17,16 @@ import { Badge } from '../components/ui/badge';
 import { formatCurrency, formatDuration } from '../lib/utils';
 import { calculateRideFare } from '../lib/admin-data';
 import { NotificationBell } from '../components/notification-bell';
-
 interface ActiveRideScreenProps {
   onEndRide: (durationSeconds: number) => void;
   onBack: () => void;
 }
-
 const LOW_BATTERY_MESSAGE = 'This vehicle has low battery. Please exchange it at the nearest dock.';
 const nearestExchangeDock = {
   name: 'Library Dock',
   distance: '200m',
   availability: '6 vehicles available',
 };
-
 export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, onBack }) => {
   const [rideTime, setRideTime] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
@@ -37,31 +34,24 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
   const [batteryLevel, setBatteryLevel] = useState(32);
   const [lowBatteryTriggered, setLowBatteryTriggered] = useState(false);
   const [showLowBatteryAlert, setShowLowBatteryAlert] = useState(false);
-
   const currentFare = calculateRideFare(rideTime);
   const isLowBattery = batteryLevel < 30;
   const batteryStatus = isLowBattery ? 'Low' : batteryLevel < 60 ? 'Moderate' : 'Ready';
   const batteryClass = isLowBattery ? 'bg-warning/10 border-warning/30 text-warning' : 'bg-success/10 border-success/20 text-success';
-
   useEffect(() => {
     const timer = setInterval(() => {
       setRideTime((prev) => prev + 1);
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
-
   useEffect(() => {
     const batteryTimer = window.setInterval(() => {
       setBatteryLevel((prev) => Math.max(18, prev - 1));
     }, 3000);
-
     return () => window.clearInterval(batteryTimer);
   }, []);
-
   useEffect(() => {
     if (!isLowBattery || lowBatteryTriggered) return;
-
     setLowBatteryTriggered(true);
     setShowLowBatteryAlert(true);
     window.dispatchEvent(new CustomEvent('quickped:add-notification', {
@@ -72,7 +62,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
       },
     }));
   }, [isLowBattery, lowBatteryTriggered]);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted pb-24">
       {}
@@ -89,7 +78,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
           </div>
         </div>
       </div>
-
       <div className="px-6 -mt-4 space-y-6">
         {}
         <motion.div
@@ -121,13 +109,11 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                   </div>
                 </div>
               </div>
-
               {}
               <div className="text-center mb-6">
                 <h2 className="text-3xl font-bold mb-2">Bike #QP-2847</h2>
                 <Badge className="bg-info/10 text-info text-sm">Standard Bike</Badge>
               </div>
-
               {}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-card rounded-2xl p-6 text-center border-2 border-primary/20">
@@ -142,7 +128,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                     {formatDuration(rideTime)}
                   </motion.p>
                 </div>
-
                 <div className="bg-card rounded-2xl p-6 text-center border-2 border-secondary/20">
                   <IndianRupee className="mx-auto mb-2 text-secondary" size={32} />
                   <p className="text-sm text-muted-foreground mb-1">Current Fare</p>
@@ -156,7 +141,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                   </motion.p>
                 </div>
               </div>
-
               {}
               <div className={`flex items-center justify-center gap-2 p-4 rounded-xl border mb-4 ${batteryClass}`}>
                 <Battery className={isLowBattery ? 'text-warning fill-warning' : 'text-success fill-success'} size={24} />
@@ -165,7 +149,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                   <p className="text-xs text-muted-foreground">{isLowBattery ? 'Exchange recommended now' : 'Enough range for this ride'}</p>
                 </div>
               </div>
-
               {isLowBattery && (
                 <div className="mb-6 rounded-xl border border-warning/30 bg-warning/10 p-4">
                   <div className="flex items-start gap-3">
@@ -179,7 +162,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                   </div>
                 </div>
               )}
-
               {}
               <Button
                 onClick={() => setIsLocked(!isLocked)}
@@ -199,7 +181,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                   </>
                 )}
               </Button>
-
               {}
               <Button
                 onClick={() => onEndRide(rideTime)}
@@ -212,7 +193,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
             </CardContent>
           </Card>
         </motion.div>
-
         {}
         <Card>
           <CardContent className="p-4">
@@ -225,7 +205,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
             </div>
           </CardContent>
         </Card>
-
         {}
         <motion.div whileTap={{ scale: 0.95 }}>
           <Button
@@ -238,7 +217,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
             SOS Emergency
           </Button>
         </motion.div>
-
         <AnimatePresence>
           {showLowBatteryAlert && (
             <motion.div
@@ -263,13 +241,11 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                       <h3 className="text-2xl font-bold mb-2">Low Battery Alert</h3>
                       <p className="text-muted-foreground">{LOW_BATTERY_MESSAGE}</p>
                     </div>
-
                     <div className="rounded-2xl bg-muted p-4 mb-6">
                       <p className="text-sm text-muted-foreground">Nearest available dock</p>
                       <p className="font-semibold">{nearestExchangeDock.name}</p>
                       <p className="text-sm text-muted-foreground">{nearestExchangeDock.distance} away - {nearestExchangeDock.availability}</p>
                     </div>
-
                     <Button onClick={() => setShowLowBatteryAlert(false)} size="lg" className="w-full">
                       Exchange at Nearest Dock
                     </Button>
@@ -279,7 +255,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
             </motion.div>
           )}
         </AnimatePresence>
-
         {}
         {showSOS && (
           <motion.div
@@ -302,7 +277,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                     <h3 className="text-2xl font-bold mb-2">Emergency Assistance</h3>
                     <p className="text-muted-foreground">Need immediate help?</p>
                   </div>
-
                   <div className="space-y-3 mb-6">
                     <Button variant="destructive" size="lg" className="w-full">
                       <Phone className="mr-2" size={20} />
@@ -313,7 +287,6 @@ export const ActiveRideScreen: React.FC<ActiveRideScreenProps> = ({ onEndRide, o
                       Call Support
                     </Button>
                   </div>
-
                   <Button
                     onClick={() => setShowSOS(false)}
                     variant="ghost"

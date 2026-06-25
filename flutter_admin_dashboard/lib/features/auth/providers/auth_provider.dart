@@ -2,25 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/network/dio_client.dart';
 import '../data/auth_repository.dart';
-
 enum AuthState { unauthenticated, loading, otpVerifiedNeedsProfile, authenticated }
-
 class AuthNotifier extends Notifier<AuthState> {
   StorageService get _storageService => ref.read(storageServiceProvider);
-  // AuthRepository get _repository => ref.read(authRepositoryProvider);
-
   @override
   AuthState build() {
     _init();
     return AuthState.loading;
   }
-
   Future<void> _init() async {
-    // We defer to let build complete before modifying state in init
     await Future.microtask(() {});
     final phone = _storageService.getPhone();
-    
-    if (phone != null && phone.isNotEmpty) {
+        if (phone != null && phone.isNotEmpty) {
       if (_storageService.isProfileComplete()) {
         state = AuthState.authenticated;
       } else {
@@ -30,7 +23,6 @@ class AuthNotifier extends Notifier<AuthState> {
       state = AuthState.unauthenticated;
     }
   }
-
   Future<void> loginWithPhone(String phone) async {
     state = AuthState.loading;
     try {
@@ -41,7 +33,6 @@ class AuthNotifier extends Notifier<AuthState> {
       rethrow;
     }
   }
-
   Future<void> verifyPhoneOtp(String phone, String otp) async {
     state = AuthState.loading;
     try {
@@ -62,7 +53,6 @@ class AuthNotifier extends Notifier<AuthState> {
       rethrow;
     }
   }
-
   Future<void> completeProfile(String name, String email, String institution) async {
     state = AuthState.loading;
     try {
@@ -78,26 +68,21 @@ class AuthNotifier extends Notifier<AuthState> {
       rethrow;
     }
   }
-
   void forceLogout() async {
     await _storageService.deleteToken();
     state = AuthState.unauthenticated;
   }
 }
-
 final storageServiceProvider = Provider<StorageService>((ref) {
   throw UnimplementedError('Initialize in main.dart');
 });
-
 final dioClientProvider = Provider<DioClient>((ref) {
   throw UnimplementedError('Initialize in main.dart');
 });
-
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dioClient = ref.watch(dioClientProvider);
   return AuthRepository(dioClient.dio);
 });
-
 final authProvider = NotifierProvider<AuthNotifier, AuthState>(() {
   return AuthNotifier();
 });
