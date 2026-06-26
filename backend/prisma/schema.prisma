@@ -70,7 +70,7 @@ model User {
   walletBalance      Decimal       @default(0.00) @db.Decimal(10, 2)
   campusId           String?       @db.Uuid
   createdAt          DateTime      @default(now())
-  updatedAt          DateTime
+  updatedAt          DateTime      @updatedAt
   Ride               Ride[]
   Transaction        Transaction[]
   Campus             Campus?       @relation(fields: [campusId], references: [id])
