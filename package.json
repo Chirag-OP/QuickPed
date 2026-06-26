@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@nestjs/config": "^4.0.4",
+    "@nestjs/platform-express": "^11.1.27",
+    "ngrok": "^4.3.3"
+  }
+}

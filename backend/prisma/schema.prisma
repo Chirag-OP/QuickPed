@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Campus {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  config Json
+  User   User[]
+}
+
+model IdempotencyRecord {
+  key          String   @id
+  responseBody Json
+  createdAt    DateTime @default(now())
+}
+
+model OtpTracker {
+  identifier    String   @id
+  otpCode       String
+  expiresAt     DateTime
+  lastRequestAt DateTime @default(now())
+  attempts      Int      @default(0)
+}
+
+model Ride {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String     @db.Uuid
+  vehicleId   String
+  startDock   String
+  endDock     String
+  fare        Decimal    @db.Decimal(10, 2)
+  duration    Int
+  distance    Decimal    @db.Decimal(6, 2)
+  bikeType    String?
+  status      RideStatus @default(COMPLETED)
+  startedAt   DateTime
+  completedAt DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+  User        User       @relation(fields: [userId], references: [id])
+
+  @@index([userId, completedAt(sort: Desc)])
+}
+
+model Transaction {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @db.Uuid
+  amount      Decimal  @db.Decimal(10, 2)
+  type        TxType
+  status      TxStatus
+  referenceId String?
+  createdAt   DateTime @default(now())
+  User        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model User {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phoneNumber        String        @unique
+  name               String?
+  institutionalEmail String?       @unique
+  role               Role          @default(GUEST_RIDER)
+  walletBalance      Decimal       @default(0.00) @db.Decimal(10, 2)
+  campusId           String?       @db.Uuid
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime
+  Ride               Ride[]
+  Transaction        Transaction[]
+  Campus             Campus?       @relation(fields: [campusId], references: [id])
+}
+
+enum RideStatus {
+  ACTIVE
+  COMPLETED
+}
+
+enum Role {
+  GUEST_RIDER
+  VERIFIED_RIDER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum TxStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TxType {
+  CREDIT
+  DEBIT
+}
