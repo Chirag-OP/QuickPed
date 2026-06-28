@@ -10,32 +10,27 @@ import {
   type AdminDock,
   type InstituteData,
 } from '../lib/admin-data';
-
 interface DockManagementProps {
   institute: InstituteData;
   onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
 }
-
 const statusClass: Record<string, string> = {
   active: 'bg-success/10 text-success',
   available: 'bg-info/10 text-info',
   full: 'bg-danger/10 text-danger',
 };
-
 const emptyDock: Omit<AdminDock, 'id' | 'occupied' | 'status'> = {
   name: '',
   location: '',
   campus: '',
   spots: 10,
 };
-
 export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpdateInstitute }) => {
   const [query, setQuery] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingDock, setEditingDock] = useState<AdminDock | null>(null);
   const [dockForm, setDockForm] = useState(emptyDock);
   const [successMsg, setSuccessMsg] = useState('');
-
   const filteredDocks = useMemo(
     () =>
       institute.docks.filter(
@@ -47,24 +42,20 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
       ),
     [institute.docks, query]
   );
-
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
     window.setTimeout(() => setSuccessMsg(''), 3000);
   };
-
   const resetForm = () => {
     setDockForm({ ...emptyDock, campus: institute.name });
     setEditingDock(null);
     setShowAddForm(false);
   };
-
   const openAddForm = () => {
     setDockForm({ ...emptyDock, campus: institute.name });
     setEditingDock(null);
     setShowAddForm(true);
   };
-
   const openEditForm = (dock: AdminDock) => {
     setDockForm({
       name: dock.name,
@@ -75,11 +66,9 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
     setEditingDock(dock);
     setShowAddForm(true);
   };
-
   const handleSaveDock = (e: React.FormEvent) => {
     e.preventDefault();
     if (!dockForm.name.trim() || !dockForm.location.trim() || !dockForm.campus.trim()) return;
-
     if (editingDock) {
       onUpdateInstitute((current) => {
         const docksNext = current.docks.map((dock) =>
@@ -112,10 +101,8 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
       onUpdateInstitute((current) => ({ ...current, docks: [...current.docks, newDock] }));
       showSuccess(`Dock "${newDock.name}" created.`);
     }
-
     resetForm();
   };
-
   const handleRemoveDock = (dock: AdminDock) => {
     onUpdateInstitute((current) => {
       const docksNext = current.docks.filter((item) => item.id !== dock.id);
@@ -129,7 +116,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
     });
     showSuccess(`Dock "${dock.name}" removed.`);
   };
-
   return (
     <div className="min-h-screen bg-background p-6 pb-24">
       <AnimatePresence>
@@ -144,7 +130,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
           </motion.div>
         )}
       </AnimatePresence>
-
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="flex items-center gap-3 mb-3">
@@ -159,7 +144,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
           <Plus size={16} className="mr-2" /> Add Dock
         </Button>
       </div>
-
       <AnimatePresence>
         {showAddForm && (
           <motion.div
@@ -186,7 +170,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
                   <X size={18} />
                 </button>
               </div>
-
               <form onSubmit={handleSaveDock} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Dock Name</label>
@@ -241,7 +224,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
           </motion.div>
         )}
       </AnimatePresence>
-
       <div className="grid gap-4 lg:grid-cols-[1.5fr_2fr]">
         <Card className="border border-border">
           <CardHeader>
@@ -259,7 +241,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
             </div>
           </CardContent>
         </Card>
-
         <Card className="border border-border">
           <CardHeader>
             <CardTitle>Overview</CardTitle>
@@ -284,7 +265,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
           </CardContent>
         </Card>
       </div>
-
       <div className="mt-6 grid gap-4">
         {filteredDocks.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
@@ -294,7 +274,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
         )}
         {filteredDocks.map((dock, index) => {
           const assignedVehicles = institute.vehicles.filter((vehicle) => vehicle.dockId === dock.id);
-
           return (
             <motion.div
               key={dock.id}
@@ -325,7 +304,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
                       </Button>
                     </div>
                   </div>
-
                   <div className="grid grid-cols-3 gap-3 text-sm text-muted-foreground">
                     <div>
                       <p className="text-xs uppercase">Capacity</p>
@@ -340,7 +318,6 @@ export const DockManagement: React.FC<DockManagementProps> = ({ institute, onUpd
                       <p className="text-base font-semibold">{Math.max(0, dock.spots - dock.occupied)}</p>
                     </div>
                   </div>
-
                   <div className="rounded-2xl bg-muted p-3">
                     <p className="text-xs font-semibold text-muted-foreground mb-2">ASSIGNED VEHICLES ({assignedVehicles.length})</p>
                     {assignedVehicles.length > 0 ? (

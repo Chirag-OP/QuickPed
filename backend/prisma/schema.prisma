@@ -1,11 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [postgis]
 }
 
 model User {
@@ -21,13 +23,17 @@ model User {
 
   campus             Campus?  @relation(fields: [campusId], references: [id])
   transactions       Transaction[]
+  rides              Ride[]
 }
 
 model Campus {
-  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name               String
-  config             Json     // Stores map URLs and pricing rules dynamically
+  config             Json                // Stores map URLs and pricing rules dynamically
   users              User[]
+  docks              Dock[]
+  vehicles           Vehicle[]
+  fareConfigurations FareConfiguration[]
 }
 
 model OtpTracker {
@@ -76,4 +82,92 @@ enum TxStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+model Dock {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campusId           String   @db.Uuid
+  name               String
+  geom               Unsupported("geometry(Point, 4326)")
+  strictRadiusMeters Float
+  softBufferMeters   Float
+  optimumCapacity    Int
+  rebalanceThreshold Int
+
+  campus             Campus   @relation(fields: [campusId], references: [id])
+  vehiclesAtDock     Vehicle[] @relation("VehicleCurrentDock")
+  ridesStartingHere  Ride[]   @relation("RideStartDock")
+  ridesEndingHere    Ride[]   @relation("RideEndDock")
+}
+
+model Vehicle {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  displayTag         String
+  campusId           String   @db.Uuid
+  type               VehicleType
+  hardwareMacAddress String
+  state              VehicleState
+  batteryLevel       Int
+  currentDockId      String?  @db.Uuid
+  lastKnownLocation  Unsupported("geometry(Point, 4326)")?
+
+  campus             Campus   @relation(fields: [campusId], references: [id])
+  currentDock        Dock?    @relation("VehicleCurrentDock", fields: [currentDockId], references: [id])
+  rides              Ride[]
+}
+
+model Ride {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId               String   @db.Uuid
+  vehicleId            String   @db.Uuid
+  startDockId          String   @db.Uuid
+  endDockId            String?  @db.Uuid
+  status               RideStatus
+  reservationExpiresAt DateTime?
+  startTime            DateTime?
+  endTime              DateTime?
+  calculatedFare       Decimal? @db.Decimal(10, 2)
+  rating               Int?
+  feedbackText         String?
+
+  user                 User     @relation(fields: [userId], references: [id])
+  vehicle              Vehicle  @relation(fields: [vehicleId], references: [id])
+  startDock            Dock     @relation("RideStartDock", fields: [startDockId], references: [id])
+  endDock              Dock?    @relation("RideEndDock", fields: [endDockId], references: [id])
+}
+
+model FareConfiguration {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campusId            String   @db.Uuid
+  vehicleType         VehicleType
+  userRole            Role
+  baseFare            Decimal  @db.Decimal(10, 2)
+  baseDurationMinutes Int
+  perMinuteRate       Decimal  @db.Decimal(10, 2)
+
+  campus              Campus   @relation(fields: [campusId], references: [id])
+
+  @@unique([campusId, vehicleType, userRole])
+}
+
+enum VehicleType {
+  BICYCLE
+  E_BIKE
+}
+
+enum VehicleState {
+  AVAILABLE
+  RESERVED
+  IN_USE
+  TEMP_LOCKED
+  MAINTENANCE
+}
+
+enum RideStatus {
+  RESERVED
+  ACTIVE
+  TEMP_LOCKED
+  COMPLETED
+  CANCELLED_NO_FUNDS
+  HARDWARE_TIMEOUT
 }

@@ -1,12 +1,10 @@
 import React from 'react';
 import { BarChart3, Home, QrCode, Smile, User, WalletCards } from 'lucide-react';
 import { cn } from '../lib/utils';
-
 interface BottomNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
-
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
@@ -15,7 +13,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
     { id: 'wallet', label: 'Wallet', icon: WalletCards },
     { id: 'profile', label: 'Profile', icon: User },
   ];
-
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 px-3 pb-0 safe-area-bottom">
       <div className="mx-auto max-w-screen-xl rounded-t-[32px] bg-white px-2 pb-3 pt-2 shadow-[0_-12px_30px_rgba(15,15,15,0.08)]">
@@ -24,7 +21,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             const isScan = tab.id === 'scan';
-
             if (isScan) {
               return (
                 <button
@@ -38,7 +34,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
                 </button>
               );
             }
-
             return (
               <button
                 key={tab.id}

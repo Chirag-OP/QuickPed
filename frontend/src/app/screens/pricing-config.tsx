@@ -6,12 +6,10 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { formatCurrency } from '../lib/utils';
 import type { AdminPricing, InstituteData } from '../lib/admin-data';
-
 interface PricingConfigProps {
   institute: InstituteData;
   onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
 }
-
 const pricingFields: Array<{ key: keyof AdminPricing; label: string; type: 'number' | 'text'; step?: string }> = [
   { key: 'baseFare', label: 'Base Fare', type: 'number', step: '0.5' },
   { key: 'perMinute', label: 'Per Minute Charge', type: 'number', step: '0.5' },
@@ -20,41 +18,34 @@ const pricingFields: Array<{ key: keyof AdminPricing; label: string; type: 'numb
   { key: 'discount', label: 'Discount (%)', type: 'number' },
   { key: 'pricingStructure', label: 'Pricing Structure', type: 'text' },
 ];
-
 const updatePricingValue = (pricing: AdminPricing, key: keyof AdminPricing, value: string): AdminPricing => {
   if (key === 'pricingStructure') {
     return { ...pricing, pricingStructure: value };
   }
   return { ...pricing, [key]: Number(value) || 0 };
 };
-
 export const PricingConfig: React.FC<PricingConfigProps> = ({ institute, onUpdateInstitute }) => {
   const [successMsg, setSuccessMsg] = useState('');
   const [saved, setSaved] = useState(false);
-
   const pricing = institute.pricing;
   const sampleRideCost = pricing.baseFare + pricing.perMinute * 10 + pricing.reservation;
   const discountedSubscription = pricing.subscription * (1 - pricing.discount / 100);
-
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
     window.setTimeout(() => setSuccessMsg(''), 3000);
   };
-
   const handlePricingChange = (key: keyof AdminPricing, value: string) => {
     onUpdateInstitute((current) => ({
       ...current,
       pricing: updatePricingValue(current.pricing, key, value),
     }));
   };
-
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     setSaved(true);
     showSuccess(`${institute.name} pricing saved.`);
     window.setTimeout(() => setSaved(false), 1800);
   };
-
   return (
     <div className="min-h-screen bg-background p-6 pb-24">
       <AnimatePresence>
@@ -69,14 +60,12 @@ export const PricingConfig: React.FC<PricingConfigProps> = ({ institute, onUpdat
           </motion.div>
         )}
       </AnimatePresence>
-
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 className="text-3xl font-bold">Pricing Configuration</h1>
           <p className="text-muted-foreground">Edit {institute.name} pricing. Changes reflect instantly in the admin UI.</p>
         </div>
       </div>
-
       <div className="grid gap-6 xl:grid-cols-[1.3fr_1fr]">
         <Card className="border border-border">
           <CardHeader>
@@ -102,7 +91,6 @@ export const PricingConfig: React.FC<PricingConfigProps> = ({ institute, onUpdat
                   </div>
                 ))}
               </div>
-
               <div className="rounded-3xl bg-primary/10 border border-primary/20 p-4">
                 <p className="text-xs font-semibold text-primary mb-2">LIVE PREVIEW</p>
                 <p className="text-sm">
@@ -110,14 +98,12 @@ export const PricingConfig: React.FC<PricingConfigProps> = ({ institute, onUpdat
                 </p>
                 <p className="text-2xl font-bold text-primary mt-2">{formatCurrency(sampleRideCost)}</p>
               </div>
-
               <Button type="submit" className="w-full">
                 {saved ? <><CheckCircle2 size={16} className="mr-2" /> Saved</> : <><Save size={16} className="mr-2" /> Save Pricing</>}
               </Button>
             </form>
           </CardContent>
         </Card>
-
         <div className="space-y-4">
           <Card className="border border-border">
             <CardHeader>
@@ -137,7 +123,6 @@ export const PricingConfig: React.FC<PricingConfigProps> = ({ institute, onUpdat
               ))}
             </CardContent>
           </Card>
-
           <Card className="border border-border">
             <CardHeader>
               <CardTitle>Billing Preview</CardTitle>

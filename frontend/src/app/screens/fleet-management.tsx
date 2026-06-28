@@ -22,14 +22,11 @@ import {
   type InstituteData,
   type VehicleStatus,
 } from '../lib/admin-data';
-
 interface FleetManagementProps {
   institute: InstituteData;
   onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
 }
-
 const statusFilters: Array<'all' | VehicleStatus> = ['all', 'available', 'in-ride', 'user-locked', 'maintenance'];
-
 const getStatusClass = (status: VehicleStatus) => {
   switch (status) {
     case 'available':
@@ -44,23 +41,19 @@ const getStatusClass = (status: VehicleStatus) => {
       return 'bg-muted text-muted-foreground';
   }
 };
-
 const getBatteryColor = (battery: number) => {
   if (battery > 60) return 'text-success';
   if (battery >= 30) return 'text-warning';
   return 'text-danger';
 };
-
 export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onUpdateInstitute }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | VehicleStatus>('all');
   const [showAddForm, setShowAddForm] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
-
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [vehicleType, setVehicleType] = useState(institute.vehicleTypes[0] ?? 'Bicycle');
   const [vehicleDockId, setVehicleDockId] = useState(institute.docks[0]?.id ?? '');
-
   const filteredVehicles = useMemo(
     () =>
       institute.vehicles.filter((vehicle) => {
@@ -73,17 +66,14 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
       }),
     [institute.vehicles, searchQuery, statusFilter]
   );
-
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
     window.setTimeout(() => setSuccessMsg(''), 3000);
   };
-
   const handleAddVehicle = (e: React.FormEvent) => {
     e.preventDefault();
     const assignedDock = institute.docks.find((dock) => dock.id === vehicleDockId);
     if (!vehicleNumber.trim() || !vehicleType.trim() || !assignedDock) return;
-
     const newVehicle: AdminVehicle = {
       id: vehicleNumber.trim().toUpperCase(),
       status: 'available',
@@ -95,7 +85,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
       condition: 'good',
       type: vehicleType.trim(),
     };
-
     onUpdateInstitute((current) => {
       const vehiclesNext = [newVehicle, ...current.vehicles];
       return {
@@ -105,14 +94,12 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
         docks: recalculateDockOccupancy(current.docks, vehiclesNext),
       };
     });
-
     setVehicleNumber('');
     setVehicleType(institute.vehicleTypes[0] ?? 'Bicycle');
     setVehicleDockId(institute.docks[0]?.id ?? '');
     setShowAddForm(false);
     showSuccess(`${newVehicle.id} added to ${assignedDock.name}.`);
   };
-
   const handleRemoveVehicle = (vehicle: AdminVehicle) => {
     onUpdateInstitute((current) => {
       const vehiclesNext = current.vehicles.filter((item) => item.id !== vehicle.id);
@@ -124,7 +111,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
     });
     showSuccess(`${vehicle.id} removed from ${institute.name}.`);
   };
-
   return (
     <div className="min-h-screen bg-background p-6 pb-24">
       <AnimatePresence>
@@ -139,7 +125,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
           </motion.div>
         )}
       </AnimatePresence>
-
       <AnimatePresence>
         {showAddForm && (
           <motion.div
@@ -170,7 +155,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                   <X size={18} />
                 </button>
               </div>
-
               <form onSubmit={handleAddVehicle} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Vehicle Number</label>
@@ -182,7 +166,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                     required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Vehicle Type</label>
                   <Input
@@ -198,7 +181,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                     ))}
                   </datalist>
                 </div>
-
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Which Dock to Assign Vehicle To</label>
                   <select
@@ -213,7 +195,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                     ))}
                   </select>
                 </div>
-
                 <div className="flex gap-3 pt-2">
                   <Button type="button" variant="outline" className="flex-1" onClick={() => setShowAddForm(false)}>
                     Cancel
@@ -227,7 +208,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
           </motion.div>
         )}
       </AnimatePresence>
-
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <Bike className="text-primary" size={32} />
@@ -239,7 +219,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
             <Plus size={16} className="mr-1" /> Add Fleet
           </Button>
         </div>
-
         <div className="flex gap-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
@@ -255,7 +234,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
             <Filter size={20} />
           </Button>
         </div>
-
         <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
           {statusFilters.map((status) => (
             <button
@@ -273,7 +251,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
           ))}
         </div>
       </div>
-
       <div className="space-y-4">
         {filteredVehicles.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
@@ -303,7 +280,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                       </Badge>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <div className="text-right">
                       <div className={`flex items-center gap-2 justify-end mb-2 ${getBatteryColor(vehicle.battery)}`}>
@@ -317,7 +293,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                     </Button>
                   </div>
                 </div>
-
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="text-muted-foreground" size={16} />
@@ -328,7 +303,6 @@ export const FleetManagement: React.FC<FleetManagementProps> = ({ institute, onU
                     <span>Last ride: {vehicle.lastRide}</span>
                   </div>
                 </div>
-
                 {vehicle.condition !== 'good' && (
                   <div className="mt-4 p-3 bg-warning/10 border-l-4 border-warning rounded-lg">
                     <p className="text-sm font-medium text-warning">

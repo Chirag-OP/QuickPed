@@ -1,4 +1,3 @@
-﻿
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
@@ -44,7 +43,7 @@ import {
   type InstituteData,
 } from '../lib/admin-data';
 import { downloadInstituteReport, type ReportFormat } from '../lib/report-export';
-
+import api from '../../api/axios';
 const rideTrends = [
   { label: '6 AM', value: 24 },
   { label: '9 AM', value: 40 },
@@ -53,13 +52,11 @@ const rideTrends = [
   { label: '6 PM', value: 78 },
   { label: '9 PM', value: 48 },
 ];
-
 const WELCOME_NAMES: Record<AdminKey, string> = {
   parth: 'Parth Bansal',
   chirag: 'Chirag',
   arshpreet: 'Arshpreet',
 };
-
 type ActivePanel =
   | 'none'
   | 'operations'
@@ -71,7 +68,6 @@ type ActivePanel =
   | 'edit-pricing'
   | 'add-institute'
   | 'manage-vehicles';
-
 interface AdminDashboardProps {
   adminKey?: AdminKey;
   institutes: InstituteData[];
@@ -82,7 +78,6 @@ interface AdminDashboardProps {
   onUpdateInstitute: (updater: (institute: InstituteData) => InstituteData) => void;
   onNavigate?: (screen: 'user-management' | 'fleet-management' | 'docks' | 'pricing' | 'revenue') => void;
 }
-
 const statusClass: Record<string, string> = {
   active: 'bg-success/10 text-success',
   available: 'bg-info/10 text-info',
@@ -91,7 +86,6 @@ const statusClass: Record<string, string> = {
   'user-locked': 'bg-warning/10 text-warning',
   maintenance: 'bg-danger/10 text-danger',
 };
-
 const panelTitles: Record<ActivePanel, string> = {
   none: '',
   operations: 'Operations',
@@ -104,18 +98,14 @@ const panelTitles: Record<ActivePanel, string> = {
   'add-institute': 'Add Institute',
   'manage-vehicles': 'Manage Vehicles',
 };
-
 const createDockId = (institute: InstituteData) => `${institute.id}-dock-${Date.now().toString(36)}`;
-
 const getVehicleCondition = (battery: number) => (battery < 30 ? 'low-battery' : 'good');
-
 const updatePricingField = (pricing: AdminPricing, field: keyof AdminPricing, value: string) => {
   if (field === 'pricingStructure') {
     return { ...pricing, pricingStructure: value };
   }
   return { ...pricing, [field]: Number(value) || 0 };
 };
-
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   adminKey = 'parth',
   institutes,
@@ -133,23 +123,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [successMsg, setSuccessMsg] = useState('');
   const [reportOptionsOpen, setReportOptionsOpen] = useState(false);
   const [reportStatus, setReportStatus] = useState('');
-
   const [dockName, setDockName] = useState('');
   const [dockLocation, setDockLocation] = useState('');
   const [dockCampus, setDockCampus] = useState('');
-
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [vehicleType, setVehicleType] = useState('Bicycle');
   const [vehicleDockId, setVehicleDockId] = useState('');
   const [pricingSaved, setPricingSaved] = useState(false);
-
+  const [isCreatingCampus, setIsCreatingCampus] = useState(false);
   const [instituteName, setInstituteName] = useState('');
   const [instituteDockCount, setInstituteDockCount] = useState('3');
   const [instituteVehicleCount, setInstituteVehicleCount] = useState('10');
   const [instituteVehicleTypes, setInstituteVehicleTypes] = useState('Bicycle, E-Bike');
   const [institutePricingStructure, setInstitutePricingStructure] = useState('Standard: base 0, per minute 2, reservation 5');
   const [instituteDockLocations, setInstituteDockLocations] = useState('Main Gate, Library, Hostel Area');
-
   const welcomeName = WELCOME_NAMES[adminKey];
   const docks = selectedInstitute?.docks ?? [];
   const vehicles = selectedInstitute?.vehicles ?? [];
@@ -158,11 +145,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const pricing = selectedInstitute?.pricing;
   const completedRideHistory = getCompletedRides(rideHistory);
   const revenueMetrics = selectedInstitute ? getRevenueMetrics(selectedInstitute) : { daily: 0, weekly: 0, monthly: 0, total: 0 };
-
   const availableVehicles = vehicles.filter((vehicle) => vehicle.status === 'available').length;
   const completedRides = completedRideHistory.length;
   const activeRides = rideHistory.filter((ride) => ride.status === 'active').length;
-
   const filteredRides = useMemo(
     () =>
       completedRideHistory.filter(
@@ -173,7 +158,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       ),
     [completedRideHistory, searchQuery]
   );
-
   useEffect(() => {
     const loadTimer = window.setTimeout(() => {
       setLoading(false);
@@ -181,28 +165,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }, 500);
     return () => window.clearTimeout(loadTimer);
   }, []);
-
   useEffect(() => {
     if (!vehicleDockId && docks[0]) {
       setVehicleDockId(docks[0].id);
     }
   }, [docks, vehicleDockId]);
-
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
     window.setTimeout(() => setSuccessMsg(''), 3000);
   };
-
   const handleRetry = () => {
     setError(null);
     setLoading(true);
     window.setTimeout(() => setLoading(false), 700);
   };
-
   const handleAddDock = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedInstitute || !dockName.trim() || !dockLocation.trim() || !dockCampus.trim()) return;
-
     const newDock: AdminDock = {
       id: createDockId(selectedInstitute),
       name: dockName.trim(),
@@ -212,7 +191,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       occupied: 0,
       status: 'available',
     };
-
     onUpdateInstitute((institute) => ({ ...institute, docks: [...institute.docks, newDock] }));
     setDockName('');
     setDockLocation('');
@@ -221,14 +199,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     showSuccess(`Dock "${newDock.name}" created for ${newDock.campus}.`);
     setActivePanel('none');
   };
-
   const handleAddVehicle = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedInstitute || !vehicleNumber.trim() || !vehicleType.trim() || !vehicleDockId) return;
-
     const assignedDock = selectedInstitute.docks.find((dock) => dock.id === vehicleDockId);
     if (!assignedDock) return;
-
     const newVehicle: AdminVehicle = {
       id: vehicleNumber.trim().toUpperCase(),
       type: vehicleType.trim(),
@@ -240,7 +215,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       totalRides: 0,
       condition: 'good',
     };
-
     onUpdateInstitute((institute) => {
       const vehiclesNext = [newVehicle, ...institute.vehicles];
       return {
@@ -250,13 +224,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         docks: recalculateDockOccupancy(institute.docks, vehiclesNext),
       };
     });
-
     setVehicleNumber('');
     setVehicleType('Bicycle');
     showSuccess(`${newVehicle.id} added to ${assignedDock.name}.`);
     setActivePanel('none');
   };
-
   const handlePricingChange = (field: keyof AdminPricing, value: string) => {
     if (!selectedInstitute) return;
     onUpdateInstitute((institute) => ({
@@ -264,7 +236,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       pricing: updatePricingField(institute.pricing, field, value),
     }));
   };
-
   const handleSavePricing = (e: React.FormEvent) => {
     e.preventDefault();
     setPricingSaved(true);
@@ -272,31 +243,59 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     window.setTimeout(() => setPricingSaved(false), 2000);
     setActivePanel('none');
   };
-
-  const handleAddInstitute = (e: React.FormEvent) => {
+  const handleAddInstitute = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!instituteName.trim()) return;
-
-    const newInstitute = createInstituteFromInput({
-      name: instituteName,
-      dockCount: Number(instituteDockCount),
-      vehicleCount: Number(instituteVehicleCount),
-      vehicleTypes: instituteVehicleTypes,
-      pricingStructure: institutePricingStructure,
-      dockLocations: instituteDockLocations,
-    });
-
-    onAddInstitute(newInstitute);
-    setInstituteName('');
-    setInstituteDockCount('3');
-    setInstituteVehicleCount('10');
-    setInstituteVehicleTypes('Bicycle, E-Bike');
-    setInstitutePricingStructure('Standard: base 0, per minute 2, reservation 5');
-    setInstituteDockLocations('Main Gate, Library, Hostel Area');
-    showSuccess(`Institute "${newInstitute.name}" created.`);
-    setActivePanel('none');
+    setIsCreatingCampus(true);
+    try {
+      const payload = {
+        name: instituteName,
+        fareConfigurations: [
+          {
+            vehicleType: 'BICYCLE',
+            userRole: 'GUEST_RIDER',
+            baseFare: 0,
+            baseDurationMinutes: 0,
+            perMinuteRate: 2
+          },
+          {
+            vehicleType: 'E_BIKE',
+            userRole: 'GUEST_RIDER',
+            baseFare: 5,
+            baseDurationMinutes: 0,
+            perMinuteRate: 3
+          }
+        ]
+      };
+            const res = await api.post('/admin/campuses', payload);
+            const newInstitute = {
+        id: res.data.id,
+        name: res.data.name,
+        docks: [],
+        vehicles: [],
+        pricing: { base: 0, perMinute: 2, reservation: 5 },
+        rideHistory: [],
+        issueReports: [],
+        revenue: [],
+        vehicleTypes: ['Bicycle', 'E-Bike']
+      };
+      onAddInstitute(newInstitute as any);
+      setInstituteName('');
+      setInstituteDockCount('3');
+      setInstituteVehicleCount('10');
+      setInstituteVehicleTypes('Bicycle, E-Bike');
+      setInstitutePricingStructure('Standard: base 0, per minute 2, reservation 5');
+      setInstituteDockLocations('Main Gate, Library, Hostel Area');
+      showSuccess(`Institute "${newInstitute.name}" created.`);
+      setActivePanel('none');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || 'Failed to create institute');
+      window.setTimeout(() => setError(null), 3000);
+    } finally {
+      setIsCreatingCampus(false);
+    }
   };
-
   const handleRemoveVehicle = (vehicleId: string) => {
     if (!selectedInstitute) return;
     onUpdateInstitute((institute) => {
@@ -309,14 +308,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     });
     showSuccess(`${vehicleId} removed from ${selectedInstitute.name}.`);
   };
-
   const handleDownloadReport = (format: ReportFormat) => {
     if (!selectedInstitute) return;
     const message = downloadInstituteReport(selectedInstitute, format);
     setReportStatus(message);
     showSuccess(message);
   };
-
   const renderAddInstituteForm = () => (
     <form onSubmit={handleAddInstitute} className="space-y-4">
       <div className="space-y-2">
@@ -383,15 +380,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           required
         />
       </div>
-      <Button type="submit" className="w-full" size="lg">
-        <Building2 size={18} className="mr-2" /> Add Institute
+      <Button type="submit" className="w-full" size="lg" disabled={isCreatingCampus}>
+        {isCreatingCampus ? (
+          <><Loader2 size={18} className="mr-2 animate-spin" /> Adding...</>
+        ) : (
+          <><Building2 size={18} className="mr-2" /> Add Institute</>
+        )}
       </Button>
     </form>
   );
-
   const renderPanel = () => {
     if (activePanel === 'none') return null;
-
     return (
       <AnimatePresence>
         <motion.div
@@ -420,14 +419,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <X size={20} />
               </button>
             </div>
-
             <div className="p-6">
               {activePanel !== 'add-institute' && !selectedInstitute && (
                 <div className="rounded-2xl bg-warning/10 p-4 text-sm text-warning">
                   Select an institute before using this control.
                 </div>
               )}
-
               {activePanel === 'operations' && selectedInstitute && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
@@ -465,7 +462,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
               )}
-
               {activePanel === 'analytics' && selectedInstitute && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-3">
@@ -500,7 +496,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </Button>
                 </div>
               )}
-
               {activePanel === 'reports' && selectedInstitute && (
                 <div className="space-y-4">
                   {[
@@ -558,7 +553,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
               )}
-
               {activePanel === 'livefeed' && selectedInstitute && (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
@@ -582,7 +576,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   ))}
                 </div>
               )}
-
               {activePanel === 'add-dock' && selectedInstitute && (
                 <form onSubmit={handleAddDock} className="space-y-4">
                   <div className="space-y-2">
@@ -602,7 +595,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </Button>
                 </form>
               )}
-
               {activePanel === 'add-fleet' && selectedInstitute && (
                 <form onSubmit={handleAddVehicle} className="space-y-4">
                   <div className="space-y-2">
@@ -631,7 +623,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </Button>
                 </form>
               )}
-
               {activePanel === 'edit-pricing' && selectedInstitute && pricing && (
                 <form onSubmit={handleSavePricing} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -670,7 +661,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </Button>
                 </form>
               )}
-
               {activePanel === 'add-institute' && (
                 <div className="space-y-4">
                   {renderAddInstituteForm()}
@@ -692,7 +682,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   )}
                 </div>
               )}
-
               {activePanel === 'manage-vehicles' && selectedInstitute && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -727,7 +716,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </AnimatePresence>
     );
   };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-6 flex items-center justify-center">
@@ -739,7 +727,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="min-h-screen bg-background p-6 flex items-center justify-center">
@@ -754,7 +741,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </div>
     );
   }
-
   if (!selectedInstitute) {
     return (
       <>
@@ -775,7 +761,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <Building2 size={18} className="mr-2" /> Add Institute
               </Button>
             </div>
-
             <div className="grid gap-4 md:grid-cols-2">
               {institutes.map((institute) => (
                 <button
@@ -801,7 +786,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </>
     );
   }
-
   const summaryCards = [
     { label: 'Daily Revenue', value: formatCurrency(revenueMetrics.daily), Icon: IndianRupee, color: 'text-primary' },
     { label: 'Weekly Revenue', value: formatCurrency(revenueMetrics.weekly), Icon: IndianRupee, color: 'text-primary' },
@@ -813,11 +797,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { label: 'Completed Rides', value: String(completedRides), Icon: CheckCircle2, color: 'text-success' },
     { label: 'Available Vehicles', value: String(availableVehicles), Icon: Wrench, color: 'text-primary' },
   ];
-
   return (
     <>
       {renderPanel()}
-
       <div className="min-h-screen bg-background p-6 pb-24">
         <AnimatePresence>
           {successMsg && (
@@ -831,7 +813,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
-
         <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="flex items-center gap-3 mb-3">
@@ -841,7 +822,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <p className="text-muted-foreground">{selectedInstitute.name} command center.</p>
               </div>
             </div>
-
             <div className="flex flex-wrap items-center gap-2">
               <select
                 value={selectedInstituteId ?? ''}
@@ -857,14 +837,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <Badge className="cursor-pointer bg-info/10 text-info" onClick={() => setActivePanel('analytics')}>Analytics</Badge>
             </div>
           </div>
-
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" className="rounded-full px-5 py-3" onClick={() => setActivePanel('reports')}>
               <ArrowRight size={18} /> Explore Reports
             </Button>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
           {summaryCards.map(({ label, value, Icon, color }) => (
             <Card key={label} variant="elevated" className="border border-border">
@@ -883,7 +861,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </Card>
           ))}
         </div>
-
         <Card variant="elevated" className="border border-border mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -917,7 +894,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           </CardContent>
         </Card>
-
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
           <Card variant="elevated" className="xl:col-span-2 border border-border">
             <CardHeader>
@@ -932,7 +908,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 ))}
               </div>
-
               <div className="h-52 rounded-[32px] bg-muted/60 p-5 overflow-hidden">
                 <div className="relative h-full">
                   {rideTrends.map((item, index) => (
@@ -946,7 +921,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </CardContent>
           </Card>
-
           <Card variant="elevated" className="border border-border">
             <CardHeader>
               <CardTitle>Institute Controls</CardTitle>
@@ -980,7 +954,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </CardContent>
           </Card>
         </div>
-
         <div className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
           <Card variant="elevated" className="border border-border">
             <CardHeader>
@@ -1010,7 +983,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {filteredRides.length === 0 && <p className="text-sm text-muted-foreground">No rides match your search.</p>}
             </CardContent>
           </Card>
-
           <div className="space-y-6">
             <Card variant="elevated" className="border border-border">
               <CardHeader>
@@ -1039,7 +1011,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 )}
               </CardContent>
             </Card>
-
             <Card variant="elevated" className="border border-border">
               <CardHeader>
                 <div className="flex items-center justify-between">

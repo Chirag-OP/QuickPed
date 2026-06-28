@@ -7,19 +7,20 @@ import { UsersModule } from './users/users.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WebhookModule } from './webhooks/webhook.module';
 import { ConfigModule } from '@nestjs/config';
-
+import { CampusModule } from './campus/campus.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-    isGlobal: true,
-  }),
+      isGlobal: true,
+    }),
     ScheduleModule.forRoot(),
     PrismaModule, 
     InfrastructureModule, 
     AuthModule, 
     UsersModule, 
     WalletModule,
-    WebhookModule
+    WebhookModule,
+    CampusModule,
   ],
   controllers: [],
   providers: [],

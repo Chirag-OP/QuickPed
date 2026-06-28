@@ -2,7 +2,6 @@ interface StepIndicatorProps {
   currentStep: number;
   totalSteps?: number;
 }
-
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   totalSteps = 4,

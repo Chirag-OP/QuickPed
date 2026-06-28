@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as crypto from 'crypto';
-
 if (!globalThis.crypto) {
   Object.defineProperty(globalThis, 'crypto', {
     value: {
@@ -10,7 +9,6 @@ if (!globalThis.crypto) {
   });
 }
 import { ValidationPipe } from '@nestjs/common';
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));

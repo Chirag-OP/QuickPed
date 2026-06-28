@@ -1,2 +1,10 @@
 node_modules
 node_modules
+# IDE
+.idea/
+*.iml
+
+# Frontend local files
+frontend/.env.local
+frontend/vite-fix.log
+frontend/vite-fix.err.log
