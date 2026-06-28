@@ -17,7 +17,7 @@ interface AuthContextType {
   refreshUser: () => Promise<User | null>;
   setWalletBalance: (balance: number) => void;
   login: (phone: string) => Promise<void>;
-  verifyOtp: (phone: string, otpCode: string) => Promise<void>;
+  verifyOtp: (phone: string, otpCode: string) => Promise<User | null>;
   updateProfile: (name: string, campusId: string) => Promise<void>;
   verifyStudentEmail: (email: string, otpCode: string) => Promise<void>;
   logout: () => void;
@@ -60,12 +60,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (phone: string) => {
     await api.post('/auth/otp/send', { phoneNumber: phone });
   };
-  const verifyOtp = async (phone: string, otpCode: string) => {
+  const verifyOtp = async (phone: string, otpCode: string): Promise<User | null> => {
     const response = await api.post('/auth/otp/verify', { phoneNumber: phone, otpCode });
     if (response.data.token) {
       localStorage.setItem('qp_auth_token', response.data.token);
       setToken(response.data.token);
+      
+      const profileResponse = await api.get('/users/me');
+      const profile = profileResponse.data;
+      setUser(profile);
+      return profile;
     }
+    return null;
   };
   const updateProfile = async (name: string, campusId: string) => {
     await api.put('/users/me/profile', { name, campusId });

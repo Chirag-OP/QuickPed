@@ -67,7 +67,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   onAdminGoogleLogin,
 }) => {
   const [screen, setScreen] = useState<'choice' | 'user' | 'admin'>(initialMode);
-  const [step, setStep] = useState<'phone' | 'otp' | 'profile'>(initialStep);
+  const [step, setStep] = useState<'phone' | 'otp' | 'profile' | 'not-registered' | 'already-registered'>(initialStep);
+  const [authIntent, setAuthIntent] = useState<'login' | 'signup' | null>(null);
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [name, setName] = useState('');
@@ -85,13 +86,21 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   useEffect(() => {
     api.get('/campuses').then(res => setCampuses(res.data)).catch(console.error);
   }, []);
-  const { login, verifyOtp, updateProfile, isAuthenticated, user } = useAuth();
+  const { login, verifyOtp, updateProfile, isAuthenticated, user, logout } = useAuth();
   useEffect(() => {
-    if (isAuthenticated && user && !user.campusId) {
-      setScreen('user');
-      setStep('profile');
+    if (isAuthenticated && user) {
+      if (user.campusId) {
+        if (step !== 'already-registered') {
+          onUserLoginSuccess();
+        }
+      } else {
+        if (step !== 'not-registered') {
+          setScreen('user');
+          setStep('profile');
+        }
+      }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, step]);
   useEffect(() => {
     if (!isAuthenticated) {
       setScreen(initialMode);
@@ -101,6 +110,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       setOtpCountdown(initialStep === 'otp' ? OTP_RESEND_SECONDS : 0);
       setAdminId('');
       setAdminPassword('');
+      setAuthIntent(null);
     }
   }, [initialMode, initialStep, isAuthenticated]);
   useEffect(() => {
@@ -178,7 +188,20 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     setError('');
     setIsLoading(true);
     try {
-      await verifyOtp(phone, otp);
+      const userProfile = await verifyOtp(phone, otp);
+      const isRegistered = Boolean(userProfile && userProfile.name && userProfile.campusId);
+
+      if (authIntent === 'login' && !isRegistered) {
+        setStep('not-registered');
+      } else if (authIntent === 'signup' && isRegistered) {
+        setStep('already-registered');
+      } else {
+        if (isRegistered) {
+          onUserLoginSuccess();
+        } else {
+          setStep('profile');
+        }
+      }
     } catch (err: any) {
       setError('Incorrect OTP. Please try again.');
     } finally {
@@ -209,6 +232,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     try {
       await updateProfile(name.trim(), institution);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone, name: name.trim(), institution }));
+      onUserLoginSuccess();
     } catch (err: any) {
       setError('Failed to save profile.');
     } finally {
@@ -288,11 +312,11 @@ const getCurrentStep = () => {
                  variant="ghost"
                   size="lg"
                   className="w-full h-14 rounded-full bg-orange-400 border-0 text-black text-lg mb-5 hover:scale-[1.03] transition-transform duration-200"
-                  onClick={() => setScreen('user')}
+                  onClick={() => { setAuthIntent('signup'); setScreen('user'); }}
                 >
                   <Phone size={38} className="mr-2 text-black text-lg" />
                   <span className="text-lg text-black font-semibold">
-                    Continue With Phone
+                    Sign Up With Phone
                   </span>
                 </Button>
                 {}
@@ -323,7 +347,7 @@ const getCurrentStep = () => {
                     className="h-16 rounded-full bg-gray-50 hover:bg-slate-50 hover:scale-[1.03] transition-transform duration-200"                  >
                     <img
                       src="https://imgs.search.brave.com/FezUwRGIAsiVYTjCqJUNP5zUnnNd_uPQad1abyOSctI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTEv/MTY4LzU3OS9zbWFs/bC9mYWNlYm9vay1s/b2dvLW9uLWEtYmx1/ZS1idXR0b24tZnJl/ZS1wbmcucG5n"
-                      alt="Google"
+                      alt="Facebook"
                       className="w-12 h-12"
                     />
                     <span className="text-black font-semibold text-lg">
@@ -333,9 +357,12 @@ const getCurrentStep = () => {
                 </div>
                 <p className="text-gray-500 mb-10">
                   Already have an account?
-                  <span className="font-semibold text-gray-900 ml-1">
+                  <button 
+                    onClick={() => { setAuthIntent('login'); setScreen('user'); }}
+                    className="font-semibold text-gray-900 ml-1 hover:underline"
+                  >
                     Log in
-                  </span>
+                  </button>
                 </p>
               </AuthPanel>
             )}
@@ -345,7 +372,7 @@ const getCurrentStep = () => {
                 <div className="flex items-center gap-4">
                   <button
                     type="button"
-                    onClick={() => { setScreen('choice'); setStep('phone'); setError(''); setOtp(''); setOtpCountdown(0); }}
+                    onClick={() => { setScreen('choice'); setStep('phone'); setError(''); setOtp(''); setOtpCountdown(0); setAuthIntent(null); }}
                     className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                   >
                     <ArrowLeft size={20} />
@@ -357,14 +384,18 @@ const getCurrentStep = () => {
                   />
                   <div>
                     <h2 className="text-2xl font-bold text-slate-800">
-                      {step === 'phone' && 'Sign In'}
+                      {step === 'phone' && (authIntent === 'login' ? 'Log In' : 'Sign Up')}
                       {step === 'otp' && 'Verify OTP'}
                       {step === 'profile' && 'Complete Profile'}
+                      {step === 'not-registered' && 'Account Not Found'}
+                      {step === 'already-registered' && 'Welcome Back'}
                     </h2>
                     <p className="text-slate-500 text-sm font-medium mt-1">
                       {step === 'phone' && 'Enter your mobile number'}
                       {step === 'otp' && `Code sent to +91 ${phone}`}
                       {step === 'profile' && 'Tell us a bit about yourself'}
+                      {step === 'not-registered' && 'You need to create an account first'}
+                      {step === 'already-registered' && 'Looks like you already have an account'}
                     </p>
                   </div>
                 </div>
@@ -585,6 +616,48 @@ const getCurrentStep = () => {
                         }
                       </Button>
                     </motion.form>
+                  )}
+                  {step === 'not-registered' && (
+                    <motion.div
+                      key="not-registered"
+                      initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                      className="space-y-6 text-center"
+                    >
+                      <div className="bg-orange-50 text-orange-800 p-5 rounded-2xl mb-6 shadow-sm border border-orange-100">
+                        <p className="font-medium">No account is associated with +91 {phone}.</p>
+                        <p className="text-sm mt-1 opacity-80">Would you like to create one now?</p>
+                      </div>
+                      <Button
+                        onClick={() => { setAuthIntent('signup'); setStep('profile'); }}
+                        className="w-full h-14 rounded-full bg-orange-500 text-white text-lg font-semibold hover:bg-orange-600 shadow-md"
+                      >
+                        Yes, Register Now
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => { logout(); setScreen('choice'); setStep('phone'); setAuthIntent(null); }}
+                        className="w-full h-14 rounded-full text-slate-500 text-lg hover:bg-slate-100 mt-2"
+                      >
+                        Cancel
+                      </Button>
+                    </motion.div>
+                  )}
+                  {step === 'already-registered' && (
+                    <motion.div
+                      key="already-registered"
+                      initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                      className="space-y-6 text-center"
+                    >
+                      <div className="bg-green-50 text-green-800 p-5 rounded-2xl mb-6 shadow-sm border border-green-100">
+                        <p className="font-medium">An account for +91 {phone} already exists!</p>
+                      </div>
+                      <Button
+                        onClick={() => onUserLoginSuccess()}
+                        className="w-full h-14 rounded-full bg-green-500 text-white text-lg font-semibold hover:bg-green-600 shadow-md"
+                      >
+                        Continue to Dashboard
+                      </Button>
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </AuthPanel>

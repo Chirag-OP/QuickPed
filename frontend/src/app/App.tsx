@@ -193,10 +193,10 @@ function AppContent() {
         }
       } else {
         if (!user?.campusId) {
-          if (location.pathname !== '/profile-setup') {
+          if (location.pathname !== '/profile-setup' && location.pathname !== '/login') {
              navigate('/profile-setup');
           }
-        } else if (location.pathname === '/login' || location.pathname === '/' || location.pathname === '/welcome' || location.pathname === '/profile-setup') {
+        } else if (location.pathname === '/' || location.pathname === '/welcome' || location.pathname === '/profile-setup') {
           navigate('/dashboard');
         }
       }
