@@ -153,7 +153,7 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
           <Button
             type="button"
             onClick={markAllAsRead}
-            className="h-12 rounded-[18px] bg-orange-500 text-white shadow-[0_12px_24px_rgba(249,115,22,0.20)] hover:bg-orange-600"
+            className="h-12 rounded-[18px] bg-orange-500 text-white shadow-[0_12px_24px_rgba(249,115,22,0.20)] hover:bg-orange-600 hover:cursor-pointer"
           >
             <CheckCheck size={18} />
             Mark All as Read
@@ -162,7 +162,7 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
             type="button"
             variant="outline"
             onClick={() => setNotifications([])}
-            className="h-12 rounded-[18px] border-orange-100 bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700"
+            className="h-12 rounded-[18px] border-orange-100 bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 hover:cursor-pointer"
           >
             <Trash2 size={18} />
             Clear All
@@ -177,7 +177,7 @@ export const ProfileNotificationsScreen: React.FC<ProfileNotificationsScreenProp
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.03 }}
-                className={`group flex gap-4 rounded-[24px] bg-white p-4 shadow-[0_12px_30px_rgba(31,31,31,0.05)] transition-transform active:scale-[0.99] ${
+                className={`group flex gap-4 rounded-[24px] bg-white p-4 shadow-[0_12px_30px_rgba(31,31,31,0.05)] transition-transform active:scale-[0.99]  hover:scale-[1.03] duration-200 lg:hover:scale-[1.01] ${
                   notification.unread ? 'ring-1 ring-orange-100' : ''
                 }`}
               >

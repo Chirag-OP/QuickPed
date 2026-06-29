@@ -110,7 +110,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)] hover:scale-[1.02] transition-transform duration-200"
+          className="relative overflow-hidden rounded-[23px] bg-[#ffdfbd] px-[23px] pb-[22px] pt-[27px] shadow-[0_18px_34px_rgba(255,119,49,0.06)] "
         >
           <div className="pointer-events-none absolute right-[24px] top-[25px] h-[48px] w-[48px] rounded-full bg-white/52 blur-[3px]" />
           <div className="pointer-events-none absolute bottom-0 left-0 h-[95px] w-full overflow-hidden">
@@ -141,7 +141,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onStartRide, onNavigate 
               <Button
                 onClick={onStartRide}
                 size="lg"
-                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98] hover:cursor-pointer"
+                className="h-[56px] flex-1 rounded-full bg-[#181818] px-6 text-[15px] font-bold text-white shadow-[0_15px_25px_rgba(17,17,17,0.20)] hover:bg-[#111] active:scale-[0.98] hover:cursor-pointer lg:hover:scale-100 hover:scale-[1.03] transition-transform duration-200"
               >
                 <QrCode size={18} className="mr-[9px]" />
                 Scan & Unlock

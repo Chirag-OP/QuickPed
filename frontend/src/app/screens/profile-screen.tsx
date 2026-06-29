@@ -94,7 +94,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
   };
   return (
     <div className="min-h-screen bg-[#f7f6f3] pb-24">
-      <div className="space-y-6 px-2 py-[13px]">
+      <div className="space-y-6 p-4">
         {user ? (
           <Card className="relative overflow-hidden rounded-[25px] border-0 bg-[#fbdec0] shadow-none">
             <CardContent className="relative h-[262px] px-[23px] pt-[27px] pb-0">
@@ -171,14 +171,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
           </Card>
         )}
         <div className="mt-[10px]">
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between ">
             <h2 className="text-[20px] font-bold leading-none text-[#1f2024]">Your impact</h2>
-            <div className="rounded-full bg-[#fff0df] px-[13px] py-[9px]">
+            <div className="rounded-full bg-[#fff0df] px-[13px] py-[9px] hover:underline">
               <p className="text-[12px] font-semibold leading-none text-[#d95400]">This semester</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-[24px] bg-white p-4 shadow-sm">
+            <div className="rounded-[24px] bg-white p-4 shadow-sm hover:scale-[1.03] transition-transform duration-200 lg:hover_scale-[1.02]">
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100">
                 <Bike className="h-6 w-6 text-green-600" />
               </div>
@@ -187,7 +187,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
               </h3>
               <p className="mt-3 text-[12px] font-medium uppercase tracking-[3px] text-slate-400">RIDES</p>
             </div>
-            <div className="rounded-[24px] bg-white p-4 shadow-sm">
+            <div className="rounded-[24px] bg-white p-4 shadow-sm hover:scale-[1.03] transition-transform duration-200 lg:hover_scale-[1.02]">
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100">
                 <Route className="h-6 w-6 text-orange-600" />
               </div>
@@ -196,7 +196,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
               </h3>
               <p className="mt-3 text-[12px] font-medium uppercase tracking-[3px] text-slate-400">KM</p>
             </div>
-            <div className="rounded-[24px] bg-white p-4 shadow-sm">
+            <div className="rounded-[24px] bg-white p-4 shadow-sm hover:scale-[1.03] transition-transform duration-200 lg:hover_scale-[1.02]">
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
                 <Leaf className="h-6 w-6 text-blue-600" />
               </div>
@@ -209,7 +209,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
         </div>
         <section className="space-y-5">
           <h2 className="text-[22px] font-bold leading-none text-[#1f2024]">Account</h2>
-          <Card className="overflow-hidden rounded-[19px] border-0 bg-white shadow-none">
+          <Card className="overflow-hidden rounded-[19px] border-0 bg-white shadow-none p-1">
             <CardContent className="p-0">
               {accountItems.map((item, index) => (
                 <motion.button
@@ -219,7 +219,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.04 }}
-                  className="group flex min-h-[76px] w-full items-center gap-4 border-b border-[#eeeeeb] px-4 text-left last:border-b-0"
+                  className="group flex min-h-[76px] w-full items-center gap-4 border-b border-[#eeeeeb] px-4 text-left last:border-b-0 hover:scale-[1.03] transition-transform duration-200 lg:hover:scale-[1.01] hover:cursor-pointer"
                 >
                   <span className={`flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[15px] ${item.iconClassName}`}>
                     <item.icon size={20} strokeWidth={2} />
@@ -235,7 +235,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
           </Card>
           <button
             type="button"
-            className="flex min-h-[82px] w-full items-center gap-4 rounded-[19px] bg-[#ffdcb6] px-4 text-left"
+            className="flex min-h-[82px] w-full items-center gap-4 rounded-[19px] bg-[#ffdcb6] px-4 text-left  hover:scale-[1.03] transition-transform duration-200 lg:hover:scale-[1.01] hover:cursor-pointer"
           >
             <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[15px] bg-white text-[#ea5d12]">
               <Gift size={22} />
@@ -248,7 +248,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onAddMoney, onLogo
           </button>
           <button
             type="button"
-            className="flex h-[55px] w-full items-center justify-center rounded-[19px] bg-white text-[15px] font-semibold text-[#d5251f]"
+            className="flex h-[55px] w-full items-center justify-center rounded-[19px] bg-white text-[15px] font-semibold text-[#d5251f]  hover:scale-[1.03] transition-transform duration-200 lg:hover:scale-[1.01] hover:cursor-pointer"
             onClick={() => setIsConfirmOpen(true)}
           >
             <LogOut size={18} className="mr-2" />

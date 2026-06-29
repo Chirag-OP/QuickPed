@@ -37,7 +37,7 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
   const displayVehicle = latestRide?.vehicleId ?? 'Unknown Vehicle';
   return (
     <div className="min-h-screen bg-[#f3f1ee] pb-[122px] text-[#080808]">
-            <main className="px-[34px] pt-[16px]">
+            <main className="p-4">
         <div className="mb-[18px] flex items-center justify-between">
           <button
             onClick={onBack}
@@ -84,35 +84,6 @@ export const HistoryScreen: React.FC<HistoryScreenProps> = ({ rides, onBack }) =
               <span className="pb-[3px] text-[14px] font-semibold leading-none text-[#222]">min</span>
             </div>
           </div>
-        </motion.section>
-        <motion.section
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05, duration: 0.32 }}
-          className="relative mb-[20px] h-[143px] overflow-hidden rounded-[23px] bg-[#f6f1e9]"
-        >
-          <div className="absolute inset-0 opacity-70 [background-image:linear-gradient(#e6dfd4_1px,transparent_1px),linear-gradient(90deg,#e6dfd4_1px,transparent_1px)] [background-size:22px_22px]" />
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 356 143" preserveAspectRatio="none">
-            <path
-              d="M28 116 C72 101 86 70 129 51 C169 33 190 35 212 46"
-              fill="none"
-              stroke="#ff742f"
-              strokeLinecap="round"
-              strokeWidth="3"
-            />
-            <path
-              d="M212 46 C247 49 273 83 315 83 C329 83 339 78 347 72"
-              fill="none"
-              stroke="#b9b4ad"
-              strokeDasharray="4 6"
-              strokeLinecap="round"
-              strokeWidth="3"
-            />
-            <circle cx="28" cy="116" r="5" fill="#13855a" />
-            <circle cx="212" cy="46" r="7" fill="#fff" />
-            <circle cx="212" cy="46" r="4" fill="#ff742f" />
-            <circle cx="347" cy="72" r="5" fill="#141414" />
-          </svg>
         </motion.section>
         <section className="mb-[20px] grid grid-cols-3 gap-[12px]">
           {[
