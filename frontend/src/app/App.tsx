@@ -24,32 +24,39 @@ import { FleetManagement } from './screens/fleet-management';
 import { DockManagement } from './screens/dock-management';
 import { PricingConfig } from './screens/pricing-config';
 import { RevenueReports } from './screens/revenue-reports';
+import { CampusSetup } from './screens/campus-setup';
+import { AdminRideHistory } from './screens/admin-ride-history';
 import { BottomNav } from './components/bottom-nav';
 import { NotificationProvider } from './contexts/notification-context';
 import { NotificationBell } from './components/notification-bell';
 import {
   calculateRideFare,
-  createInitialInstitutes,
   getCompletedRides,
   getInstituteRevenue,
   recalculateDockOccupancy,
+  syncInstituteMetrics,
   type AdminUser,
   type InstituteData,
   type IssueReport,
   type RideHistoryRecord,
 } from './lib/admin-data';
-import { LayoutDashboard, Bike, Users, MapPin, IndianRupee, BarChart3, X } from 'lucide-react';
+import { loadInstitutes, saveInstitutes, loadSelectedCampusId, saveSelectedCampusId } from './lib/admin-storage';
+import { Toaster } from 'sonner';
+import { X } from 'lucide-react';
+import { AdminSidebar } from './components/admin-sidebar';
+import { AdminMobileHeader } from './components/admin-mobile-header';
+import { AdminMobileBottomNav } from './components/admin-mobile-bottom-nav';
+import { AdminMobileUsers } from './components/admin-mobile-users';
+import { AdminMobileFleetDocks } from './components/admin-mobile-fleet-docks';
+import { AdminMobileSupport } from './components/admin-mobile-support';
 
 type LoginMode = 'choice' | 'user' | 'admin';
 
-const adminNavItems = [
-  { screen: 'admin', label: 'Dashboard', Icon: LayoutDashboard },
-  { screen: 'fleet', label: 'Fleet', Icon: Bike },
-  { screen: 'users', label: 'Users', Icon: Users },
-  { screen: 'docks', label: 'Docks', Icon: MapPin },
-  { screen: 'pricing', label: 'Pricing', Icon: IndianRupee },
-  { screen: 'revenue', label: 'Revenue', Icon: BarChart3 },
-];
+const ADMIN_DISPLAY_NAMES: Record<AdminKey, string> = {
+  parth: 'Parth Bansal',
+  chirag: 'Chirag',
+  arshpreet: 'Arshpreet',
+};
 
 const USER_PROFILE_KEY = 'qp_user_profile';
 const RIDE_VEHICLE_ID = 'QP-2847';
@@ -102,6 +109,17 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode,
   return <>{children}</>;
 }
 
+const getMobileScreenName = (pathname: string, prefix: string) => {
+  const rest = pathname.replace(`/${prefix}`, '').replace(/^\//, '');
+  if (!rest) return 'Overview';
+  if (rest.startsWith('campus')) return 'Campus';
+  if (rest.startsWith('users')) return 'Users';
+  if (rest.startsWith('fleet') || rest.startsWith('docks')) return 'Fleet & Docks';
+  if (rest.startsWith('rides')) return 'Ride History';
+  if (rest.startsWith('support')) return 'Support';
+  return 'Overview';
+};
+
 function AdminLayout({
   institutes,
   selectedInstitute,
@@ -116,22 +134,68 @@ function AdminLayout({
   const location = useLocation();
 
   const pathParts = location.pathname.split('/');
-  const prefix = pathParts[1]; 
-  const currentTab = pathParts[2] || 'admin';
+  const prefix = pathParts[1];
+
+  const totalUsers = institutes.reduce((sum: number, institute: InstituteData) => sum + institute.users.length, 0);
+  const totalSupport = institutes.reduce((sum: number, institute: InstituteData) => sum + institute.issueReports.length, 0);
+  const adminDisplayName = ADMIN_DISPLAY_NAMES[adminKey as AdminKey] ?? 'Admin';
+  const mobileScreenName = getMobileScreenName(location.pathname, prefix);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
     <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'ADMIN']}>
-      <>
-        <div className="flex items-center justify-end gap-3 bg-background px-4 pt-4">
-          <NotificationBell />
-          <button
-            onClick={onExitAdmin}
-            className="flex items-center gap-1.5 rounded-full bg-danger px-3 py-1.5 text-xs font-medium text-white shadow-lg"
-          >
-            <X size={13} /> Exit Admin
-          </button>
-        </div>
+      <div className="flex min-h-screen bg-[#F9F9F9]">
+        <AdminSidebar
+          prefix={prefix}
+          adminName={adminDisplayName}
+          adminRole={prefix === 'hq-dashboard' ? 'Super admin' : 'Campus admin'}
+          userCount={totalUsers}
+          supportCount={totalSupport || 12}
+          onLogout={onExitAdmin}
+        />
 
+        <div className="flex min-w-0 flex-1 flex-col">
+          <AdminMobileHeader
+            screenName={mobileScreenName}
+            onMenuClick={() => setMobileMenuOpen((open) => !open)}
+          />
+
+          {mobileMenuOpen && (
+            <div className="border-b border-[#eceae6] bg-white px-4 py-3 lg:hidden">
+              <p className="text-xs font-semibold text-[#9a9a9a] mb-2">CAMPUS</p>
+              <select
+                value={selectedInstituteId ?? ''}
+                onChange={(e) => {
+                  onSelectInstitute(e.target.value);
+                  setMobileMenuOpen(false);
+                }}
+                className="mb-3 w-full h-10 rounded-xl border border-[#eceae6] bg-[#fafafa] px-3 text-sm"
+              >
+                <option value="">Select campus...</option>
+                {institutes.map((institute: InstituteData) => (
+                  <option key={institute.id} value={institute.id}>{institute.name}</option>
+                ))}
+              </select>
+              <button
+                onClick={onExitAdmin}
+                className="w-full rounded-xl bg-[#ef4444] py-2.5 text-sm font-semibold text-white"
+              >
+                Exit Admin
+              </button>
+            </div>
+          )}
+
+          <div className="hidden lg:flex items-center justify-end gap-3 border-b border-[#eceae6] bg-white px-4 py-3 lg:px-6">
+            <NotificationBell />
+            <button
+              onClick={onExitAdmin}
+              className="flex items-center gap-1.5 rounded-full bg-[#ef4444] px-3 py-1.5 text-xs font-medium text-white shadow-sm"
+            >
+              <X size={13} /> Exit Admin
+            </button>
+          </div>
+
+          <main className="flex-1 overflow-auto lg:pb-0">
         <Routes>
           <Route 
             path="" 
@@ -155,11 +219,60 @@ function AdminLayout({
               />
             } 
           />
-          
+
+          <Route
+            path="campus"
+            element={
+              <CampusSetup
+                institutes={institutes}
+                selectedInstituteId={selectedInstituteId}
+                onSelectInstitute={(id: string) => {
+                  onSelectInstitute(id);
+                  navigate(`/${prefix}`);
+                }}
+                onAddInstitute={onAddInstitute}
+                onNavigateDocks={() => selectedInstituteId && navigate(`/${prefix}/docks`)}
+              />
+            }
+          />
+
           {selectedInstitute && (
             <>
-              <Route path="fleet" element={<FleetManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
-              <Route path="users" element={<UserManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
+              <Route
+                path="fleet"
+                element={
+                  <>
+                    <div className="lg:hidden">
+                      <AdminMobileFleetDocks institute={selectedInstitute} />
+                    </div>
+                    <div className="hidden lg:block">
+                      <FleetManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />
+                    </div>
+                  </>
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <>
+                    <div className="lg:hidden">
+                      <AdminMobileUsers institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />
+                    </div>
+                    <div className="hidden lg:block">
+                      <UserManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />
+                    </div>
+                  </>
+                }
+              />
+              <Route
+                path="support"
+                element={
+                  <div className="mx-auto max-w-lg lg:max-w-4xl">
+                    <AdminMobileSupport institute={selectedInstitute} />
+                  </div>
+                }
+              />
+              <Route path="rides" element={<AdminRideHistory institute={selectedInstitute} />} />
               <Route path="docks" element={<DockManagement institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
               <Route path="pricing" element={<PricingConfig institute={selectedInstitute} onUpdateInstitute={onUpdateInstitute} />} />
               <Route path="revenue" element={<RevenueReports institute={selectedInstitute} />} />
@@ -168,28 +281,11 @@ function AdminLayout({
 
           <Route path="*" element={<Navigate to={`/${prefix}`} replace />} />
         </Routes>
+          </main>
 
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-xl border-t border-border pb-safe">
-          <div className="flex items-stretch">
-            {adminNavItems.map(({ screen, label, Icon }) => {
-              const isActive = currentTab === screen;
-              return (
-                <button
-                  key={screen}
-                  onClick={() => navigate(`/${prefix}/${screen === 'admin' ? '' : screen}`)}
-                  className={`relative flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 transition-all ${
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  }`}
-                >
-                  <Icon size={20} />
-                  <span className="text-[10px] font-medium leading-none">{label}</span>
-                  {isActive && <span className="absolute bottom-1 h-0.5 w-8 rounded-full bg-primary" />}
-                </button>
-              );
-            })}
-          </div>
+          <AdminMobileBottomNav prefix={prefix} />
         </div>
-      </>
+      </div>
     </ProtectedRoute>
   );
 }
@@ -226,12 +322,20 @@ function AppContent() {
   const [activeRide, setActiveRide] = useState(false);
   const [initialLoginMode, setInitialLoginMode] = useState<LoginMode>('choice');
   const [adminKey, setAdminKey] = useState<AdminKey>('parth');
-  const [institutes, setInstitutes] = useState<InstituteData[]>(() => createInitialInstitutes());
-  const [selectedInstituteId, setSelectedInstituteId] = useState<string | null>(null);
-  const [lastCompletedRide, setLastCompletedRide] = useState<RideHistoryRecord | null>(null);
-  const [userRideHistory, setUserRideHistory] = useState<RideHistoryRecord[]>([]);
+  const [institutes, setInstitutes] = useState<InstituteData[]>(() => loadInstitutes());
+  const [selectedInstituteId, setSelectedInstituteId] = useState<string | null>(() => loadSelectedCampusId());
+
+  useEffect(() => {
+    saveInstitutes(institutes);
+  }, [institutes]);
+
+  useEffect(() => {
+    saveSelectedCampusId(selectedInstituteId);
+  }, [selectedInstituteId]);
 
   const selectedInstitute = institutes.find((institute) => institute.id === selectedInstituteId) ?? null;
+  const [lastCompletedRide, setLastCompletedRide] = useState<RideHistoryRecord | null>(null);
+  const [userRideHistory, setUserRideHistory] = useState<RideHistoryRecord[]>([]);
 
   const resolveUserInstituteId = (profile: StoredUserProfile) => {
     const institution = profile.institution?.trim().toLowerCase();
@@ -434,13 +538,16 @@ function AppContent() {
 
   const handleUpdateSelectedInstitute = (updater: (institute: InstituteData) => InstituteData) => {
     setInstitutes((prev) =>
-      prev.map((institute) => (institute.id === selectedInstituteId ? updater(institute) : institute))
+      prev.map((institute) =>
+        institute.id === selectedInstituteId ? syncInstituteMetrics(updater(institute)) : institute
+      )
     );
   };
 
   return (
     <NotificationProvider>
       <ThemeProvider>
+        <Toaster position="top-center" richColors closeButton />
         <div className="relative min-h-screen bg-background">
           <Routes>
             <Route path="/" element={<RootGatekeeper />} />

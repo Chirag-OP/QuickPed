@@ -1,4 +1,4 @@
-﻿
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
@@ -44,33 +44,16 @@ import {
   type InstituteData,
 } from '../lib/admin-data';
 import { downloadInstituteReport, type ReportFormat } from '../lib/report-export';
-
-const rideTrends = [
-  { label: '6 AM', value: 24 },
-  { label: '9 AM', value: 40 },
-  { label: '12 PM', value: 52 },
-  { label: '3 PM', value: 68 },
-  { label: '6 PM', value: 78 },
-  { label: '9 PM', value: 48 },
-];
+import { AdminOverviewDashboard } from '../components/admin-overview-dashboard';
+import { AdminMobileOverview } from '../components/admin-mobile-overview';
+import type { ActivePanel } from './admin-dashboard-types';
+import { getInstituteAnalytics } from '../lib/admin-analytics';
 
 const WELCOME_NAMES: Record<AdminKey, string> = {
   parth: 'Parth Bansal',
   chirag: 'Chirag',
   arshpreet: 'Arshpreet',
 };
-
-type ActivePanel =
-  | 'none'
-  | 'operations'
-  | 'analytics'
-  | 'reports'
-  | 'livefeed'
-  | 'add-dock'
-  | 'add-fleet'
-  | 'edit-pricing'
-  | 'add-institute'
-  | 'manage-vehicles';
 
 interface AdminDashboardProps {
   adminKey?: AdminKey;
@@ -101,7 +84,7 @@ const panelTitles: Record<ActivePanel, string> = {
   'add-dock': 'Add New Dock',
   'add-fleet': 'Add Fleet Vehicle',
   'edit-pricing': 'Edit Pricing Plan',
-  'add-institute': 'Add Institute',
+  'add-institute': 'Campus Setup Wizard',
   'manage-vehicles': 'Manage Vehicles',
 };
 
@@ -144,11 +127,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [pricingSaved, setPricingSaved] = useState(false);
 
   const [instituteName, setInstituteName] = useState('');
-  const [instituteDockCount, setInstituteDockCount] = useState('3');
-  const [instituteVehicleCount, setInstituteVehicleCount] = useState('10');
-  const [instituteVehicleTypes, setInstituteVehicleTypes] = useState('Bicycle, E-Bike');
-  const [institutePricingStructure, setInstitutePricingStructure] = useState('Standard: base 0, per minute 2, reservation 5');
-  const [instituteDockLocations, setInstituteDockLocations] = useState('Main Gate, Library, Hostel Area');
+  const [instituteCity, setInstituteCity] = useState('');
+  const [instituteMapAssetName, setInstituteMapAssetName] = useState('');
 
   const welcomeName = WELCOME_NAMES[adminKey];
   const docks = selectedInstitute?.docks ?? [];
@@ -157,7 +137,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const issueReports = selectedInstitute?.issueReports ?? [];
   const pricing = selectedInstitute?.pricing;
   const completedRideHistory = getCompletedRides(rideHistory);
-  const revenueMetrics = selectedInstitute ? getRevenueMetrics(selectedInstitute) : { daily: 0, weekly: 0, monthly: 0, total: 0 };
+  const revenueMetrics = selectedInstitute ? getRevenueMetrics(selectedInstitute) : { daily: 100, weekly: 0, monthly: 0, total: 0 };
+  const analytics = useMemo(
+    () => (selectedInstitute ? getInstituteAnalytics(selectedInstitute) : null),
+    [selectedInstitute]
+  );
+  const hourlyRideTrend = analytics?.hourlyRideTrend ?? [];
+  const maxHourlyRides = Math.max(...hourlyRideTrend.map((item) => item.value), 1);
 
   const availableVehicles = vehicles.filter((vehicle) => vehicle.status === 'available').length;
   const completedRides = completedRideHistory.length;
@@ -279,22 +265,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     const newInstitute = createInstituteFromInput({
       name: instituteName,
-      dockCount: Number(instituteDockCount),
-      vehicleCount: Number(instituteVehicleCount),
-      vehicleTypes: instituteVehicleTypes,
-      pricingStructure: institutePricingStructure,
-      dockLocations: instituteDockLocations,
+      city: instituteCity,
+      mapAssetName: instituteMapAssetName,
+      dockCount: 0,
+      vehicleCount: 0,
+      vehicleTypes: 'BICYCLE, E_BIKE',
     });
 
     onAddInstitute(newInstitute);
     setInstituteName('');
-    setInstituteDockCount('3');
-    setInstituteVehicleCount('10');
-    setInstituteVehicleTypes('Bicycle, E-Bike');
-    setInstitutePricingStructure('Standard: base 0, per minute 2, reservation 5');
-    setInstituteDockLocations('Main Gate, Library, Hostel Area');
-    showSuccess(`Institute "${newInstitute.name}" created.`);
+    setInstituteCity('');
+    setInstituteMapAssetName('');
+    showSuccess(`Campus "${newInstitute.name}" created.`);
     setActivePanel('none');
+    onNavigate?.('docks');
   };
 
   const handleRemoveVehicle = (vehicleId: string) => {
@@ -320,7 +304,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const renderAddInstituteForm = () => (
     <form onSubmit={handleAddInstitute} className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium">Institute Name</label>
+        <label className="text-sm font-medium">Campus Name</label>
         <Input
           placeholder="e.g. IIT Ropar"
           value={instituteName}
@@ -329,62 +313,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           required
         />
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Number of Docks</label>
-          <Input
-            type="number"
-            min="1"
-            value={instituteDockCount}
-            onChange={(e) => setInstituteDockCount(e.target.value)}
-            className="h-12 rounded-xl"
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Number of Vehicles</label>
-          <Input
-            type="number"
-            min="0"
-            value={instituteVehicleCount}
-            onChange={(e) => setInstituteVehicleCount(e.target.value)}
-            className="h-12 rounded-xl"
-            required
-          />
-        </div>
-      </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Vehicle Types</label>
+        <label className="text-sm font-medium">City / Location</label>
         <Input
-          placeholder="Bicycle, E-Bike, E-Scooter"
-          value={instituteVehicleTypes}
-          onChange={(e) => setInstituteVehicleTypes(e.target.value)}
+          placeholder="e.g. Rupnagar, Punjab"
+          value={instituteCity}
+          onChange={(e) => setInstituteCity(e.target.value)}
           className="h-12 rounded-xl"
           required
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Pricing Structure</label>
+        <label className="text-sm font-medium">Campus Map Asset</label>
         <Input
-          placeholder="Standard: base 10, per minute 2, reservation 5"
-          value={institutePricingStructure}
-          onChange={(e) => setInstitutePricingStructure(e.target.value)}
-          className="h-12 rounded-xl"
-          required
+          type="file"
+          accept="image/*,.svg"
+          onChange={(e) => setInstituteMapAssetName(e.target.files?.[0]?.name ?? '')}
+          className="h-12 rounded-xl file:mr-4 file:rounded-full file:border-0 file:bg-[#fff0df] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#ee5f13]"
         />
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Dock Locations</label>
-        <textarea
-          placeholder="Main Gate, Library, Hostel Area"
-          value={instituteDockLocations}
-          onChange={(e) => setInstituteDockLocations(e.target.value)}
-          className="min-h-24 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-          required
-        />
+        {instituteMapAssetName && <p className="text-xs text-muted-foreground">Selected: {instituteMapAssetName}</p>}
       </div>
       <Button type="submit" className="w-full" size="lg">
-        <Building2 size={18} className="mr-2" /> Add Institute
+        <Building2 size={18} className="mr-2" /> Save & Continue
       </Button>
     </form>
   );
@@ -466,33 +416,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               )}
 
-              {activePanel === 'analytics' && selectedInstitute && (
+              {activePanel === 'analytics' && selectedInstitute && analytics && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-3">
-                    {rideTrends.map((item) => (
+                    {hourlyRideTrend.map((item) => (
                       <div key={item.label} className="rounded-2xl p-3 bg-muted text-center">
                         <p className="text-xs text-muted-foreground">{item.label}</p>
-                        <p className="text-xl font-bold text-primary">{item.value}k</p>
+                        <p className="text-xl font-bold text-primary">{item.value}</p>
                       </div>
                     ))}
                   </div>
                   <div className="h-40 rounded-2xl bg-muted/60 p-4 overflow-hidden relative">
-                    {rideTrends.map((item, index) => (
+                    {hourlyRideTrend.map((item, index) => (
                       <div
                         key={item.label}
                         className="absolute bottom-4 bg-primary rounded-t-2xl"
-                        style={{ left: `${index * 14.5 + 2}%`, width: '9%', height: `${item.value}%` }}
+                        style={{
+                          left: `${index * 14.5 + 2}%`,
+                          width: '9%',
+                          height: `${(item.value / maxHourlyRides) * 100}%`,
+                        }}
                       />
                     ))}
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="rounded-2xl bg-success/10 p-4">
                       <p className="text-xs text-muted-foreground">Avg. Revenue / Day</p>
-                      <p className="text-xl font-bold text-success">{formatCurrency(revenueMetrics.monthly / Math.max(new Date().getDate(), 1))}</p>
+                      <p className="text-xl font-bold text-success">
+                        {formatCurrency(analytics.revenue.monthly / Math.max(new Date().getDate(), 1))}
+                      </p>
                     </div>
                     <div className="rounded-2xl bg-info/10 p-4">
                       <p className="text-xs text-muted-foreground">Completed Rides</p>
-                      <p className="text-xl font-bold text-info">{completedRides}</p>
+                      <p className="text-xl font-bold text-info">{analytics.rides.completed}</p>
+                    </div>
+                    <div className="rounded-2xl bg-muted p-4">
+                      <p className="text-xs text-muted-foreground">Avg Ride Duration</p>
+                      <p className="text-xl font-bold">{analytics.avgRideDurationMinutes} min</p>
+                    </div>
+                    <div className="rounded-2xl bg-muted p-4">
+                      <p className="text-xs text-muted-foreground">Total Ride Time</p>
+                      <p className="text-xl font-bold">{analytics.rides.totalDurationMinutes} min</p>
                     </div>
                   </div>
                   <Button className="w-full" onClick={() => { setActivePanel('none'); onNavigate?.('revenue'); }}>
@@ -730,11 +694,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <div className="w-full max-w-md rounded-3xl border border-border bg-muted p-8 text-center shadow-lg">
-          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-primary" />
-          <h2 className="text-2xl font-semibold">Loading Admin Dashboard</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Preparing institute data and fleet controls.</p>
+      <div className="min-h-full bg-[#F9F9F9] p-6 flex items-center justify-center">
+        <div className="w-full max-w-md rounded-[32px] border border-border bg-white p-8 text-center shadow-[0_12px_30px_rgba(0,0,0,0.04)]">
+          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-[#ee5f13]" />
+          <h2 className="text-2xl font-bold text-[#1f1714]">Loading Admin Dashboard</h2>
+          <p className="mt-2 text-sm text-[#77736f]">Preparing institute data and fleet controls.</p>
         </div>
       </div>
     );
@@ -742,13 +706,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <div className="w-full max-w-md rounded-3xl border border-danger bg-muted p-8 text-center shadow-lg">
-          <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-danger" />
-          <h2 className="text-2xl font-semibold">Unable to load dashboard</h2>
-          <p className="mt-2 text-sm text-muted-foreground">{error}</p>
+      <div className="min-h-full bg-[#F9F9F9] p-6 flex items-center justify-center">
+        <div className="w-full max-w-md rounded-[32px] border border-danger/20 bg-white p-8 text-center shadow-[0_12px_30px_rgba(0,0,0,0.04)]">
+          <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-[#ef4444]" />
+          <h2 className="text-2xl font-bold text-[#1f1714]">Unable to load dashboard</h2>
+          <p className="mt-2 text-sm text-[#77736f]">{error}</p>
           <div className="mt-6 flex justify-center gap-3">
-            <Button variant="outline" onClick={handleRetry}>Retry</Button>
+            <Button variant="outline" className="rounded-full px-6" onClick={handleRetry}>Retry</Button>
           </div>
         </div>
       </div>
@@ -759,20 +723,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     return (
       <>
         {renderPanel()}
-        <div className="min-h-screen bg-background p-6 pb-24">
+        <div className="min-h-full bg-[#F9F9F9] p-4 pb-28 lg:p-6 lg:pb-6">
           <div className="mx-auto max-w-5xl space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <LayoutDashboard className="text-primary" size={36} />
+                  <LayoutDashboard className="text-[#ee5f13]" size={36} />
                   <div>
-                    <h1 className="text-3xl font-bold">Welcome {welcomeName}</h1>
-                    <p className="text-muted-foreground">Which Institute&apos;s Data Would You Like To View?</p>
+                    <h1 className="text-3xl font-bold text-[#1f1714]">Welcome {welcomeName}</h1>
+                    <p className="text-[#77736f] text-sm">Which Institute&apos;s Data Would You Like To View?</p>
                   </div>
                 </div>
               </div>
-              <Button onClick={() => setActivePanel('add-institute')} className="rounded-full">
-                <Building2 size={18} className="mr-2" /> Add Institute
+              <Button onClick={() => setActivePanel('add-institute')} className="rounded-full bg-[#181818] hover:bg-[#111] text-white">
+                <Building2 size={18} className="mr-2" /> Add Campus
               </Button>
             </div>
 
@@ -782,16 +746,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   key={institute.id}
                   type="button"
                   onClick={() => onSelectInstitute(institute.id)}
-                  className="rounded-3xl border border-border bg-card p-5 text-left shadow-sm transition hover:border-primary hover:shadow-lg"
+                  className="rounded-[24px] border border-border/50 bg-white p-6 text-left shadow-[0_8px_20px_rgba(15,15,15,0.02)] transition-all duration-300 hover:border-[#ee5f13]/30 hover:shadow-[0_15px_30px_rgba(238,95,19,0.06)] hover:-translate-y-1"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-xl font-bold">{institute.name}</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {institute.docks.length} docks - {institute.vehicles.length} vehicles - {institute.issueReports.length} issues - {formatCurrency(getInstituteRevenue(institute))}
+                      <p className="text-xl font-bold text-[#1f1714]">{institute.name}</p>
+                      <p className="text-sm text-[#77736f] mt-1.5 leading-relaxed">
+                        {institute.docks.length} docks &middot; {institute.vehicles.length} vehicles &middot; {institute.issueReports.length} issues &middot; <span className="font-semibold text-[#ee5f13]">{formatCurrency(getInstituteRevenue(institute))}</span>
                       </p>
+                      <p className="mt-1 text-xs text-[#77736f]">{institute.city ?? 'Campus location not set'}{institute.mapAssetName ? ` - ${institute.mapAssetName}` : ''}</p>
                     </div>
-                    <ChevronRight className="text-primary" size={22} />
+                    <ChevronRight className="text-[#ee5f13]" size={22} />
                   </div>
                 </button>
               ))}
@@ -802,282 +767,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     );
   }
 
-  const summaryCards = [
-    { label: 'Daily Revenue', value: formatCurrency(revenueMetrics.daily), Icon: IndianRupee, color: 'text-primary' },
-    { label: 'Weekly Revenue', value: formatCurrency(revenueMetrics.weekly), Icon: IndianRupee, color: 'text-primary' },
-    { label: 'Monthly Revenue', value: formatCurrency(revenueMetrics.monthly), Icon: IndianRupee, color: 'text-primary' },
-    { label: 'Total Revenue', value: formatCurrency(revenueMetrics.total), Icon: IndianRupee, color: 'text-primary' },
-    { label: 'Total Vehicles', value: String(vehicles.length), Icon: Bike, color: 'text-info' },
-    { label: 'Total Docks', value: String(docks.length), Icon: MapPin, color: 'text-success' },
-    { label: 'Active Rides', value: String(activeRides), Icon: Activity, color: 'text-warning' },
-    { label: 'Completed Rides', value: String(completedRides), Icon: CheckCircle2, color: 'text-success' },
-    { label: 'Available Vehicles', value: String(availableVehicles), Icon: Wrench, color: 'text-primary' },
-  ];
-
   return (
     <>
       {renderPanel()}
 
-      <div className="min-h-screen bg-background p-6 pb-24">
+      <div className="min-h-full bg-[#F9F9F9]">
         <AnimatePresence>
           {successMsg && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-success text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2 text-sm font-semibold"
+              className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#FF8C42] text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2 text-sm font-semibold"
             >
               <CheckCircle2 size={16} /> {successMsg}
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <LayoutDashboard className="text-primary" size={36} />
-              <div>
-                <h1 className="text-3xl font-bold">Welcome {welcomeName}</h1>
-                <p className="text-muted-foreground">{selectedInstitute.name} command center.</p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <select
-                value={selectedInstituteId ?? ''}
-                onChange={(e) => onSelectInstitute(e.target.value)}
-                className="h-9 rounded-full border border-border bg-background px-3 text-sm"
-              >
-                {institutes.map((institute) => (
-                  <option key={institute.id} value={institute.id}>{institute.name}</option>
-                ))}
-              </select>
-              <Badge className="cursor-pointer bg-secondary text-secondary-foreground" onClick={() => setActivePanel('livefeed')}>Live Feed</Badge>
-              <Badge className="cursor-pointer bg-success/10 text-success" onClick={() => setActivePanel('operations')}>Operations</Badge>
-              <Badge className="cursor-pointer bg-info/10 text-info" onClick={() => setActivePanel('analytics')}>Analytics</Badge>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <Button variant="outline" className="rounded-full px-5 py-3" onClick={() => setActivePanel('reports')}>
-              <ArrowRight size={18} /> Explore Reports
-            </Button>
-          </div>
+        <div className="lg:hidden">
+          <AdminMobileOverview
+            selectedInstitute={selectedInstitute}
+            onSetActivePanel={setActivePanel}
+            onNavigateFleet={() => onNavigate?.('fleet-management')}
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
-          {summaryCards.map(({ label, value, Icon, color }) => (
-            <Card key={label} variant="elevated" className="border border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{label}</p>
-                    <p className="text-3xl font-bold">{value}</p>
-                  </div>
-                  <Icon className={color} size={32} />
-                </div>
-                <div className="flex items-center gap-2 text-success text-sm">
-                  <TrendingUp size={16} /> Current institute only
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <Card variant="elevated" className="border border-border mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles size={20} className="text-primary" /> Quick Actions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: 'Add Dock', icon: MapPin, panel: 'add-dock' as ActivePanel, color: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20' },
-                { label: 'Add Fleet', icon: Bike, panel: 'add-fleet' as ActivePanel, color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20' },
-                { label: 'Edit Pricing', icon: IndianRupee, panel: 'edit-pricing' as ActivePanel, color: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20' },
-                { label: 'Add Institute', icon: Building2, panel: 'add-institute' as ActivePanel, color: 'bg-purple-500/10 text-purple-700 hover:bg-purple-500/20' },
-                { label: 'View Reports', icon: FileText, panel: 'reports' as ActivePanel, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20' },
-                { label: 'View Analytics', icon: BarChart3, panel: 'analytics' as ActivePanel, color: 'bg-pink-500/10 text-pink-700 hover:bg-pink-500/20' },
-                { label: 'Manage Vehicles', icon: Wrench, panel: 'manage-vehicles' as ActivePanel, color: 'bg-orange-500/10 text-orange-700 hover:bg-orange-500/20' },
-                { label: 'Live Feed', icon: Radio, panel: 'livefeed' as ActivePanel, color: 'bg-red-500/10 text-red-700 hover:bg-red-500/20' },
-              ].map(({ label, icon: Icon, panel, color }) => (
-                <motion.button
-                  key={label}
-                  type="button"
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setActivePanel(panel)}
-                  className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-colors ${color}`}
-                >
-                  <Icon size={24} />
-                  <span className="text-xs font-semibold text-center leading-tight">{label}</span>
-                </motion.button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-          <Card variant="elevated" className="xl:col-span-2 border border-border">
-            <CardHeader>
-              <CardTitle>Operational Insights</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-3 gap-4">
-                {rideTrends.map((item) => (
-                  <div key={item.label} className="rounded-3xl p-4 bg-muted/70">
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
-                    <p className="text-xl font-bold">{item.value}k</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="h-52 rounded-[32px] bg-muted/60 p-5 overflow-hidden">
-                <div className="relative h-full">
-                  {rideTrends.map((item, index) => (
-                    <div
-                      key={item.label}
-                      className="absolute bottom-0 bg-primary rounded-t-3xl"
-                      style={{ left: `${index * 14.5}%`, width: '9%', height: `${item.value}%` }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card variant="elevated" className="border border-border">
-            <CardHeader>
-              <CardTitle>Institute Controls</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {[
-                { label: 'Add Dock', panel: 'add-dock' as ActivePanel, Icon: MapPin },
-                { label: 'Add Vehicle', panel: 'add-fleet' as ActivePanel, Icon: Bike },
-                { label: 'Edit Pricing', panel: 'edit-pricing' as ActivePanel, Icon: IndianRupee },
-                { label: 'View Reports', panel: 'reports' as ActivePanel, Icon: FileText },
-                { label: 'View Analytics', panel: 'analytics' as ActivePanel, Icon: BarChart3 },
-              ].map(({ label, panel, Icon }) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => setActivePanel(panel)}
-                  className="w-full flex items-center justify-between rounded-2xl bg-muted p-4 text-left hover:bg-muted/80"
-                >
-                  <span className="flex items-center gap-3 font-medium"><Icon size={18} className="text-primary" /> {label}</span>
-                  <ChevronRight size={18} className="text-muted-foreground" />
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => onNavigate?.('docks')}
-                className="w-full flex items-center justify-between rounded-2xl bg-muted p-4 text-left hover:bg-muted/80"
-              >
-                <span className="flex items-center gap-3 font-medium"><Eye size={18} className="text-primary" /> Edit or Remove Docks</span>
-                <ChevronRight size={18} className="text-muted-foreground" />
-              </button>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
-          <Card variant="elevated" className="border border-border">
-            <CardHeader>
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <CardTitle>Ride History</CardTitle>
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search rides..."
-                  className="h-10 rounded-xl md:max-w-xs"
-                />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {filteredRides.map((ride) => (
-                <div key={ride.id} className="flex items-center justify-between gap-3 rounded-2xl bg-muted p-4">
-                  <div>
-                    <p className="font-semibold">{ride.id} - {ride.user}</p>
-                    <p className="text-sm text-muted-foreground">{ride.vehicleId} - {ride.startDock} to {ride.endDock}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold">{formatCurrency(ride.fare)}</p>
-                    <Badge className={ride.status === 'active' ? 'bg-info/10 text-info' : 'bg-success/10 text-success'}>{ride.status}</Badge>
-                  </div>
-                </div>
-              ))}
-              {filteredRides.length === 0 && <p className="text-sm text-muted-foreground">No rides match your search.</p>}
-            </CardContent>
-          </Card>
-
-          <div className="space-y-6">
-            <Card variant="elevated" className="border border-border">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Current Pricing</CardTitle>
-                  <Button size="sm" variant="outline" className="rounded-full" onClick={() => setActivePanel('edit-pricing')}>
-                    <Settings size={14} className="mr-1" /> Edit
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {pricing && (
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: 'Base Fare', value: formatCurrency(pricing.baseFare) },
-                      { label: 'Per Minute', value: formatCurrency(pricing.perMinute) },
-                      { label: 'Reservation', value: formatCurrency(pricing.reservation) },
-                      { label: 'Subscription', value: `${formatCurrency(pricing.subscription)}/mo` },
-                    ].map(({ label, value }) => (
-                      <div key={label} className="rounded-2xl bg-muted p-4">
-                        <p className="text-xs text-muted-foreground">{label}</p>
-                        <p className="text-xl font-bold text-primary">{value}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card variant="elevated" className="border border-border">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Issue Reports</CardTitle>
-                  <Badge className={issueReports.length ? 'bg-warning/10 text-warning' : 'bg-success/10 text-success'}>
-                    {issueReports.length}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {issueReports.map((issue) => (
-                  <div key={issue.id} className="rounded-2xl bg-muted p-4">
-                    <div className="mb-2 flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold">{issue.issueLabel}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {issue.vehicleId}{issue.rideId ? ` - Ride ${issue.rideId}` : ''}
-                        </p>
-                      </div>
-                      <Badge className="bg-warning/10 text-warning">{issue.issueType}</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {issue.description || 'No additional details provided.'}
-                    </p>
-                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-                      <span>{issue.user}{issue.userPhone ? ` - ${issue.userPhone}` : ''}</span>
-                      <span>{formatDate(issue.reportedAt)}</span>
-                    </div>
-                  </div>
-                ))}
-                {issueReports.length === 0 && (
-                  <p className="rounded-2xl bg-muted p-4 text-sm text-muted-foreground">
-                    No issue reports for {selectedInstitute.name}.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+        <div className="hidden lg:block">
+          <AdminOverviewDashboard
+            selectedInstitute={selectedInstitute}
+            selectedInstituteId={selectedInstituteId}
+            institutes={institutes}
+            onSelectInstitute={onSelectInstitute}
+            onSetActivePanel={setActivePanel}
+            onNavigate={onNavigate}
+            onExport={() => setActivePanel('reports')}
+          />
         </div>
       </div>
     </>

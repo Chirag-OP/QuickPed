@@ -1,6 +1,8 @@
 export type DockStatus = 'active' | 'available' | 'full';
 export type VehicleStatus = 'available' | 'in-ride' | 'user-locked' | 'maintenance';
 export type VehicleCondition = 'good' | 'low-battery' | 'needs-repair';
+export type FareVehicleType = 'BICYCLE' | 'E_BIKE';
+export type FareUserRole = 'GUEST_RIDER' | 'VERIFIED_RIDER';
 
 export interface AdminDock {
   id: string;
@@ -10,11 +12,21 @@ export interface AdminDock {
   spots: number;
   occupied: number;
   status: DockStatus;
+  latitude?: number;
+  longitude?: number;
+  strictRadius?: number;
+  softBuffer?: number;
+  optimumCapacity?: number;
+  rebalanceThreshold?: number;
+  isActive?: boolean;
+  mapX?: number;
+  mapY?: number;
 }
 
 export interface AdminVehicle {
   id: string;
   type: string;
+  hardwareMac?: string;
   dockId: string;
   location: string;
   status: VehicleStatus;
@@ -31,6 +43,15 @@ export interface AdminPricing {
   subscription: number;
   discount: number;
   pricingStructure: string;
+}
+
+export interface AdminFareRule {
+  id: string;
+  vehicleType: FareVehicleType;
+  userRole: FareUserRole;
+  baseFare: number;
+  baseDurationMinutes: number;
+  perMinuteRate: number;
 }
 
 export type AdminUserRole = 'verified' | 'guest' | 'admin' | 'blocked';
@@ -81,6 +102,9 @@ export interface IssueReport {
 export interface InstituteData {
   id: string;
   name: string;
+  city?: string;
+  mapAssetName?: string;
+  mapPreviewDataUrl?: string;
   revenue: number;
   activeRides: number;
   completedRides: number;
@@ -91,15 +115,19 @@ export interface InstituteData {
   issueReports: IssueReport[];
   users: AdminUser[];
   pricing: AdminPricing;
+  fareRules: AdminFareRule[];
 }
 
 export interface NewInstituteInput {
   name: string;
-  dockCount: number;
-  vehicleCount: number;
-  vehicleTypes: string;
-  pricingStructure: string;
-  dockLocations: string;
+  city?: string;
+  mapAssetName?: string;
+  mapPreviewDataUrl?: string;
+  dockCount?: number;
+  vehicleCount?: number;
+  vehicleTypes?: string;
+  pricingStructure?: string;
+  dockLocations?: string;
 }
 
 export const defaultPricing: AdminPricing = {
@@ -110,6 +138,33 @@ export const defaultPricing: AdminPricing = {
   discount: 10,
   pricingStructure: 'Standard: base 0, per minute 2, reservation 5',
 };
+
+export const defaultFareRules: AdminFareRule[] = [
+  {
+    id: 'fare-bicycle-guest',
+    vehicleType: 'BICYCLE',
+    userRole: 'GUEST_RIDER',
+    baseFare: 5,
+    baseDurationMinutes: 15,
+    perMinuteRate: 1,
+  },
+  {
+    id: 'fare-bicycle-verified',
+    vehicleType: 'BICYCLE',
+    userRole: 'VERIFIED_RIDER',
+    baseFare: 3,
+    baseDurationMinutes: 15,
+    perMinuteRate: 0.75,
+  },
+  {
+    id: 'fare-ebike-guest',
+    vehicleType: 'E_BIKE',
+    userRole: 'GUEST_RIDER',
+    baseFare: 10,
+    baseDurationMinutes: 10,
+    perMinuteRate: 2,
+  },
+];
 
 export const calculateRideFare = (
   durationSeconds: number,
@@ -204,36 +259,192 @@ export const getRevenueMetrics = (institute: Pick<InstituteData, 'rideHistory'>,
   );
 };
 
+export const getDashboardStats = (institute: InstituteData, now = new Date()) => {
+  const completed = getCompletedRides(institute.rideHistory);
+  const today = startOfDay(now);
+  const ridesToday = institute.rideHistory.filter((ride) => {
+    if (ride.status === 'active') return true;
+    const rideDate = parseRideDate(ride);
+    return rideDate ? isSameDay(rideDate, today) : false;
+  }).length;
+  const revenueToday = completed.reduce((sum, ride) => {
+    const rideDate = parseRideDate(ride);
+    return rideDate && isSameDay(rideDate, today) ? sum + ride.fare : sum;
+  }, 0);
+  const avgFare = completed.length
+    ? completed.reduce((sum, ride) => sum + ride.fare, 0) / completed.length
+    : 0;
+  const totalRideDurationMinutes = Math.round(
+    completed.reduce((sum, ride) => sum + ride.duration, 0) / 60
+  );
+  const avgRideDurationMinutes = completed.length
+    ? Math.round((completed.reduce((sum, ride) => sum + ride.duration, 0) / completed.length / 60) * 10) / 10
+    : 0;
+
+  const currentWeekStart = new Date(today);
+  currentWeekStart.setDate(today.getDate() - 6);
+  const activeRiders = new Set(
+    institute.rideHistory
+      .filter((ride) => {
+        const started = ride.startedAt ? new Date(ride.startedAt) : parseRideDate(ride);
+        return started && !Number.isNaN(started.getTime()) && started >= currentWeekStart && started <= now;
+      })
+      .map((ride) => ride.user)
+  ).size;
+
+  return {
+    totalVehicles: institute.vehicles.length,
+    activeVehicles: institute.vehicles.filter((v) => v.status === 'available' || v.status === 'in-ride').length,
+    maintenanceVehicles: institute.vehicles.filter((v) => v.status === 'maintenance').length,
+    activeRiders,
+    registeredUsers: institute.users.length,
+    revenueToday,
+    ridesToday,
+    activeDocks: institute.docks.filter((d) => d.isActive !== false).length,
+    openTickets: institute.issueReports.length,
+    avgFare,
+    weeklyRevenue: getRevenueMetrics(institute, now).weekly,
+    avgRideDurationMinutes,
+    totalRideDurationMinutes,
+  };
+};
+
+const createSeedRideHistory = (options: {
+  instituteId: string;
+  docks: AdminDock[];
+  vehicles: AdminVehicle[];
+  users: AdminUser[];
+  targetRevenue?: number;
+  now?: Date;
+}): RideHistoryRecord[] => {
+  const {
+    instituteId,
+    docks,
+    vehicles,
+    users,
+    targetRevenue = 500,
+    now = new Date(),
+  } = options;
+
+  if (docks.length === 0 || vehicles.length === 0 || users.length === 0) {
+    return [];
+  }
+
+  const seedPlan = [
+    { dayOffset: -6, fare: 42, durationMin: 12 },
+    { dayOffset: -5, fare: 48, durationMin: 14 },
+    { dayOffset: -4, fare: 55, durationMin: 16 },
+    { dayOffset: -3, fare: 62, durationMin: 18 },
+    { dayOffset: -2, fare: 70, durationMin: 20 },
+    { dayOffset: -1, fare: 78, durationMin: 22 },
+    { dayOffset: -1, fare: 45, durationMin: 13 },
+    { dayOffset: 0, fare: 50, durationMin: 15 },
+    { dayOffset: 0, fare: 50, durationMin: 15 },
+  ];
+
+  const scaledFares = seedPlan.map((plan) => Math.round(plan.fare * (targetRevenue / 500) * 100) / 100);
+  const fareTotal = scaledFares.slice(0, -1).reduce((sum, fare) => sum + fare, 0);
+  scaledFares[scaledFares.length - 1] = Math.round((targetRevenue - fareTotal) * 100) / 100;
+
+  const completedRides = seedPlan.map((plan, index) => {
+    const user = users[index % users.length];
+    const startDock = docks[index % docks.length];
+    const endDock = docks[(index + 1) % docks.length];
+    const vehicle = vehicles[index % vehicles.length];
+    const completedAt = new Date(now);
+    completedAt.setDate(now.getDate() + plan.dayOffset);
+    completedAt.setHours(9 + (index % 8), 10 + index, 0, 0);
+    const startedAt = new Date(completedAt.getTime() - plan.durationMin * 60 * 1000);
+
+    return {
+      id: `R-SEED-${instituteId}-${index + 1}`,
+      user: user.name,
+      userPhone: user.phone,
+      vehicleId: vehicle.id,
+      startDock: startDock.name,
+      endDock: endDock.name,
+      fare: scaledFares[index],
+      duration: plan.durationMin * 60,
+      distance: Math.round((1.5 + (index % 3) * 0.4) * 10) / 10,
+      bikeType: vehicle.type,
+      status: 'completed' as const,
+      startedAt: startedAt.toISOString(),
+      completedAt: completedAt.toISOString(),
+    };
+  });
+
+  const activeUser = users[0];
+  const activeVehicle = vehicles.find((vehicle) => vehicle.status === 'in-ride') ?? vehicles[0];
+  const activeStartDock = docks[0];
+  const activeEndDock = docks[1] ?? docks[0];
+
+  const activeRide: RideHistoryRecord = {
+    id: `R-SEED-${instituteId}-active`,
+    user: activeUser.name,
+    userPhone: activeUser.phone,
+    vehicleId: activeVehicle.id,
+    startDock: activeStartDock.name,
+    endDock: activeEndDock.name,
+    fare: 0,
+    duration: 14 * 60,
+    distance: 2.1,
+    bikeType: activeVehicle.type,
+    status: 'active',
+    startedAt: new Date(now.getTime() - 14 * 60 * 1000).toISOString(),
+    completedAt: 'Live',
+  };
+
+  return [...completedRides, activeRide];
+};
+
+export const syncInstituteMetrics = (institute: InstituteData): InstituteData => ({
+  ...institute,
+  revenue: getInstituteRevenue(institute),
+  completedRides: getCompletedRides(institute.rideHistory).length,
+  activeRides: institute.rideHistory.filter((ride) => ride.status === 'active').length,
+});
+
 export const createInstituteFromInput = (input: NewInstituteInput): InstituteData => {
   const name = input.name.trim();
   const id = `${makeId(name)}-${Date.now().toString(36)}`;
-  const locations = splitList(input.dockLocations);
-  const vehicleTypes = splitList(input.vehicleTypes);
-  const safeDockCount = Math.max(1, input.dockCount || locations.length || 1);
+  const locations = splitList(input.dockLocations ?? '');
+  const vehicleTypes = splitList(input.vehicleTypes ?? 'BICYCLE, E_BIKE');
+  const safeDockCount = Math.max(0, input.dockCount ?? locations.length);
   const safeVehicleCount = Math.max(0, input.vehicleCount || 0);
-  const resolvedTypes = vehicleTypes.length ? vehicleTypes : ['Bicycle'];
+  const resolvedTypes = vehicleTypes.length ? vehicleTypes : ['BICYCLE'];
 
   const docks: AdminDock[] = Array.from({ length: safeDockCount }, (_, index) => {
     const location = locations[index] || `Campus Zone ${index + 1}`;
+    const capacity = Math.max(8, Math.ceil(safeVehicleCount / safeDockCount) + 4);
     return {
       id: `${id}-dock-${index + 1}`,
       name: `${location} Dock`,
       location,
       campus: name,
-      spots: Math.max(8, Math.ceil(safeVehicleCount / safeDockCount) + 4),
+      spots: capacity,
       occupied: 0,
       status: 'available',
+      latitude: 30.9685 + index * 0.0014,
+      longitude: 76.5273 + index * 0.0012,
+      strictRadius: 20,
+      softBuffer: 15,
+      optimumCapacity: capacity,
+      rebalanceThreshold: 5,
+      isActive: true,
+      mapX: 25 + (index % 3) * 24,
+      mapY: 32 + Math.floor(index / 3) * 22,
     };
   });
 
   const vehicles: AdminVehicle[] = Array.from({ length: safeVehicleCount }, (_, index) => {
-    const dock = docks[index % docks.length];
+    const dock = docks[index % Math.max(docks.length, 1)];
     const battery = Math.max(35, 98 - index * 4);
     return {
       id: `${name.slice(0, 2).toUpperCase()}-${String(index + 1).padStart(4, '0')}`,
       type: resolvedTypes[index % resolvedTypes.length],
-      dockId: dock.id,
-      location: dock.name,
+      hardwareMac: `A4:C1:38:${String(index + 1).padStart(2, '0')}:QP:${String(index + 11).padStart(2, '0')}`,
+      dockId: dock?.id ?? '',
+      location: dock?.name ?? 'Unassigned',
       status: 'available',
       battery,
       lastRide: 'Never',
@@ -245,6 +456,9 @@ export const createInstituteFromInput = (input: NewInstituteInput): InstituteDat
   return {
     id,
     name,
+    city: input.city?.trim() || 'Campus City',
+    mapAssetName: input.mapAssetName,
+    mapPreviewDataUrl: input.mapPreviewDataUrl,
     revenue: 0,
     activeRides: 0,
     completedRides: 0,
@@ -254,7 +468,8 @@ export const createInstituteFromInput = (input: NewInstituteInput): InstituteDat
     rideHistory: [],
     issueReports: [],
     users: [],
-    pricing: parsePricingStructure(input.pricingStructure),
+    pricing: parsePricingStructure(input.pricingStructure ?? defaultPricing.pricingStructure),
+    fareRules: defaultFareRules.map((rule) => ({ ...rule, id: `${id}-${rule.id}` })),
   };
 };
 
@@ -283,53 +498,19 @@ export const createInitialInstitutes = (): InstituteData[] => {
     { id: 'u-delhi-6', name: 'Ritu Singh', email: 'ritu.singh@gmail.com', phone: '+91 98765 43215', role: 'blocked', walletBalance: 0, totalRides: 3, memberSince: 'June 2026', institute: 'IIT Delhi', avatar: 'R' },
   ];
 
-  const delhiRideHistory: RideHistoryRecord[] = [
-    {
-      id: 'R-4701',
-      user: 'Amit Kumar',
-      userPhone: '+91 98765 43212',
-      vehicleId: 'QP-2846',
-      startDock: 'Main Gate Dock',
-      endDock: 'Library Dock',
-      fare: calculateRideFare(17 * 60),
-      duration: 17 * 60,
-      distance: 2.3,
-      bikeType: 'Bicycle',
-      status: 'completed',
-      startedAt: '2026-06-08T10:13:00+05:30',
-      completedAt: '2026-06-08T10:30:00+05:30',
-    },
-    {
-      id: 'R-4702',
-      user: 'Rahul Sharma',
-      userPhone: '+91 98765 43210',
-      vehicleId: 'QP-2847',
-      startDock: 'Hostel A Dock',
-      endDock: 'Sports Complex Dock',
-      fare: 0,
-      duration: 14 * 60,
-      distance: 2.8,
-      bikeType: 'Bicycle',
-      status: 'active',
-      startedAt: '2026-06-08T11:32:00+05:30',
-      completedAt: 'Live',
-    },
-    {
-      id: 'R-4703',
-      user: 'Priya Patel',
-      userPhone: '+91 98765 43211',
-      vehicleId: 'QP-2843',
-      startDock: 'Library Dock',
-      endDock: 'Main Gate Dock',
-      fare: calculateRideFare(21 * 60),
-      duration: 21 * 60,
-      distance: 3.1,
-      bikeType: 'Bicycle',
-      status: 'completed',
-      startedAt: '2026-06-08T11:24:00+05:30',
-      completedAt: '2026-06-08T11:45:00+05:30',
-    },
-  ];
+  const delhiVehiclesMapped = delhiVehicles.map((vehicle, index) => ({
+    ...vehicle,
+    type: vehicle.type === 'E-Bike' ? 'E_BIKE' : 'BICYCLE',
+    hardwareMac: `D8:3A:DD:${String(index + 1).padStart(2, '0')}:QP:${String(index + 21).padStart(2, '0')}`,
+  }));
+
+  const delhiRideHistory = createSeedRideHistory({
+    instituteId: 'iit-delhi',
+    docks: delhiDocks,
+    vehicles: delhiVehiclesMapped,
+    users: delhiUsers,
+    targetRevenue: 500,
+  });
 
   const bombayDocks: AdminDock[] = [
     { id: 'iit-bombay-dock-1', name: 'Powai Gate Dock', location: 'Powai Gate', campus: 'IIT Bombay', spots: 14, occupied: 0, status: 'available' },
@@ -348,67 +529,85 @@ export const createInitialInstitutes = (): InstituteData[] => {
     { id: 'u-bombay-2', name: 'Arjun Rao', email: 'arjun.rao@university.edu', phone: '+91 98765 44211', role: 'verified', walletBalance: 140, totalRides: 9, memberSince: 'June 2026', institute: 'IIT Bombay', avatar: 'A' },
   ];
 
-  const bombayRideHistory: RideHistoryRecord[] = [
-    {
-      id: 'B-2101',
-      user: 'Neha Mehta',
-      userPhone: '+91 98765 44210',
-      vehicleId: 'QB-1001',
-      startDock: 'Powai Gate Dock',
-      endDock: 'Lecture Hall Dock',
-      fare: calculateRideFare(11 * 60),
-      duration: 11 * 60,
-      distance: 1.9,
-      bikeType: 'Bicycle',
-      status: 'completed',
-      startedAt: '2026-06-08T09:09:00+05:30',
-      completedAt: '2026-06-08T09:20:00+05:30',
-    },
-    {
-      id: 'B-2102',
-      user: 'Arjun Rao',
-      userPhone: '+91 98765 44211',
-      vehicleId: 'QB-1003',
-      startDock: 'Hostel 12 Dock',
-      endDock: 'Powai Gate Dock',
-      fare: 0,
-      duration: 9 * 60,
-      distance: 1.5,
-      bikeType: 'Bicycle',
-      status: 'active',
-      startedAt: '2026-06-08T11:40:00+05:30',
-      completedAt: 'Live',
-    },
-  ];
+  const bombayVehiclesMapped = bombayVehicles.map((vehicle, index) => ({
+    ...vehicle,
+    type: vehicle.type === 'E-Scooter' ? 'E_BIKE' : 'BICYCLE',
+    hardwareMac: `B0:22:BY:${String(index + 1).padStart(2, '0')}:QP:${String(index + 41).padStart(2, '0')}`,
+  }));
+
+  const bombayRideHistory = createSeedRideHistory({
+    instituteId: 'iit-bombay',
+    docks: bombayDocks,
+    vehicles: bombayVehiclesMapped,
+    users: bombayUsers,
+    targetRevenue: 250,
+  });
 
   return [
     {
       id: 'iit-delhi',
       name: 'IIT Delhi',
+      city: 'New Delhi',
+      mapAssetName: 'iit-delhi-campus-map.svg',
       revenue: getInstituteRevenue({ rideHistory: delhiRideHistory }),
       activeRides: delhiRideHistory.filter((ride) => ride.status === 'active').length,
       completedRides: getCompletedRides(delhiRideHistory).length,
-      vehicleTypes: ['Bicycle', 'E-Bike', 'E-Scooter'],
-      docks: recalculateDockOccupancy(delhiDocks, delhiVehicles),
-      vehicles: delhiVehicles,
+      vehicleTypes: ['BICYCLE', 'E_BIKE'],
+      docks: recalculateDockOccupancy(
+        delhiDocks.map((dock, index) => ({
+          ...dock,
+          latitude: 28.545 + index * 0.0011,
+          longitude: 77.1926 + index * 0.0013,
+          strictRadius: 20,
+          softBuffer: 15,
+          optimumCapacity: dock.spots,
+          rebalanceThreshold: 5,
+          isActive: true,
+          mapX: [34, 54, 68, 26][index] ?? 35,
+          mapY: [58, 42, 68, 34][index] ?? 45,
+        })),
+        delhiVehicles
+      ),
+      vehicles: delhiVehiclesMapped,
       rideHistory: delhiRideHistory,
       issueReports: [],
       users: delhiUsers,
       pricing: { ...defaultPricing },
+      fareRules: defaultFareRules.map((rule) => ({ ...rule, id: `iit-delhi-${rule.id}` })),
     },
     {
       id: 'iit-bombay',
       name: 'IIT Bombay',
+      city: 'Mumbai',
+      mapAssetName: 'iit-bombay-campus-map.svg',
       revenue: getInstituteRevenue({ rideHistory: bombayRideHistory }),
       activeRides: bombayRideHistory.filter((ride) => ride.status === 'active').length,
       completedRides: getCompletedRides(bombayRideHistory).length,
-      vehicleTypes: ['Bicycle', 'E-Scooter'],
-      docks: recalculateDockOccupancy(bombayDocks, bombayVehicles),
-      vehicles: bombayVehicles,
+      vehicleTypes: ['BICYCLE', 'E_BIKE'],
+      docks: recalculateDockOccupancy(
+        bombayDocks.map((dock, index) => ({
+          ...dock,
+          latitude: 19.1334 + index * 0.001,
+          longitude: 72.9133 + index * 0.0012,
+          strictRadius: 20,
+          softBuffer: 15,
+          optimumCapacity: dock.spots,
+          rebalanceThreshold: 5,
+          isActive: true,
+          mapX: [31, 58, 72][index] ?? 38,
+          mapY: [48, 39, 62][index] ?? 46,
+        })),
+        bombayVehicles
+      ),
+      vehicles: bombayVehiclesMapped,
       rideHistory: bombayRideHistory,
       issueReports: [],
       users: bombayUsers,
       pricing: { ...defaultPricing },
+      fareRules: defaultFareRules.map((rule) => ({ ...rule, id: `iit-bombay-${rule.id}` })),
     },
   ];
 };
+
+export { getInstituteAnalytics, buildWeeklyChart, formatTrendLabel, INITIAL_TARGET_REVENUE } from './admin-analytics';
+export type { InstituteAnalytics } from './admin-analytics';

@@ -1,33 +1,54 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem('quickped-theme');
-    return (stored as Theme) || 'light';
+  const [theme, setThemeState] = useState<Theme>(() => {
+    try {
+      const stored = localStorage.getItem('quickped-theme');
+      return (stored as Theme) || 'light';
+    } catch {
+      return 'light';
+    }
   });
 
-  useEffect(() => {
+  const applyTheme = (t: Theme) => {
+    // Apply to both <html> and <body> so both .dark selectors and CSS variable scoping work
     const root = document.documentElement;
+    const body = document.body;
     root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    localStorage.setItem('quickped-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    root.classList.add(t);
+    body.classList.remove('light', 'dark');
+    body.classList.add(t);
+    try {
+      localStorage.setItem('quickped-theme', t);
+    } catch { /* ignore */ }
   };
 
+  // Apply on mount immediately (before paint)
+  const mounted = useRef(false);
+  if (!mounted.current) {
+    applyTheme(theme);
+    mounted.current = true;
+  }
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
+  const setTheme = (t: Theme) => setThemeState(t);
+  const toggleTheme = () => setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
